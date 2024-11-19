@@ -6,13 +6,13 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0rem 1rem;
+  padding: 0rem 0.5rem;
   backdrop-filter: blur(0.25rem);
 }
 
 .connectButton {
   background-color: transparent;
-  color: #f2ff00;
+  color: var(--yellow);
   outline: none;
   border: none;
   cursor: pointer;
@@ -22,6 +22,7 @@ nav {
   transition: all 0.1s ease-in-out;
   display: flex;
   gap: 0.25rem;
+  font-size: 20px;
 }
 
 .connectButton:hover {
@@ -29,7 +30,7 @@ nav {
 }
 .disconnectButton {
   background-color: transparent;
-  color: #f2ff00;
+  color: var(--yellow);
   outline: none;
   border: none;
   cursor: pointer;
@@ -38,9 +39,12 @@ nav {
   border-radius: 0.25rem;
   transition: all 0.1s ease-in-out;
   display: flex;
-
+  font-size: 20px;
   gap: 0.25rem;
   min-width: 115px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .disconnectButton:hover {

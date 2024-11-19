@@ -22,9 +22,86 @@
   height: 40rem;
   /* background-color: rgb(91, 0, 0); */
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .mainLogo {
   margin-top: 2rem;
   width: 500px;
+}
+
+.modal {
+  width: 40rem;
+  height: 40rem;
+  /* background-color: rgb(12, 12, 161); */
+  background: linear-gradient(
+    130deg,
+    rgb(34, 34, 151),
+    rgb(35, 35, 121),
+    rgb(5, 5, 116)
+  );
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  /* border: 2px solid rgba(255, 255, 0, 0.383);
+  border-top: none; */
+  position: relative;
+  overflow: hidden;
+}
+
+.blastCorner {
+  position: absolute;
+  bottom: -10rem;
+  left: -7rem;
+  width: 300px;
+  opacity: 0.1;
+}
+
+.toggleBox {
+  width: 640px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2rem);
+}
+.toggleBox button {
+  padding: 0.6rem 0.5rem;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 30px;
+  cursor: pointer;
+  opacity: 0.4;
+  color: white;
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(96, 96, 249);
+  transition: all 0.1s ease-in-out;
+}
+
+.toggleBox button:nth-child(1) {
+  border-top-left-radius: 0.5rem;
+}
+.toggleBox button:nth-child(2) {
+  border-top-right-radius: 0.5rem;
+}
+
+.activeButton {
+  background-color: blue;
+  opacity: 1 !important;
+  color: var(--yellow) !important;
+}
+
+.miner {
+  width: 20px;
+  margin-bottom: 5px;
+}
+
+.stake {
+  width: 22px;
+  margin-bottom: 5px;
 }
