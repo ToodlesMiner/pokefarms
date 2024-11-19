@@ -1,6 +1,6 @@
 .home {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: rgb(16, 6, 6);
   position: relative;
   display: flex;
@@ -19,13 +19,13 @@
 .mainApp {
   margin-top: 2rem;
   width: 100%;
-  height: 40rem;
   /* background-color: rgb(91, 0, 0); */
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 4rem;
 }
 
 .mainLogo {
@@ -47,8 +47,8 @@
   border-bottom-right-radius: 1rem;
   /* border: 2px solid rgba(255, 255, 0, 0.383);
   border-top: none; */
-  position: relative;
   overflow: hidden;
+  position: relative;
 }
 
 .blastCorner {
@@ -104,4 +104,9 @@
 .stake {
   width: 22px;
   margin-bottom: 5px;
+}
+
+.frame {
+  width: 710px;
+  height: 800px;
 }

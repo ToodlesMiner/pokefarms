@@ -39,6 +39,11 @@ const Home = () => {
             className={stl.blastCorner}
           />
         </div>
+        <iframe
+          className={stl.frame}
+          src="https://dex.9mm.pro/?chain=pulsechain"
+          title="DEX on PulseChain"
+        ></iframe>
       </div>
       <img src="../bg.png" alt="Forrest" className={stl.forrestBG} />
     </div>
