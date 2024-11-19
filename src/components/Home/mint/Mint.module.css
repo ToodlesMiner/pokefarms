@@ -27,7 +27,7 @@
 
 .swapArrow {
   color: rgba(255, 255, 0, 0.705);
-  font-size: 80px;
+  font-size: 40px;
   margin: 0.5rem 0rem;
 }
 
@@ -141,7 +141,6 @@
 
 .bottomBox {
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -219,4 +218,52 @@
 .frame {
   width: 100%;
   height: 30rem;
+}
+
+.priceBox {
+  display: flex;
+  flex-direction: column;
+  width: 7.5rem;
+}
+
+.priceChange {
+  font-size: 16px;
+}
+
+.redPrice {
+  color: red !important;
+}
+
+.vaultStats {
+  margin-top: 1rem;
+  height: 5rem;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.694);
+  border: 2px solid rgba(169, 158, 0, 1);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(5rem);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgb(172, 172, 172);
+  padding: 1rem;
+  padding-right: 3rem;
+}
+
+.reserves {
+  margin-left: 0.5rem;
+  margin-top: 5px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.valueSpan {
+  color: white;
 }
