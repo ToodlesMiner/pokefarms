@@ -183,7 +183,7 @@ const Mint = ({ blastoiseData, squirtleData }) => {
           </div>
         </div>
       </div>
-      <div className={stl.vaultStats}>
+      {/* <div className={stl.vaultStats}>
         <div>
           <BsBank />
           <span className={stl.reserves}>Reserves</span>
@@ -196,7 +196,7 @@ const Mint = ({ blastoiseData, squirtleData }) => {
           <span>USD Value</span>
           <span className={stl.valueSpan}>$12,431</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

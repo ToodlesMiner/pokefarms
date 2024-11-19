@@ -7,6 +7,18 @@
   align-items: center;
   flex-direction: column;
   padding-top: 1rem;
+  min-height: 540px;
+  opacity: 0;
+  animation: fadeIn 0.2s forwards linear;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .swapWrap {
@@ -27,8 +39,8 @@
 
 .swapArrow {
   color: rgba(255, 255, 0, 0.705);
-  font-size: 40px;
-  margin: 0.5rem 0rem;
+  font-size: 35px;
+  margin: 0.3rem 0rem;
 }
 
 .logoIcon {
@@ -124,7 +136,7 @@
 .swapCta {
   width: 100%;
   min-height: 2.75rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   font-size: 2rem;
   border-radius: 0.5rem;
   border: none;
