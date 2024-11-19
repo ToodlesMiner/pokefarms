@@ -2,4 +2,29 @@
   width: 100%;
   height: 100vh;
   background-color: rgb(16, 6, 6);
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.forrestBG {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.mainApp {
+  margin-top: 2rem;
+  width: 100%;
+  height: 40rem;
+  /* background-color: rgb(91, 0, 0); */
+  z-index: 10;
+}
+
+.mainLogo {
+  margin-top: 2rem;
+  width: 500px;
 }
