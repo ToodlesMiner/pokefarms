@@ -5,9 +5,8 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
-import { BsBank } from "react-icons/bs";
 
-const Mint = ({ blastoiseData, squirtleData }) => {
+const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
   const [inputAmount, setInputAmount] = useState("");
   const [outputAmount, setOutputAmount] = useState(205.92);
 
@@ -25,15 +24,15 @@ const Mint = ({ blastoiseData, squirtleData }) => {
   return (
     <div className={stl.innerModal}>
       <div className={stl.toprow}>
-        <span className={stl.rate}>1 Blastoise = {outputAmount} Squirtle</span>
+        <span className={stl.rate}>1 BLASTOISE = {outputAmount} SQUIRTLE</span>
         <IoMdInformationCircleOutline className={stl.info} />
       </div>
       <div className={stl.swapWrap}>
         <span>You're Freezing</span>
         <div className={stl.itemBox}>
-          <div className={stl.itemWrap}>
+          <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img src="../Blastlogo.webp" alt="Blast" className={stl.logoIcon} />
-            <span>Blastoise</span>
+            <span>BLASTOISE</span>
           </div>
           <div className={stl.numberBox}>
             <input
@@ -50,13 +49,13 @@ const Mint = ({ blastoiseData, squirtleData }) => {
       <div className={stl.swapWrap}>
         <span>You're Minting</span>
         <div className={stl.itemBox}>
-          <div className={stl.itemWrap}>
+          <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
               src="../Squirtlogo.webp"
               alt="Blast"
               className={stl.logoIcon}
             />
-            <span>Squirtle</span>
+            <span>SQUIRTLE</span>
           </div>
           <div className={stl.numberBox}>
             <span
@@ -76,24 +75,24 @@ const Mint = ({ blastoiseData, squirtleData }) => {
         <div className={stl.tokenBox}>
           <div className={stl.wrapper}>
             <img src="../Blastlogo.webp" alt="Blast" className={stl.logoIcon} />
-            <span>Blastoise</span>
+            <span>BLASTOISE</span>
           </div>
           <div className={stl.priceBox}>
-            <span className={stl.priceSpan}>${blastoiseData?.priceUsd}</span>
+            <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
             <span
               className={`${stl.priceChange} ${
-                blastoiseData?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
               }`}
             >
-              24h {blastoiseData?.priceChange?.h24 >= 0 ? "+" : "-"}
-              {blastoiseData?.priceChange?.h24}%
+              24h {mainToken?.priceChange?.h24 >= 0 ? "+" : "-"}
+              {mainToken?.priceChange?.h24}%
             </span>
           </div>
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
                 handleCopyAddress(
-                  "Blastoise",
+                  "BLASTOISE",
                   "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3"
                 )
               }
@@ -133,24 +132,24 @@ const Mint = ({ blastoiseData, squirtleData }) => {
               alt="Blast"
               className={stl.logoIcon}
             />
-            <span>Squirtle</span>
+            <span>SQUIRTLE</span>
           </div>
           <div className={stl.priceBox}>
-            <span className={stl.priceSpan}>${squirtleData?.priceUsd}</span>
+            <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
             <span
               className={`${stl.priceChange} ${
-                squirtleData?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
               }`}
             >
-              24h {squirtleData?.priceChange?.h24 >= 0 ? "+" : "-"}
-              {squirtleData?.priceChange?.h24}%
+              24h {lpToken?.priceChange?.h24 >= 0 ? "+" : "-"}
+              {lpToken?.priceChange?.h24}%
             </span>
           </div>
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
                 handleCopyAddress(
-                  "Squirtle",
+                  "SQUIRTLE",
                   "0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0"
                 )
               }
@@ -183,20 +182,6 @@ const Mint = ({ blastoiseData, squirtleData }) => {
           </div>
         </div>
       </div>
-      {/* <div className={stl.vaultStats}>
-        <div>
-          <BsBank />
-          <span className={stl.reserves}>Reserves</span>
-        </div>
-        <div className={stl.col}>
-          <span>Balance</span>
-          <span className={stl.valueSpan}>501,340 Blastoise</span>
-        </div>
-        <div className={stl.col}>
-          <span>USD Value</span>
-          <span className={stl.valueSpan}>$12,431</span>
-        </div>
-      </div> */}
     </div>
   );
 };
