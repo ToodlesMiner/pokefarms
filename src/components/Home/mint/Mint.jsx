@@ -6,9 +6,8 @@ import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
 
-const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
+const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
   const [inputAmount, setInputAmount] = useState("");
-  const [outputAmount, setOutputAmount] = useState(205.92);
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -24,15 +23,22 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
   return (
     <div className={stl.innerModal}>
       <div className={stl.toprow}>
-        <span className={stl.rate}>1 BLASTOISE = {outputAmount} SQUIRTLE</span>
+        <span className={stl.rate}>
+          1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
+          {lpToken?.baseToken?.symbol}
+        </span>
         <IoMdInformationCircleOutline className={stl.info} />
       </div>
       <div className={stl.swapWrap}>
         <span>You're Freezing</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
-            <img src="../Blastlogo.webp" alt="Blast" className={stl.logoIcon} />
-            <span>BLASTOISE</span>
+            <img
+              src={pool.dexMainTokenImgUrl}
+              alt="Main"
+              className={stl.logoIcon}
+            />
+            <span>{mainToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <input
@@ -51,20 +57,20 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src="../Squirtlogo.webp"
-              alt="Blast"
+              src={pool.dexLpTokenImgUrl}
+              alt="LP"
               className={stl.logoIcon}
             />
-            <span>SQUIRTLE</span>
+            <span>{lpToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <span
               className={`${stl.outputSpan} ${
-                +inputAmount * outputAmount > 0 ? stl.whiteSpan : ""
+                +inputAmount * emissionRate > 0 ? stl.whiteSpan : ""
               }`}
             >
               {inputAmount
-                ? Math.floor(+inputAmount * outputAmount).toLocaleString()
+                ? Math.floor(+inputAmount * emissionRate).toLocaleString()
                 : "0"}
             </span>
           </div>
@@ -74,8 +80,12 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
       <div className={stl.bottomBox}>
         <div className={stl.tokenBox}>
           <div className={stl.wrapper}>
-            <img src="../Blastlogo.webp" alt="Blast" className={stl.logoIcon} />
-            <span>BLASTOISE</span>
+            <img
+              src={pool.dexMainTokenImgUrl}
+              alt="Main"
+              className={stl.logoIcon}
+            />
+            <span>{mainToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.priceBox}>
             <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
@@ -84,17 +94,14 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
                 mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
               }`}
             >
-              24h {mainToken?.priceChange?.h24 >= 0 ? "+" : "-"}
+              24h {mainToken?.priceChange?.h24 >= 0 ? "+" : ""}
               {mainToken?.priceChange?.h24}%
             </span>
           </div>
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
-                handleCopyAddress(
-                  "BLASTOISE",
-                  "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3"
-                )
+                handleCopyAddress(mainToken?.baseToken?.symbol, pool.mainToken)
               }
             >
               <FaRegCopy className={stl.copyIcon} />
@@ -103,7 +110,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
             <button
               onClick={() =>
                 window.open(
-                  "https://dex.9mm.pro/?chain=pulsechain&outputCurrency=0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31&inputCurrency=PLS",
+                  `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.mainTokenLP}`,
                   "_blank"
                 )
               }
@@ -114,7 +121,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
             <button
               onClick={() =>
                 window.open(
-                  "https://dexscreener.com/pulsechain/0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3",
+                  `https://dexscreener.com/pulsechain/${pool.mainToken}`,
                   "_blank"
                 )
               }
@@ -132,7 +139,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
               alt="Blast"
               className={stl.logoIcon}
             />
-            <span>SQUIRTLE</span>
+            <span>{lpToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.priceBox}>
             <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
@@ -141,17 +148,14 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
                 lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
               }`}
             >
-              24h {lpToken?.priceChange?.h24 >= 0 ? "+" : "-"}
+              24h {lpToken?.priceChange?.h24 >= 0 ? "+" : ""}
               {lpToken?.priceChange?.h24}%
             </span>
           </div>
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
-                handleCopyAddress(
-                  "SQUIRTLE",
-                  "0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0"
-                )
+                handleCopyAddress(lpToken?.baseToken?.symbol, pool.lpToken)
               }
             >
               <FaRegCopy className={stl.copyIcon} />
@@ -160,7 +164,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
             <button
               onClick={() =>
                 window.open(
-                  "https://dex.9mm.pro/?chain=pulsechain&outputCurrency=0x44de2D9EB4f3CB4131287D5C76C88c275139DA57&inputCurrency=PLS",
+                  `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.lpTokenLP}&inputCurrency=PLS`,
                   "_blank"
                 )
               }
@@ -171,7 +175,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm }) => {
             <button
               onClick={() =>
                 window.open(
-                  "https://dexscreener.com/pulsechain/0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0",
+                  `https://dexscreener.com/pulsechain/${pool.lpToken}`,
                   "_blank"
                 )
               }

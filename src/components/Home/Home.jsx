@@ -6,51 +6,76 @@ import { GiMiner } from "react-icons/gi";
 import Mint from "./mint/Mint";
 import Stake from "./stake/Stake";
 import ChooseFarm from "./choosefarm/ChooseFarm";
+import { ethers } from "ethers";
+import { masterABI } from "../../utils/MasterABI";
 
 const poolData = [
   {
     contractName: "Blastoise-Squirtle",
     parentContract: "0x09a454D9cfA1602F658b000d7e10d715D4A8D857",
     mainToken: "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3", // Blastoise
-    lpToken: "0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0", // Squirtle
-    dexImgUrl:
+    mainTokenLP: "0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31", // BLastoise LP
+    lpToken: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0", // Squirtle
+    lpTokenLP: "0x44de2D9EB4f3CB4131287D5C76C88c275139DA57", // Squirtle LP
+    dexMainTokenImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31.png?size=lg&key=19ffe5",
+    dexLpTokenImgUrl:
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
   },
   {
     contractName: "Blastoise-Squirtle",
     parentContract: "0x09a454D9cfA1602F658b000d7e10d715D4A8D857",
     mainToken: "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3", // Blastoise
     lpToken: "0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0", // Squirtle
-    dexImgUrl:
+    dexMainTokenImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31.png?size=lg&key=19ffe5",
+    dexLpTokenImgUrl:
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
   },
 ];
 
 const Home = () => {
   const [pool, setPool] = useState(poolData[0]);
-  const [selectingFarm, setSelectingFarm] = useState(true);
+  const [selectingFarm, setSelectingFarm] = useState(false);
 
   const [activeMenu, setActiveMenu] = useState("Mint");
   const [mainToken, setMainToken] = useState({});
   const [lpToken, setLPToken] = useState({});
+  const [emissionRate, setEmissionRate] = useState(null);
+
+  const provider = new ethers.JsonRpcProvider("https://rpc.pulsechain.com");
+
+  const contractAddress = pool.parentContract;
+  const contractABI = masterABI;
+
+  const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
   //Initialize app
   useEffect(() => {
-    const priceFetcher = async () => {
-      const request = await fetch(
-        "https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3"
+    const initialize = async () => {
+      const emission = Number(await contract.calculateRatio());
+      const truncEmission = +emission.toString().slice(0, 3);
+      setEmissionRate(truncEmission);
+
+      const mainTokenRequest = await fetch(
+        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.mainToken}`
       );
-      const response = await request.json();
-      console.log(response.pairs[0]);
-      setMainToken(response.pairs[0]);
-      const request2 = await fetch(
-        "https://api.dexscreener.com/latest/dex/pairs/pulsechain/0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0"
+      const mainTokenResponse = await mainTokenRequest.json();
+      console.log(mainTokenResponse);
+      setMainToken(mainTokenResponse.pairs[0]);
+
+      const lpTokenRequest = await fetch(
+        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.lpToken}`
       );
-      const response2 = await request2.json();
-      setLPToken(response2.pairs[0]);
+      const lpTokenResponse = await lpTokenRequest.json();
+      setLPToken(lpTokenResponse.pairs[0]);
     };
-    priceFetcher();
+    initialize();
   }, []);
+
+  useEffect(() => {
+    console.log(mainToken);
+  }, [mainToken]);
 
   return (
     <div className={stl.home}>
@@ -85,7 +110,9 @@ const Home = () => {
             <Mint
               mainToken={mainToken}
               lpToken={lpToken}
+              pool={pool}
               setSelectingFarm={setSelectingFarm}
+              emissionRate={emissionRate}
             />
           )}
           {activeMenu === "Stake" && <Stake />}
@@ -107,3 +134,16 @@ const Home = () => {
 };
 
 export default Home;
+
+/* Thats the only ABI I think youll need. 
+
+"mint" for minting
+"calculateRatio" is how you will get the currant minting ratio
+''pendingReward" used in the LP pools to see the pending reward.  it take two inputs pid (for pool ID from 0-2) and user the connected wallet addy
+
+"deposit" requires Pool ID and an amount
+"withdraw" same thing. this is also used to claim reward. I just set the amount to 0 on the withdraw
+
+I think that's all you'll need.
+
+For the Pool IDs 0 is Blastoise/PLS 1 is Squirtle/PLS and 2 is Blastoise/Squirtle */

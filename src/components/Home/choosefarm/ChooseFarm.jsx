@@ -16,18 +16,20 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
         <h2>
           {" "}
           <FaFlaskVial />
-          Active Pools
+          Active Pokémon
         </h2>
         <ul className={stl.list}>
           {poolData.map((pool, index) => (
             <li
               key={index}
               onMouseEnter={() => setHoveredIndex(index)}
-              onClick={() => setPool(pool)}
-              onClick={() => setSelectingFarm(false)}
+              onClick={() => {
+                setPool(pool);
+                setSelectingFarm(false);
+              }}
             >
               <img
-                src={pool.dexImgUrl}
+                src={pool.dexMainTokenImgUrl}
                 alt="Pair img"
                 className={stl.pairLogo}
               />

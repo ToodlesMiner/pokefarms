@@ -1,37 +1,19 @@
-const masterABI = [
+export const masterABI = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_allocPoint",
-        type: "uint256",
-      },
-      {
-        internalType: "contract IERC20",
-        name: "_lpToken",
-        type: "address",
-      },
-    ],
-    name: "add",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract Arbitrage",
-        name: "_arb",
+        internalType: "contract Squirtle",
+        name: "_Token_B",
         type: "address",
       },
       {
         internalType: "address",
-        name: "_secToken",
+        name: "_Token_A",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "_secPerSecond",
+        name: "_RewardPerSecond",
         type: "uint256",
       },
       {
@@ -66,73 +48,9 @@ const masterABI = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newMaker",
-        type: "address",
-      },
-    ],
-    name: "changerMaker",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pid",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-    ],
-    name: "deposit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "doubling",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pid",
-        type: "uint256",
-      },
-    ],
-    name: "emergencyWithdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "FailedInnerCall",
     type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-    ],
-    name: "mintARB",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [
@@ -196,13 +114,6 @@ const masterABI = [
     type: "event",
   },
   {
-    inputs: [],
-    name: "massUpdatePools",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -220,88 +131,6 @@ const masterABI = [
     ],
     name: "OwnershipTransferred",
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pid",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_allocPoint",
-        type: "uint256",
-      },
-    ],
-    name: "set",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_secPerSecond",
-        type: "uint256",
-      },
-    ],
-    name: "setSecPerSecond",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pid",
-        type: "uint256",
-      },
-    ],
-    name: "updatePool",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pid",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-    ],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -330,15 +159,129 @@ const masterABI = [
   },
   {
     inputs: [],
-    name: "arb",
+    name: "MaxAllocPoint",
     outputs: [
       {
-        internalType: "contract Arbitrage",
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "RewardPerSecond",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "Token_A",
+    outputs: [
+      {
+        internalType: "address",
         name: "",
         type: "address",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "Token_B",
+    outputs: [
+      {
+        internalType: "contract Squirtle",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_allocPoint",
+        type: "uint256",
+      },
+      {
+        internalType: "contract IERC20",
+        name: "_lpToken",
+        type: "address",
+      },
+    ],
+    name: "add",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "calculateRatio",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newMaker",
+        type: "address",
+      },
+    ],
+    name: "changerMaker",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_pid",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_pid",
+        type: "uint256",
+      },
+    ],
+    name: "emergencyWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -367,7 +310,14 @@ const masterABI = [
   },
   {
     inputs: [],
-    name: "MaxAllocPoint",
+    name: "massUpdatePools",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxRewardPerSecond",
     outputs: [
       {
         internalType: "uint256",
@@ -379,16 +329,16 @@ const masterABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "maxSecPerSecond",
-    outputs: [
+    inputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "_amount",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -417,7 +367,7 @@ const masterABI = [
         type: "address",
       },
     ],
-    name: "pendingSec",
+    name: "pendingReward",
     outputs: [
       {
         internalType: "uint256",
@@ -455,7 +405,7 @@ const masterABI = [
       },
       {
         internalType: "uint256",
-        name: "accSecPerShare",
+        name: "accRewardPerShare",
         type: "uint256",
       },
     ],
@@ -477,28 +427,40 @@ const masterABI = [
   },
   {
     inputs: [],
-    name: "secPerSecond",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "secToken",
-    outputs: [
+    inputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: "uint256",
+        name: "_pid",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_allocPoint",
+        type: "uint256",
       },
     ],
-    stateMutability: "view",
+    name: "set",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_RewardPerSecond",
+        type: "uint256",
+      },
+    ],
+    name: "setRewardPerSecond",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -530,6 +492,32 @@ const masterABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_pid",
+        type: "uint256",
+      },
+    ],
+    name: "updatePool",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "",
         type: "uint256",
@@ -554,6 +542,24 @@ const masterABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_pid",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
