@@ -37,18 +37,17 @@ const poolData = [
 const Home = () => {
   const [pool, setPool] = useState(poolData[0]);
   const [selectingFarm, setSelectingFarm] = useState(false);
-
+  const [user, setUser] = useState("");
   const [activeMenu, setActiveMenu] = useState("Mint");
   const [mainToken, setMainToken] = useState({});
   const [lpToken, setLPToken] = useState({});
   const [emissionRate, setEmissionRate] = useState(null);
 
-  const provider = new ethers.JsonRpcProvider("https://rpc.pulsechain.com");
-
-  const contractAddress = pool.parentContract;
-  const contractABI = masterABI;
-
-  const contract = new ethers.Contract(contractAddress, contractABI, provider);
+  const contract = new ethers.Contract(
+    pool.parentContract,
+    masterABI,
+    new ethers.JsonRpcProvider("https://rpc.pulsechain.com")
+  );
 
   //Initialize app
   useEffect(() => {
@@ -79,7 +78,7 @@ const Home = () => {
 
   return (
     <div className={stl.home}>
-      <Nav />
+      <Nav user={user} setUser={setUser} />
       <img src="../Logo.png" alt="Mainlogo" className={stl.mainLogo} />
       {selectingFarm && (
         <ChooseFarm
@@ -115,7 +114,16 @@ const Home = () => {
               emissionRate={emissionRate}
             />
           )}
-          {activeMenu === "Stake" && <Stake />}
+          {activeMenu === "Stake" && (
+            <Stake
+              mainToken={mainToken}
+              lpToken={lpToken}
+              pool={pool}
+              setSelectingFarm={setSelectingFarm}
+              contract={contract}
+              user={user}
+            />
+          )}
           <img
             src="../BLASTOISE.webp"
             alt="Blast"
@@ -147,3 +155,17 @@ export default Home;
 I think that's all you'll need.
 
 For the Pool IDs 0 is Blastoise/PLS 1 is Squirtle/PLS and 2 is Blastoise/Squirtle */
+
+/* 0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31 TokenA
+
+0x44de2D9EB4f3CB4131287D5C76C88c275139DA57 TokenB
+
+0x09a454D9cfA1602F658b000d7e10d715D4A8D857 TrainerContract */
+
+/*0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0 is actually LP theres more then one LP though to keep it consistent with the contract call that one LP1
+
+LP0: 0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3
+
+LP1: 0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0
+
+LP2: 0x678de045552Fe88a9851fef48e52240C9e924690 */

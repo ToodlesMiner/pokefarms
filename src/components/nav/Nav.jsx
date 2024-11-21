@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import stl from "./Nav.module.css";
 import { IoWalletOutline } from "react-icons/io5";
 
-const Nav = () => {
-  const [walletAddress, setWalletAddress] = useState("");
+const Nav = ({ user, setUser }) => {
   const [hovered, setHovered] = useState(false);
 
   const connectWallet = async () => {
@@ -15,7 +14,7 @@ const Nav = () => {
         });
 
         // Set the first account as the connected wallet
-        setWalletAddress(accounts[0]);
+        setUser(accounts[0]);
       } catch (error) {
         console.error("Error connecting wallet:", error);
       }
@@ -25,7 +24,7 @@ const Nav = () => {
   };
 
   const disconnectWallet = () => {
-    setWalletAddress("");
+    setUser("");
   };
 
   const chainChangedHandler = () => {
@@ -33,18 +32,18 @@ const Nav = () => {
   };
 
   window.ethereum.on("accountsChanged", (accounts) => {
-    setWalletAddress(accounts[0]);
+    setUser(accounts[0]);
   });
   window.ethereum.on("chainChanged", chainChangedHandler);
 
   return (
     <nav className={stl.nav}>
-      {!walletAddress && (
+      {!user && (
         <button onClick={connectWallet} className={stl.connectButton}>
           <>Connect Wallet</>
         </button>
       )}
-      {walletAddress && (
+      {user && (
         <button
           onClick={disconnectWallet}
           onMouseEnter={() => setHovered(true)}
@@ -60,7 +59,7 @@ const Nav = () => {
             ) : (
               <>
                 <IoWalletOutline />
-                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                {user.slice(0, 6)}...{user.slice(-4)}
               </>
             )}
           </>

@@ -108,6 +108,7 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 18px;
+  text-transform: uppercase;
 }
 
 .leftWrap {
@@ -147,6 +148,7 @@
   top: 1rem;
   font-size: 14px;
   color: rgb(187, 187, 187);
+  text-transform: upp;
 }
 
 .midInputBlock {
@@ -220,6 +222,7 @@
 .titleBox h2 {
   font-size: 36px;
   color: yellow;
+  text-transform: uppercase;
 }
 
 .copy {
@@ -275,6 +278,7 @@
   background-color: rgb(218, 218, 0);
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+  text-transform: uppercase;
 }
 .claimCta:hover {
   background-color: var(--yellow);

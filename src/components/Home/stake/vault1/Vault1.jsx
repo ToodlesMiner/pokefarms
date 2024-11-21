@@ -3,8 +3,18 @@ import { FaLock } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaRegCopy } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import getTokenBalance from "../../../../utils/getTokenBalance";
+import { ethers } from "ethers";
 
-const Vault1 = () => {
+const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
+  const [rewardCount, setRewardCount] = useState(0);
+  const [mainTokenBalance, setMainTokenBalance] = useState(0);
+  const [stakedBalance, setStakedBalance] = useState(0);
+  const [poolStakedBalance, setPoolStakedBalance] = useState(0);
+  const [stakeInput, setStakeInput] = useState("");
+  const [unStakeInput, setUnstakeInput] = useState("");
+
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
       .writeText(address)
@@ -16,21 +26,68 @@ const Vault1 = () => {
       });
   };
 
+  useEffect(() => {
+    if (!user) return;
+    const initialize = async () => {
+      try {
+        // Pending reward to be claimed by user
+        const currentReward = Number(await contract.pendingReward(0, user));
+        setRewardCount(currentReward);
+
+        // Current TokenA wallet balance
+        const tokenBalance = await getTokenBalance(pool.mainTokenLP, user);
+        setMainTokenBalance(tokenBalance);
+
+        // Current TokenA staked balance
+        const balance = await contract.userInfo(0, user);
+        setStakedBalance(parseInt(balance));
+
+        // Get pool info
+        const poolInfo = await contract.poolInfo(0);
+        const lpTokenAddress = poolInfo.lpToken;
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+
+        // Create a contract instance for the LP token
+        const lpTokenContract = new ethers.Contract(
+          lpTokenAddress,
+          [
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+          ],
+          signer
+        );
+
+        const poolBalance = await lpTokenContract.balanceOf(
+          pool.parentContract
+        );
+
+        setPoolStakedBalance(Number(BigInt(poolBalance) / BigInt(1e18)));
+      } catch (err) {
+        // More detailed error logging
+        console.error("Initialization Error:", {
+          message: err.message,
+          code: err.code,
+          stack: err.stack,
+        });
+      }
+    };
+    initialize();
+  }, [user]);
+
   return (
     <div className={stl.vault}>
       <div className={stl.titleBox}>
-        <h2>BLASTOISE/PLS LP</h2>
+        <h2>{mainToken?.baseToken?.symbol}/PLS LP</h2>
         <span>
           <FaRegCopy
             className={stl.copy}
             onClick={() =>
-              handleCopyAddress(
-                "Blastoise",
-                "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3"
-              )
+              handleCopyAddress(mainToken.baseToken.symbol, pool.mainToken)
             }
           />{" "}
-          0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3
+          {pool.mainToken}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -39,11 +96,11 @@ const Vault1 = () => {
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src="../Blastlogo.webp"
-                alt="blast"
+                src={pool.dexMainTokenImgUrl}
+                alt="Mint"
                 className={stl.microLogo}
               />
-              <span>BLASTOISE</span>
+              <span>{mainToken.baseToken.symbol}</span>
             </div>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
@@ -57,15 +114,47 @@ const Vault1 = () => {
               type="text"
               className={stl.input}
               placeholder="Enter amount to stake"
+              value={stakeInput}
+              onInput={(e) => {
+                const inputValue = e.target?.value;
+                if (/^\d*\.?\d*$/.test(inputValue)) {
+                  setStakeInput(inputValue);
+                }
+              }}
             />
             <div className={stl.buttonBox}>
-              <button>25%</button>
-              <button>50%</button>
-              <button>75%</button>
-              <button>Max</button>
+              <button
+                onClick={() =>
+                  setStakeInput((mainTokenBalance * 0.25).toFixed(0).toString())
+                }
+              >
+                25%
+              </button>
+              <button
+                onClick={() =>
+                  setStakeInput((mainTokenBalance * 0.5).toFixed(0).toString())
+                }
+              >
+                50%
+              </button>
+              <button
+                onClick={() =>
+                  setStakeInput((mainTokenBalance * 0.75).toFixed(0).toString())
+                }
+              >
+                75%
+              </button>
+              <button
+                onClick={() => setStakeInput(mainTokenBalance.toString())}
+              >
+                Max
+              </button>
             </div>
           </div>
-          <span className={stl.balanceSpan}>Balance: 3,554,905 BLASTOISE</span>
+          <span className={stl.balanceSpan}>
+            Balance: {mainTokenBalance.toLocaleString()}{" "}
+            {mainToken.baseToken.symbol}
+          </span>
         </div>
         <button className={stl.vaultCta}>Stake</button>
       </div>
@@ -88,11 +177,11 @@ const Vault1 = () => {
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src="../Blastlogo.webp"
-                alt="blast"
+                src={pool.dexMainTokenImgUrl}
+                alt="Mint"
                 className={stl.microLogo}
               />
-              <span>BLASTOISE</span>
+              <span>{mainToken.baseToken.symbol}</span>
             </div>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
@@ -106,15 +195,45 @@ const Vault1 = () => {
               type="text"
               className={stl.input}
               placeholder="Enter amount to unstake"
+              value={unStakeInput}
+              onInput={(e) => {
+                const inputValue = e.target?.value;
+                if (/^\d*\.?\d*$/.test(inputValue)) {
+                  setUnstakeInput(inputValue);
+                }
+              }}
             />
             <div className={stl.buttonBox}>
-              <button>25%</button>
-              <button>50%</button>
-              <button>75%</button>
-              <button>Max</button>
+              <button
+                onClick={() =>
+                  setUnstakeInput((stakedBalance * 0.25).toFixed(0).toString())
+                }
+              >
+                25%
+              </button>
+              <button
+                onClick={() =>
+                  setUnstakeInput((stakedBalance * 0.5).toFixed(0).toString())
+                }
+              >
+                50%
+              </button>
+              <button
+                onClick={() =>
+                  setUnstakeInput((stakedBalance * 0.75).toFixed(0).toString())
+                }
+              >
+                75%
+              </button>
+              <button onClick={() => setUnstakeInput(stakedBalance.toString())}>
+                Max
+              </button>
             </div>
           </div>
-          <span className={stl.balanceSpan}>Staked: 419,001 BLASTOISE</span>
+          <span className={stl.balanceSpan}>
+            Staked: {stakedBalance.toLocaleString()}{" "}
+            {mainToken.baseToken.symbol}
+          </span>
         </div>
         <button className={stl.vaultCta}>Unstake</button>
       </div>
@@ -125,14 +244,23 @@ const Vault1 = () => {
         </div>
         <div className={stl.col}>
           <span>Balance</span>
-          <span className={stl.valueSpan}>501,340 BLASTOISE</span>
+          <span className={stl.valueSpan}>
+            {poolStakedBalance.toLocaleString()} {mainToken.baseToken.symbol}
+          </span>
         </div>
         <div className={stl.col}>
           <span>USD Value</span>
-          <span className={stl.valueSpan}>$12,431</span>
+          <span className={stl.valueSpan}>
+            $
+            {(poolStakedBalance * +mainToken.priceUsd)
+              .toFixed(2)
+              .toLocaleString()}
+          </span>
         </div>
       </div>
-      <button className={stl.claimCta}>CLAIM 23 BLASTOISE</button>
+      <button className={stl.claimCta}>
+        CLAIM {rewardCount} {mainToken.baseToken.symbol}
+      </button>
     </div>
   );
 };
