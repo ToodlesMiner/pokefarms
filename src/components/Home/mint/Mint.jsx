@@ -102,7 +102,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
-                handleCopyAddress(mainToken?.baseToken?.symbol, pool.mainToken)
+                handleCopyAddress(mainToken?.baseToken?.symbol, pool.LP0)
               }
             >
               <FaRegCopy className={stl.copyIcon} />
@@ -111,7 +111,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
             <button
               onClick={() =>
                 window.open(
-                  `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.mainTokenLP}`,
+                  `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`,
                   "_blank"
                 )
               }
@@ -122,7 +122,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
             <button
               onClick={() =>
                 window.open(
-                  `https://dexscreener.com/pulsechain/${pool.mainToken}`,
+                  `https://dexscreener.com/pulsechain/${pool.LP0}`,
                   "_blank"
                 )
               }
@@ -156,7 +156,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
           <div className={stl.ctaBox}>
             <button
               onClick={() =>
-                handleCopyAddress(lpToken?.baseToken?.symbol, pool.lpToken)
+                handleCopyAddress(lpToken?.baseToken?.symbol, pool.LP1)
               }
             >
               <FaRegCopy className={stl.copyIcon} />
@@ -165,7 +165,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
             <button
               onClick={() =>
                 window.open(
-                  `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.lpTokenLP}&inputCurrency=PLS`,
+                  `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`,
                   "_blank"
                 )
               }
@@ -176,7 +176,7 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
             <button
               onClick={() =>
                 window.open(
-                  `https://dexscreener.com/pulsechain/${pool.lpToken}`,
+                  `https://dexscreener.com/pulsechain/${pool.LP1}`,
                   "_blank"
                 )
               }

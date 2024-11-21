@@ -194,7 +194,7 @@ contract HeadFarm is Ownable {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
         uint256 accRewardPerShare = pool.accRewardPerShare;
-        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
+        uint256 lpSupply = pool.LP1.balanceOf(address(this));
         if (block.timestamp > pool.lastRewardTime && lpSupply != 0) {
             uint256 multiplier = getMultiplier(
                 pool.lastRewardTime,
@@ -226,7 +226,7 @@ contract HeadFarm is Ownable {
         if (block.timestamp <= pool.lastRewardTime) {
             return;
         }
-        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
+        uint256 lpSupply = pool.LP1.balanceOf(address(this));
         if (lpSupply == 0) {
             pool.lastRewardTime = block.timestamp;
             return;
@@ -265,11 +265,7 @@ contract HeadFarm is Ownable {
         if (pending > 0) {
             safeSecTransfer(msg.sender, pending);
         }
-        pool.lpToken.safeTransferFrom(
-            address(msg.sender),
-            address(this),
-            _amount
-        );
+        pool.LP1.safeTransferFrom(address(msg.sender), address(this), _amount);
 
         emit Deposit(msg.sender, _pid, _amount);
     }
@@ -293,7 +289,7 @@ contract HeadFarm is Ownable {
         if (pending > 0) {
             safeSecTransfer(msg.sender, pending);
         }
-        pool.lpToken.safeTransfer(address(msg.sender), _amount);
+        pool.LP1.safeTransfer(address(msg.sender), _amount);
 
         emit Withdraw(msg.sender, _pid, _amount);
     }
@@ -307,7 +303,7 @@ contract HeadFarm is Ownable {
         user.amount = 0;
         user.rewardDebt = 0;
 
-        pool.lpToken.safeTransfer(address(msg.sender), oldUserAmount);
+        pool.LP1.safeTransfer(address(msg.sender), oldUserAmount);
         emit EmergencyWithdraw(msg.sender, _pid, oldUserAmount);
     }
 

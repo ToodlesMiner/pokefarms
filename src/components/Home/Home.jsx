@@ -14,10 +14,11 @@ const poolData = [
   {
     contractName: "Blastoise-Squirtle",
     parentContract: "0x09a454D9cfA1602F658b000d7e10d715D4A8D857",
-    mainToken: "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3", // Blastoise
-    mainTokenLP: "0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31", // BLastoise LP
-    lpToken: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0", // Squirtle
-    lpTokenLP: "0x44de2D9EB4f3CB4131287D5C76C88c275139DA57", // Squirtle LP
+    LP0: "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3",
+    LP1: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0",
+    LP3: "0x678de045552Fe88a9851fef48e52240C9e924690",
+    tokenA: "0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31", // BLastoise
+    tokenB: "0x44de2D9EB4f3CB4131287D5C76C88c275139DA57", // Squirtle
     dexMainTokenImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31.png?size=lg&key=19ffe5",
     dexLpTokenImgUrl:
@@ -61,7 +62,7 @@ const Home = () => {
 
       // Token A
       const mainTokenRequest = await fetch(
-        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.mainToken}`
+        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP0}`
       );
       const mainTokenResponse = await mainTokenRequest.json();
       console.log(mainTokenResponse);
@@ -69,7 +70,7 @@ const Home = () => {
 
       // token B
       const lpTokenRequest = await fetch(
-        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.lpToken}`
+        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
       );
       const lpTokenResponse = await lpTokenRequest.json();
       setLPToken(lpTokenResponse.pairs[0]);

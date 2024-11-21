@@ -38,7 +38,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           setRewardCount(currentReward);
 
           // Current TokenA wallet balance
-          const tokenBalance = await getTokenBalance(pool.mainTokenLP, user);
+          const tokenBalance = await getTokenBalance(pool.tokenA, user);
           setMainTokenBalance(tokenBalance);
 
           // Current TokenA staked balance
@@ -106,10 +106,10 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           <FaRegCopy
             className={stl.copy}
             onClick={() =>
-              handleCopyAddress(mainToken.baseToken.symbol, pool.mainToken)
+              handleCopyAddress(mainToken.baseToken.symbol, pool.LP0)
             }
           />{" "}
-          {pool.mainToken}
+          {pool.LP0}
         </span>
       </div>
       <div className={stl.swapWrap}>
