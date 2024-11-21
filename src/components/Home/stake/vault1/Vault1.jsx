@@ -16,6 +16,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [stakeInput, setStakeInput] = useState("");
   const [unStakeInput, setUnstakeInput] = useState("");
   const [claimLoading, setClaimLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -93,13 +94,12 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
 
   const claimReward = async () => {
     setClaimLoading(true);
+    setText("hello");
   };
 
   return (
     <div className={stl.vault}>
-      {claimLoading && (
-        <MessageOverlay submittedMessage={"Successfully Claimed 500 Tokens"} />
-      )}
+      {claimLoading && <MessageOverlay submittedMessage={text} />}
       <div className={stl.titleBox}>
         <h2>{mainToken?.baseToken?.symbol}/PLS LP</h2>
         <span>
