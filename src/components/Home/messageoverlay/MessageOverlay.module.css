@@ -1,0 +1,45 @@
+.messageOverlay {
+  position: fixed;
+  left: 2rem;
+  bottom: 2rem;
+  background-color: #232379;
+  z-index: 20;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 0, 0.576);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  padding: 1.5rem 2rem;
+  animation: mainslide 3s linear forwards;
+}
+
+@keyframes mainslide {
+  0% {
+    transform: translateY(7rem);
+  }
+  25% {
+    transform: translateY(0rem);
+  }
+  50% {
+    transform: translateY(0rem);
+  }
+  75% {
+    transform: translateY(0rem);
+  }
+  100% {
+    transform: translateY(7rem);
+  }
+}
+
+.messageSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.check {
+  color: rgb(0, 255, 0);
+}

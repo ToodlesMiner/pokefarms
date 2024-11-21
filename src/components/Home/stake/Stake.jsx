@@ -20,19 +20,19 @@ const Stake = ({
           className={activeTab === 1 ? stl.activeCta : ""}
           onClick={() => setActiveTab(1)}
         >
-          {mainToken.baseToken.symbol}/PLS LP
+          {mainToken?.baseToken?.symbol}/PLS LP
         </button>
         <button
           className={activeTab === 2 ? stl.activeCta : ""}
           onClick={() => setActiveTab(2)}
         >
-          {lpToken.baseToken.symbol}/PLS LP
+          {lpToken?.baseToken?.symbol}/PLS LP
         </button>
         <button
           className={activeTab === 3 ? stl.activeCta : ""}
           onClick={() => setActiveTab(3)}
         >
-          {mainToken.baseToken.symbol}/{lpToken.baseToken.symbol} LP
+          {mainToken?.baseToken?.symbol}/{lpToken?.baseToken?.symbol} LP
         </button>
       </div>
       <div className={stl.vaultWrapper}>

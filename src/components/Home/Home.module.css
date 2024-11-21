@@ -36,6 +36,7 @@
 }
 
 .modal {
+  min-height: 599px;
   width: 40rem;
   background: linear-gradient(
     130deg,

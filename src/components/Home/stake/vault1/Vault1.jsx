@@ -6,14 +6,16 @@ import { BsBank } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import getTokenBalance from "../../../../utils/getTokenBalance";
 import { ethers } from "ethers";
+import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
 const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [rewardCount, setRewardCount] = useState(0);
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
-  const [poolStakedBalance, setPoolStakedBalance] = useState(0);
+  const [poolTVL, setPoolTVL] = useState(0);
   const [stakeInput, setStakeInput] = useState("");
   const [unStakeInput, setUnstakeInput] = useState("");
+  const [claimLoading, setClaimLoading] = useState(false);
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -27,43 +29,49 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    // if (!user) return;
     const initialize = async () => {
       try {
-        // Pending reward to be claimed by user
-        const currentReward = Number(await contract.pendingReward(0, user));
-        setRewardCount(currentReward);
+        if (user) {
+          // Pending reward to be claimed by user
+          const currentReward = Number(await contract.pendingReward(0, user));
+          setRewardCount(currentReward);
 
-        // Current TokenA wallet balance
-        const tokenBalance = await getTokenBalance(pool.mainTokenLP, user);
-        setMainTokenBalance(tokenBalance);
+          // Current TokenA wallet balance
+          const tokenBalance = await getTokenBalance(pool.mainTokenLP, user);
+          setMainTokenBalance(tokenBalance);
 
-        // Current TokenA staked balance
-        const balance = await contract.userInfo(0, user);
-        setStakedBalance(parseInt(balance));
-
+          // Current TokenA staked balance
+          const balance = await contract.userInfo(0, user);
+          setStakedBalance(parseInt(balance));
+        }
+        // TVL
         // Get pool info
         const poolInfo = await contract.poolInfo(0);
         const lpTokenAddress = poolInfo.lpToken;
+        const provider = new ethers.JsonRpcProvider(
+          "https://rpc.pulsechain.com"
+        );
 
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
+        const lpTokenAbi = [
+          "function balanceOf(address account) external view returns (uint256)",
+        ];
 
-        // Create a contract instance for the LP token
+        // Step 2: Initialize the LP token contract with the pool address
         const lpTokenContract = new ethers.Contract(
           lpTokenAddress,
-          [
-            "function balanceOf(address owner) view returns (uint256)",
-            "function decimals() view returns (uint8)",
-          ],
-          signer
+          lpTokenAbi,
+          provider
         );
 
-        const poolBalance = await lpTokenContract.balanceOf(
-          pool.parentContract
+        // Step 3: Call balanceOf function on pool 0 to get the balance
+        const balance = await lpTokenContract.balanceOf(
+          "0x320b6EF3F24825Fa9e7f67207c15e68D3107F95e"
         );
 
-        setPoolStakedBalance(Number(BigInt(poolBalance) / BigInt(1e18)));
+        console.log(balance);
+
+        // setPoolTVL(poolBalance);
       } catch (err) {
         // More detailed error logging
         console.error("Initialization Error:", {
@@ -76,8 +84,22 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
     initialize();
   }, [user]);
 
+  const stake = async () => {
+    if (!stakeInput || +stakeInput > mainTokenBalance) return;
+  };
+  const unStake = async () => {
+    if (!unStakeInput || stakedBalance === 0) return;
+  };
+
+  const claimReward = async () => {
+    setClaimLoading(true);
+  };
+
   return (
     <div className={stl.vault}>
+      {claimLoading && (
+        <MessageOverlay submittedMessage={"Successfully Claimed 500 Tokens"} />
+      )}
       <div className={stl.titleBox}>
         <h2>{mainToken?.baseToken?.symbol}/PLS LP</h2>
         <span>
@@ -156,13 +178,19 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
             {mainToken.baseToken.symbol}
           </span>
         </div>
-        <button className={stl.vaultCta}>Stake</button>
+        <button
+          className={stl.vaultCta}
+          disabled={mainTokenBalance === 0 ? true : false}
+          onClick={stake}
+        >
+          Stake
+        </button>
       </div>
       <div className={stl.statsWrap}>
         <div className={stl.tvl}>
           <FaLock />
           <span className={stl.statSpan}>TVL</span>
-          <span className={stl.statValue}>$31,230</span>
+          <span className={stl.statValue}>${poolTVL.toLocaleString()}</span>
         </div>
         <img src="ball.png" alt="ball" className={stl.pokeBall} />
         <div className={stl.apr}>
@@ -235,31 +263,26 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
             {mainToken.baseToken.symbol}
           </span>
         </div>
-        <button className={stl.vaultCta}>Unstake</button>
+        <button
+          className={stl.vaultCta}
+          disabled={stakedBalance === 0 ? true : false}
+          onClick={unStake}
+        >
+          Unstake
+        </button>
       </div>
-      <div className={stl.vaultStats}>
-        <div>
-          <BsBank />
-          <span className={stl.reserves}>Reserves</span>
-        </div>
-        <div className={stl.col}>
-          <span>Balance</span>
-          <span className={stl.valueSpan}>
-            {poolStakedBalance.toLocaleString()} {mainToken.baseToken.symbol}
-          </span>
-        </div>
-        <div className={stl.col}>
-          <span>USD Value</span>
-          <span className={stl.valueSpan}>
-            $
-            {(poolStakedBalance * +mainToken.priceUsd)
-              .toFixed(2)
-              .toLocaleString()}
-          </span>
-        </div>
-      </div>
-      <button className={stl.claimCta}>
-        CLAIM {rewardCount} {mainToken.baseToken.symbol}
+
+      <button
+        className={stl.claimCta}
+        onClick={claimReward}
+        disabled={claimLoading ? true : false}
+      >
+        {claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
+        {!claimLoading && (
+          <>
+            CLAIM {rewardCount} {mainToken.baseToken.symbol}
+          </>
+        )}
       </button>
     </div>
   );

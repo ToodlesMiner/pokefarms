@@ -5,16 +5,13 @@
 
 .swapWrap {
   width: 100%;
-  /* background-color: rgb(14, 18, 0); */
   background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.624));
-  min-height: 7.5rem;
+  min-height: 11rem;
   border-radius: 1rem;
-  /* padding: 1rem; */
   color: white;
   font-size: 24px;
   display: flex;
   justify-content: center;
-  /* flex-direction: column; */
   position: relative;
   border: 1px solid rgba(255, 255, 0, 0.2);
   box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
@@ -120,7 +117,7 @@
 }
 
 .vaultCta {
-  width: 4rem;
+  width: 4.5rem;
   font-size: 20px;
   background-color: transparent;
   border: none;
@@ -165,7 +162,7 @@
 .input {
   font-size: 20px;
   padding: 4px;
-  height: 2rem;
+  height: 2.25rem;
   border-radius: 0.5rem;
   background-color: transparent;
   outline: none;
@@ -231,40 +228,6 @@
 }
 .copy:hover {
   color: rgb(0, 255, 0);
-}
-
-.vaultStats {
-  margin-top: 0.75rem;
-  height: 3rem;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.694);
-  border: 2px solid rgba(169, 158, 0, 0.574);
-  border-radius: 0.5rem;
-  backdrop-filter: blur(5rem);
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: rgb(172, 172, 172);
-  padding: 1rem;
-  padding-right: 3rem;
-}
-
-.reserves {
-  margin-left: 0.5rem;
-  margin-top: 5px;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-}
-
-.valueSpan {
-  color: white;
 }
 
 .claimCta {

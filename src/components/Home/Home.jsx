@@ -8,6 +8,7 @@ import Stake from "./stake/Stake";
 import ChooseFarm from "./choosefarm/ChooseFarm";
 import { ethers } from "ethers";
 import { masterABI } from "../../utils/MasterABI";
+import MessageOverlay from "./messageoverlay/MessageOverlay";
 
 const poolData = [
   {
@@ -42,6 +43,8 @@ const Home = () => {
   const [mainToken, setMainToken] = useState({});
   const [lpToken, setLPToken] = useState({});
   const [emissionRate, setEmissionRate] = useState(null);
+  const [pulsePrice, setPulsePrice] = useState(0);
+  const PLS_ADDRESS = "0xA1077a294dDE1B09bB078844df40758a5D0f9a27";
 
   const contract = new ethers.Contract(
     pool.parentContract,
@@ -56,6 +59,7 @@ const Home = () => {
       const truncEmission = +emission.toString().slice(0, 3);
       setEmissionRate(truncEmission);
 
+      // Token A
       const mainTokenRequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.mainToken}`
       );
@@ -63,11 +67,20 @@ const Home = () => {
       console.log(mainTokenResponse);
       setMainToken(mainTokenResponse.pairs[0]);
 
+      // token B
       const lpTokenRequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.lpToken}`
       );
       const lpTokenResponse = await lpTokenRequest.json();
       setLPToken(lpTokenResponse.pairs[0]);
+
+      // Pulse price
+      // const pulsePriceRequest = await fetch(
+      //   `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${PLS_ADDRESS}`
+      // );
+      // const pulseResponse = await pulsePriceRequest.json();
+      // console.log(pulseResponse);
+      // setLPToken(lpTokenResponse.pairs[0]);
     };
     initialize();
   }, []);
@@ -122,6 +135,7 @@ const Home = () => {
               setSelectingFarm={setSelectingFarm}
               contract={contract}
               user={user}
+              contract={contract}
             />
           )}
           <img
@@ -136,6 +150,7 @@ const Home = () => {
           title="DEX on PulseChain"
         ></iframe> */}
       </div>
+
       <img src="../bg.png" alt="Forrest" className={stl.forrestBG} />
     </div>
   );

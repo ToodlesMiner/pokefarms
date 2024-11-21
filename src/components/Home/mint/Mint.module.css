@@ -25,7 +25,7 @@
   width: 100%;
   /* background-color: rgb(14, 18, 0); */
   background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.624));
-  min-height: 8rem;
+  min-height: 7rem;
   border-radius: 1rem;
   padding: 1rem;
   color: white;
@@ -255,4 +255,38 @@
 
 .redPrice {
   color: red !important;
+}
+
+.vaultStats {
+  margin-top: 0.75rem;
+  height: 3rem;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.694);
+  border: 2px solid rgba(169, 158, 0, 0.574);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(5rem);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgb(172, 172, 172);
+  padding: 1rem;
+  padding-right: 3rem;
+}
+
+.reserves {
+  margin-left: 0.5rem;
+  margin-top: 5px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.valueSpan {
+  color: white;
 }

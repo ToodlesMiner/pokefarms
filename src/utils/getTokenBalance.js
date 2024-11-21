@@ -11,10 +11,11 @@ const getTokenBalance = async (tokenAddress, walletAddress) => {
     tokenABI,
     new ethers.JsonRpcProvider("https://rpc.pulsechain.com")
   );
+  // Fetch balance and decimals
   const rawBalance = await tokenContract.balanceOf(walletAddress);
-  const formattedBalance = (Number(rawBalance) / 1e18).toFixed(0);
 
-  return Number(formattedBalance);
+  const formattedBalance = Number((Number(rawBalance) / 1e18).toFixed(0));
+  return formattedBalance;
 };
 
 export default getTokenBalance;

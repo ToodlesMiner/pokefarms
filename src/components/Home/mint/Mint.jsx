@@ -5,6 +5,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
+import { BsBank } from "react-icons/bs";
 
 const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
   const [inputAmount, setInputAmount] = useState("");
@@ -184,6 +185,27 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
               Chart
             </button>
           </div>
+        </div>
+      </div>
+      <div className={stl.vaultStats}>
+        <div>
+          <BsBank />
+          <span className={stl.reserves}>Reserves</span>
+        </div>
+        <div className={stl.col}>
+          <span>Balance</span>
+          <span className={stl.valueSpan}>
+            {/* {poolStakedBalance.toLocaleString()} {mainToken.baseToken.symbol} */}
+          </span>
+        </div>
+        <div className={stl.col}>
+          <span>USD Value</span>
+          <span className={stl.valueSpan}>
+            $
+            {/* {(poolStakedBalance * +mainToken.priceUsd)
+              .toFixed(2)
+              .toLocaleString()} */}
+          </span>
         </div>
       </div>
     </div>
