@@ -2,10 +2,14 @@ import stl from "./Vault1.module.css";
 import { FaLock } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaRegCopy } from "react-icons/fa";
+import { ethers } from "ethers";
 import { BsBank } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import getTokenBalance from "../../../../utils/getTokenBalance";
-import { ethers } from "ethers";
+import {
+  getTokenBalance,
+  getPoolBalance,
+  getInnerPoolBalance,
+} from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
 const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
@@ -47,31 +51,35 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           setStakedBalance(parseInt(balance));
         }
         // TVL
-        // Get pool info
-        const poolInfo = await contract.poolInfo(0);
-        const lpTokenAddress = poolInfo.lpToken;
-        const provider = new ethers.JsonRpcProvider(
-          "https://rpc.pulsechain.com"
+        const totalPoolBalance = await getPoolBalance(pool.LP0);
+        console.log("Total LP0 Supply: ", totalPoolBalance);
+
+        ///////
+        const tokenAPoolBalance = await getInnerPoolBalance(
+          pool.tokenA,
+          pool.LP0
         );
+        console.log("SECinLP0contract: ", tokenAPoolBalance);
+        const ratio = tokenAPoolBalance / totalPoolBalance;
+        console.log("Ratio: ", ratio);
 
-        const lpTokenAbi = [
-          "function balanceOf(address account) external view returns (uint256)",
-        ];
+        const rewards = await contract.RewardPerSecond();
+        const formattedRewards = Number(rewards) / 1e18;
+        console.log("SEC per Second: ", formattedRewards);
 
-        // Step 2: Initialize the LP token contract with the pool address
-        const lpTokenContract = new ethers.Contract(
-          lpTokenAddress,
-          lpTokenAbi,
-          provider
+        const allocPoints = await contract.poolInfo(0);
+        console.log("Alloc points: ", Number(allocPoints[1]));
+
+        const totalAlloc = await contract.totalAllocPoint();
+        console.log("Total Alloc points: ", Number(totalAlloc));
+
+        const pool0Balance = await getTokenBalance(
+          pool.LP0,
+          pool.parentContract
         );
+        console.log("LP Staked0: ", pool0Balance);
 
-        // Step 3: Call balanceOf function on pool 0 to get the balance
-        const balance = await lpTokenContract.balanceOf(
-          "0x320b6EF3F24825Fa9e7f67207c15e68D3107F95e"
-        );
-
-        console.log(balance);
-
+        /////////
         // setPoolTVL(poolBalance);
       } catch (err) {
         // More detailed error logging
