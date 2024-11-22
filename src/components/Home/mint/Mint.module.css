@@ -355,10 +355,14 @@
 
 .outputSpan {
   font-size: 35px !important;
-  color: white;
+  color: gray;
   user-select: none;
 }
 
 .redInput {
   color: red !important;
+}
+
+.whiteBalance {
+  color: white;
 }

@@ -11,6 +11,7 @@ import { ethers } from "ethers";
 import { ERC20ABI } from "../../../utils/ERC20ABI";
 import MessageOverlay from "../messageoverlay/MessageOverlay";
 import { getTokenBalance } from "../../../utils/contractUtils";
+import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
 const Mint = ({
   mainToken,
@@ -27,6 +28,7 @@ const Mint = ({
   const [message, setMessage] = useState("");
   const [tokenABalance, setTokenABalance] = useState(0);
   const [tokenBBalance, setTokenBBalance] = useState(0);
+  const [reservesAmount, setReservesAmount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -43,6 +45,9 @@ const Mint = ({
 
   useEffect(() => {
     const initializeProvider = async () => {
+      const poolReserves = await getInnerPoolBalance(pool.tokenA, pool.tokenB);
+      setReservesAmount(poolReserves);
+
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
@@ -202,7 +207,7 @@ const Mint = ({
           <div className={stl.numberBox}>
             <span
               className={`${stl.outputSpan} ${
-                +inputAmount * emissionRate > 0 ? stl.whiteSpan : ""
+                +inputAmount * emissionRate > 0 ? stl.whiteBalance : ""
               }`}
             >
               {inputAmount
@@ -334,16 +339,17 @@ const Mint = ({
         <div className={stl.col}>
           <span>Balance</span>
           <span className={stl.valueSpan}>
-            {/* {poolStakedBalance.toLocaleString()} {mainToken.baseToken.symbol} */}
+            {reservesAmount.toLocaleString()} {mainToken.baseToken.symbol}
           </span>
         </div>
         <div className={stl.col}>
           <span>USD Value</span>
           <span className={stl.valueSpan}>
             $
-            {/* {(poolStakedBalance * +mainToken.priceUsd)
-              .toFixed(2)
-              .toLocaleString()} */}
+            {(reservesAmount * +mainToken.priceUsd).toLocaleString("en-US", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
           </span>
         </div>
       </div>
