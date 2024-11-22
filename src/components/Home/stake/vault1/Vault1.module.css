@@ -246,3 +246,7 @@
 .claimCta:hover {
   background-color: var(--yellow);
 }
+
+.whiteSpan {
+  color: white;
+}

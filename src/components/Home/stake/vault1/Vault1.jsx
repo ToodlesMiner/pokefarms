@@ -56,7 +56,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           setRewardCount(currentReward);
 
           // Current TokenA wallet balance
-          const tokenBalance = await getTokenBalance(pool.tokenA, user);
+          const tokenBalance = await getTokenBalance(pool.LP0, user);
           setMainTokenBalance(tokenBalance);
 
           // Current TokenA staked balance
@@ -160,6 +160,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
       await depositTx.wait();
 
       setStakedBalance((prev) => BigInt(prev) + BigInt(stakeInput));
+      setMainTokenBalance((prev) => BigInt(prev) - BigInt(stakeInput));
 
       setMessage(`Successfully Staked ${stakeInput} LP!`);
       setStakeInput("");
@@ -263,10 +264,13 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
               </button>
             </div>
           </div>
-          {/* <span className={stl.balanceSpan}>
-            Balance: {mainTokenBalance.toLocaleString()}{" "}
-            {mainToken.baseToken.symbol}
-          </span> */}
+          <span className={stl.balanceSpan}>
+            Balance:{" "}
+            <span className={stl.whiteSpan}>
+              {mainTokenBalance.toLocaleString()}
+            </span>{" "}
+            LP
+          </span>
         </div>
         <button
           className={stl.vaultCta}
@@ -352,7 +356,11 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
             </div>
           </div>
           <span className={stl.balanceSpan}>
-            Staked: {stakedBalance.toLocaleString()} LP
+            Staked:{" "}
+            <span className={stl.whiteSpan}>
+              {stakedBalance.toLocaleString()}
+            </span>{" "}
+            LP
           </span>
         </div>
         <button
