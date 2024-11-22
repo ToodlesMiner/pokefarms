@@ -98,12 +98,6 @@
   padding: 0.5rem;
 }
 
-.outputSpan {
-  font-size: 35px;
-  color: gray;
-  user-select: none;
-}
-
 .whiteSpan {
   color: white;
   font-size: 35px !important;
@@ -348,4 +342,23 @@
 .whiteSpan {
   font-size: 14px !important;
   color: white;
+}
+
+.dollarValue {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 14px;
+  right: 2rem;
+  color: rgb(0, 255, 0);
+}
+
+.outputSpan {
+  font-size: 35px !important;
+  color: white;
+  user-select: none;
+}
+
+.redInput {
+  color: red !important;
 }

@@ -64,8 +64,8 @@ const Mint = ({
   };
 
   const handleSwap = async () => {
-    if (!inputAmount || isNaN(inputAmount) || +inputAmount <= 0) {
-      alert("Please enter a valid amount to mint.");
+    if (!inputAmount || +inputAmount > tokenABalance) {
+      alert("Please enter correct values.");
       return;
     }
 
@@ -155,12 +155,19 @@ const Mint = ({
             <input
               type="text"
               placeholder="0"
-              className={stl.amountInput}
+              className={`${stl.amountInput} ${
+                +inputAmount > tokenABalance && user ? stl.redInput : ""
+              }`}
               value={inputAmount}
               onInput={(e) => setInputAmount(e.target.value)}
             />
           </div>
         </div>
+        {inputAmount && +inputAmount * +mainToken.priceUsd > 0.01 && (
+          <span className={stl.dollarValue}>
+            ${(+inputAmount * +mainToken.priceUsd).toFixed(2)}
+          </span>
+        )}
       </div>
       <IoMdArrowRoundDown className={stl.swapArrow} />
       <div className={stl.swapWrap}>
