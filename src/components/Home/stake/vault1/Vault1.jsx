@@ -248,6 +248,16 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
     }
   };
 
+  useEffect(() => {
+    if (!user) return;
+    const yieldInterval = setInterval(async () => {
+      const currentReward = Number(await contract.pendingReward(0, user));
+      setRewardCount(currentReward);
+    }, 7000);
+
+    return () => clearInterval(yieldInterval);
+  }, [user]);
+
   return (
     <div className={stl.vault}>
       {message && <MessageOverlay submittedMessage={message} />}
