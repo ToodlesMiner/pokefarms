@@ -73,12 +73,16 @@ const Mint = ({
       // Wait for confirmation
       await tx.wait();
       setMessage(
-        `Successfully Minted ${+(
+        `Successfully Minted ${Number(
           inputAmount * emissionRate
         ).toLocaleString()} ${lpToken.baseToken.symbol}!`
       );
+
       setInputAmount("");
       setLoading(true);
+      setTimeout(() => {
+        setMessage("");
+      }, 4500);
     } catch (err) {
       console.error("Minting failed:", err);
       alert("Minting failed. Please try again.");
