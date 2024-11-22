@@ -214,8 +214,38 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   };
 
   const claimReward = async () => {
-    setClaimLoading(true);
-    setText("hello");
+    if (!signer || !user) return;
+
+    try {
+      setClaimLoading(true);
+      const contractWithSigner = contract.connect(signer);
+
+      // Call withdraw with 0 amount to claim rewards
+      const withdrawTx = await contractWithSigner.withdraw(0, 0);
+      await withdrawTx.wait();
+
+      // Get updated pending reward after withdrawal
+      const currentReward = Number(await contract.pendingReward(0, user));
+      setRewardCount(currentReward);
+
+      setMessage(
+        `Successfully claimed ${(rewardCount / 1e18).toFixed(5)} ${
+          mainToken.baseToken.symbol
+        }!`
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    } catch (err) {
+      console.error("Claim Error:", {
+        message: err.message,
+        code: err.code,
+        stack: err.stack,
+      });
+    } finally {
+      setClaimLoading(false);
+    }
   };
 
   return (
@@ -406,8 +436,8 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
       <button
         className={stl.claimCta}
         onClick={claimReward}
-        disabled={true}
-        // disabled={!user || claimLoading ? true : false}
+        // disabled={true}
+        disabled={!user || claimLoading ? true : false}
       >
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (
