@@ -89,7 +89,6 @@ const Mint = ({
       }, 4500);
     } catch (err) {
       console.error("Minting failed:", err);
-      alert("Minting failed. Please try again.");
     } finally {
       setLoading(false); // End loading indicator
     }

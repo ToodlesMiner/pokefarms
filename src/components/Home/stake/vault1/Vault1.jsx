@@ -34,7 +34,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
       }
     };
     initializeProvider();
-  }, []);
+  }, [user]);
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -134,50 +134,65 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
     try {
       setStakeLoading(true);
       const amount = ethers.parseUnits(stakeInput, 18); // Assuming 18 decimals
-      console.log(amount);
-      console.log(BigInt(amount) / BigInt(1e18));
 
       // Create a new contract instance with the signer
       const contractWithSigner = contract.connect(signer);
 
       // First approve the HeadFarm contract to spend LP tokens
       const lpTokenContract = new ethers.Contract(
-        pool.tokenA,
+        pool.LP0,
         [
           "function approve(address spender, uint256 amount) public returns (bool)",
+          "function allowance(address owner, address spender) public view returns (uint256)",
+          "function balanceOf(address account) public view returns (uint256)",
         ],
         signer
       );
+      const lpBalance = await lpTokenContract.balanceOf(signer.getAddress());
+      console.log("LP Balance: ", lpBalance);
 
-      const approveTx = await lpTokenContract.approve(
-        pool.parentContract,
-        amount
+      const currentAllowance = await lpTokenContract.allowance(
+        await signer.getAddress(),
+        pool.parentContract
       );
-      await approveTx.wait();
+      console.log("Allowance: ", currentAllowance);
+      // const approveTx = await lpTokenContract.approve(
+      //   pool.parentContract,
+      //   amount
+      // );
+      // await approveTx.wait();
       console.log("Awaiting deposit");
       // Now deposit LP tokens into the farm
+
       const depositTx = await contractWithSigner.deposit(0, amount); // Using pool id 0
       await depositTx.wait();
 
       console.log("Deposited");
-      // Reset input and fetch updated balances
-      setStakeInput("");
 
-      // Fetch updated balances
+      //////////
+
       const tokenBalance = await getTokenBalance(pool.tokenA, user);
       setMainTokenBalance(tokenBalance);
 
       const balance = await contract.userInfo(0, user);
       setStakedBalance(parseInt(balance.amount));
 
-      setMessage("Stake successful!");
+      setStakeInput("");
+      setMessage(
+        `Successfully Staked ${Number(stakeInput).toLocaleString()} ${
+          mainToken.baseToken.symbol
+        }!`
+      );
+
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
     } catch (err) {
       console.error("Staking Error:", {
         message: err.message,
         code: err.code,
         stack: err.stack,
       });
-      setMessage(err.message || "Failed to stake tokens");
     } finally {
       setStakeLoading(false);
     }
@@ -194,7 +209,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
 
   return (
     <div className={stl.vault}>
-      {claimLoading && <MessageOverlay submittedMessage={text} />}
+      {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.titleBox}>
         <h2>{mainToken?.baseToken?.symbol}/PLS LP</h2>
         <span>

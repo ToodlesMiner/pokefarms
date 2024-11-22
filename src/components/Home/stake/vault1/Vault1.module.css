@@ -5,7 +5,7 @@
 
 .swapWrap {
   width: 100%;
-  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.624));
+  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
   min-height: 11rem;
   border-radius: 1rem;
   color: white;
