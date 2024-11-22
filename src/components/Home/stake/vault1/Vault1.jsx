@@ -58,6 +58,7 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
 
           // Current TokenA wallet balance
           const tokenBalance = await getTokenBalance(pool.LP0, user);
+
           setMainTokenBalance(tokenBalance);
 
           // Current TokenA staked balance
@@ -284,6 +285,7 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
               />
               <span>{mainToken.baseToken.symbol}</span>
             </div>
+            <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
               <span>PLS LP</span>
@@ -379,6 +381,7 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
               />
               <span>{mainToken.baseToken.symbol}</span>
             </div>
+            <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
               <span>PLS LP</span>

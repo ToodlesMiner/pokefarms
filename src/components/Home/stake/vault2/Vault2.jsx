@@ -11,7 +11,7 @@ import {
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
-const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
+const Vault2 = ({ lpToken, pool, contract, user }) => {
   const [rewardCount, setRewardCount] = useState(0);
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
@@ -152,17 +152,17 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
         signer
       );
 
-      const hasApproved = localStorage.getItem("Vault1Approved");
+      const hasApproved = localStorage.getItem("Vault2Approved");
       if (!hasApproved) {
         const approveTx = await lpTokenContract.approve(
           pool.parentContract,
           (BigInt(100_000_000_000) * BigInt(1e18)).toString()
         );
         await approveTx.wait();
-        localStorage.setItem("Vault1Approved", true);
+        localStorage.setItem("Vault2Approved", true);
       }
 
-      const depositTx = await contractWithSigner.deposit(0, amount);
+      const depositTx = await contractWithSigner.deposit(1, amount);
       await depositTx.wait();
 
       setStakedBalance((prev) => BigInt(prev) + BigInt(stakeInput));
@@ -194,7 +194,7 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
       const contractWithSigner = contract.connect(signer);
 
       // Call the withdraw function from the smart contract
-      const withdrawTx = await contractWithSigner.withdraw(0, amount);
+      const withdrawTx = await contractWithSigner.withdraw(1, amount);
       await withdrawTx.wait();
 
       // Update balances
@@ -226,11 +226,11 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
       const contractWithSigner = contract.connect(signer);
 
       // Call withdraw with 0 amount to claim rewards
-      const withdrawTx = await contractWithSigner.withdraw(0, 0);
+      const withdrawTx = await contractWithSigner.withdraw(1, 0);
       await withdrawTx.wait();
 
       // Get updated pending reward after withdrawal
-      const currentReward = Number(await contract.pendingReward(0, user));
+      const currentReward = Number(await contract.pendingReward(1, user));
       setRewardCount(currentReward);
 
       setMessage(
@@ -293,6 +293,7 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
               />
               <span>{lpToken.baseToken.symbol}</span>
             </div>
+            <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
               <span>PLS LP</span>
@@ -388,6 +389,7 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
               />
               <span>{lpToken.baseToken.symbol}</span>
             </div>
+            <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img src="../Pulse.png" alt="pulse" className={stl.microLogo} />
               <span>PLS LP</span>

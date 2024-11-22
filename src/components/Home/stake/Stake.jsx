@@ -46,7 +46,6 @@ const Stake = ({
         )}
         {activeTab === 2 && (
           <Vault2
-            mainToken={mainToken}
             lpToken={lpToken}
             pool={pool}
             contract={contract}

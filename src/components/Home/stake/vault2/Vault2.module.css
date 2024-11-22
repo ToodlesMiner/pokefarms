@@ -95,8 +95,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
-  flex: 1;
-  margin-top: 0.5rem;
+  margin-top: 1.75rem;
 }
 
 .microRow {
@@ -249,4 +248,9 @@
 
 .whiteSpan {
   color: white;
+}
+.grayPlus {
+  color: gray;
+  width: 70%;
+  text-align: center;
 }
