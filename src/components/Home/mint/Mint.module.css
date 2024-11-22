@@ -291,3 +291,49 @@
 .valueSpan {
   color: white;
 }
+
+.loadOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 40px;
+}
+
+.loadOverlay h2 {
+  z-index: 10;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+.pika {
+  width: 100%;
+  opacity: 1;
+  position: relative;
+  z-index: 10;
+}
+
+.rotate {
+  transform: scaleX(-1) !important;
+}
+
+.grassBg {
+  position: absolute;
+  background-image: url("../Grass.webp");
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 3s forwards linear;
+}

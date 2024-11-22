@@ -96,6 +96,17 @@ const Mint = ({
 
   return (
     <div className={stl.innerModal}>
+      {loading && (
+        <div className={stl.loadOverlay}>
+          <img
+            src="Pika.gif"
+            alt="Pika"
+            className={`${stl.pika} ${Math.random() > 0.5 ? stl.rotate : ""}`}
+          />
+          <h2>Minting...</h2>
+          <div className={stl.grassBg}></div>
+        </div>
+      )}
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
