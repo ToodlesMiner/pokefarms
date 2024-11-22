@@ -159,13 +159,22 @@ const Mint = ({
                 +inputAmount > tokenABalance && user ? stl.redInput : ""
               }`}
               value={inputAmount}
-              onInput={(e) => setInputAmount(e.target.value)}
+              onInput={(e) => {
+                const inputValue = e.target?.value;
+                if (/^\d*\.?\d*$/.test(inputValue)) {
+                  setInputAmount(inputValue);
+                }
+              }}
             />
           </div>
         </div>
         {inputAmount && +inputAmount * +mainToken.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
-            ${(+inputAmount * +mainToken.priceUsd).toFixed(2)}
+            $
+            {(+inputAmount * +mainToken.priceUsd).toLocaleString("en-US", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}
           </span>
         )}
       </div>
