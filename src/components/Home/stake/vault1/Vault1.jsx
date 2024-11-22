@@ -17,6 +17,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
   const [poolTVL, setPoolTVL] = useState(0);
+  const [APR, setAPR] = useState(0);
   const [stakeInput, setStakeInput] = useState("");
   const [unStakeInput, setUnstakeInput] = useState("");
   const [claimLoading, setClaimLoading] = useState(false);
@@ -107,9 +108,11 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         console.log("Blast staked: ", blastStaked);
 
         const APR = annualRewards / blastStaked;
+        setAPR(APR);
         console.log("APR: %", APR);
 
         const TVL = blastStaked * 2 * +mainToken.priceUsd * 10;
+        setPoolTVL(TVL);
         console.log("TVL: ", TVL);
         /////////
         // setPoolTVL(poolBalance);
@@ -283,11 +286,13 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         <div className={stl.tvl}>
           <FaLock />
           <span className={stl.statSpan}>TVL</span>
-          <span className={stl.statValue}>${poolTVL.toLocaleString()}</span>
+          <span className={stl.statValue}>
+            ${Number(poolTVL.toFixed(0)).toLocaleString()}
+          </span>
         </div>
         <img src="ball.png" alt="ball" className={stl.pokeBall} />
         <div className={stl.apr}>
-          <span className={stl.statValue}>54%</span>
+          <span className={stl.statValue}>{Math.floor(APR * 10)}%</span>
           <span className={stl.statSpan2}>APR</span>
           <FaChartSimple />
         </div>
