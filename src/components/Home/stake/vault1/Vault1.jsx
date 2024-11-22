@@ -373,14 +373,15 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
       <button
         className={stl.claimCta}
         onClick={claimReward}
-        disabled={claimLoading ? true : false}
+        disabled={!user || claimLoading ? true : false}
       >
-        {claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
-        {!claimLoading && (
+        {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
+        {user && !claimLoading && (
           <>
             CLAIM {rewardCount} {mainToken.baseToken.symbol}
           </>
         )}
+        {!user && "Connect A Wallet To Claim Rewards"}
       </button>
     </div>
   );
