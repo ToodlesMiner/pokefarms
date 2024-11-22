@@ -10,6 +10,7 @@ import { masterABI } from "../../../utils/MasterABI";
 import { ethers } from "ethers";
 import { ERC20ABI } from "../../../utils/ERC20ABI";
 import MessageOverlay from "../messageoverlay/MessageOverlay";
+import { getTokenBalance } from "../../../utils/contractUtils";
 
 const Mint = ({
   mainToken,
@@ -24,6 +25,21 @@ const Mint = ({
   const [loading, setLoading] = useState(false);
   const [signer, setSigner] = useState(null);
   const [message, setMessage] = useState("");
+  const [tokenABalance, setTokenABalance] = useState(0);
+  const [tokenBBalance, setTokenBBalance] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const balanceFetcher = async () => {
+      const tokenA = await getTokenBalance(pool.tokenA, user);
+      setTokenABalance(tokenA);
+
+      const tokenB = await getTokenBalance(pool.tokenB, user);
+      setTokenBBalance(tokenB);
+    };
+    balanceFetcher();
+  }, [user]);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -116,6 +132,15 @@ const Mint = ({
         <IoMdInformationCircleOutline className={stl.info} />
       </div>
       <div className={stl.swapWrap}>
+        {user && (
+          <span className={stl.balanceSpan}>
+            Balance:{" "}
+            <span className={stl.whiteSpan}>
+              {tokenABalance.toLocaleString()}
+            </span>{" "}
+            {mainToken.baseToken.symbol}
+          </span>
+        )}
         <span>You're Freezing</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
@@ -139,6 +164,15 @@ const Mint = ({
       </div>
       <IoMdArrowRoundDown className={stl.swapArrow} />
       <div className={stl.swapWrap}>
+        {user && (
+          <span className={stl.balanceSpan}>
+            Balance:{" "}
+            <span className={stl.whiteSpan}>
+              {tokenBBalance.toLocaleString()}
+            </span>{" "}
+            {lpToken.baseToken.symbol}
+          </span>
+        )}
         <span>You're Minting</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
@@ -163,8 +197,9 @@ const Mint = ({
         </div>
       </div>
       <button className={stl.swapCta} onClick={handleSwap}>
-        {!loading && "Swap"}
-        {loading && <img src="../Spinner.svg" alt="spinner" />}
+        {!user && "Connect A Wallet"}
+        {user && !loading && "Swap"}
+        {user && loading && <img src="../Spinner.svg" alt="spinner" />}
       </button>
       <div className={stl.bottomBox}>
         <div className={stl.tokenBox}>
