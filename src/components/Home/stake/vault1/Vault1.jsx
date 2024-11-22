@@ -3,7 +3,7 @@ import { FaLock } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaRegCopy } from "react-icons/fa";
 import { ethers } from "ethers";
-import { BsBank } from "react-icons/bs";
+
 import { useEffect, useState } from "react";
 import {
   getTokenBalance,
@@ -12,7 +12,7 @@ import {
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
-const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
+const Vault1 = ({ mainToken, pool, contract, user }) => {
   const [rewardCount, setRewardCount] = useState(0);
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
@@ -64,11 +64,9 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           const balance = await contract.userInfo(0, user);
           setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
         }
-        // TVL
+        // TVL & APR
         const totalPoolBalance = await getPoolBalance(pool.LP0);
         console.log("Total LP0 Supply: ", totalPoolBalance);
-
-        ///////
         const tokenAPoolBalance = await getInnerPoolBalance(
           pool.tokenA,
           pool.LP0
@@ -115,8 +113,6 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         const TVL = blastStaked * 2 * +mainToken.priceUsd * 10;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
-        /////////
-        // setPoolTVL(poolBalance);
       } catch (err) {
         // More detailed error logging
         console.error("Initialization Error:", {

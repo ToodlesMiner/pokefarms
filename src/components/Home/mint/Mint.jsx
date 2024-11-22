@@ -6,7 +6,6 @@ import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
-import { masterABI } from "../../../utils/MasterABI";
 import { ethers } from "ethers";
 import { ERC20ABI } from "../../../utils/ERC20ABI";
 import MessageOverlay from "../messageoverlay/MessageOverlay";
@@ -91,12 +90,9 @@ const Mint = ({
         localStorage.setItem("MintApproved", true);
       }
 
-      // Call the mint function
       const tx = await contractWithSigner.mint(formattedAmount);
-      console.log(`Transaction hash: ${tx.hash}`);
-
-      // Wait for confirmation
       await tx.wait();
+
       setMessage(
         `Successfully Minted ${Number(
           inputAmount * emissionRate
@@ -339,7 +335,7 @@ const Mint = ({
         <div className={stl.col}>
           <span>Balance</span>
           <span className={stl.valueSpan}>
-            {reservesAmount.toLocaleString()} {mainToken.baseToken.symbol}
+            {reservesAmount.toLocaleString()} {mainToken?.baseToken?.symbol}
           </span>
         </div>
         <div className={stl.col}>
