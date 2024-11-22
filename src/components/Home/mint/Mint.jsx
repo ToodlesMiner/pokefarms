@@ -60,14 +60,14 @@ const Mint = ({
 
       const tokenAContract = new ethers.Contract(pool.tokenA, ERC20ABI, signer);
 
-      const hasApproved = localStorage.getItem("Approved");
+      const hasApproved = localStorage.getItem("MintApproved");
       if (!hasApproved) {
         const approveTx = await tokenAContract.approve(
           pool.tokenB,
           (BigInt(100_000_000_000) * BigInt(1e18)).toString()
         );
         await approveTx.wait();
-        localStorage.setItem("Approved", true);
+        localStorage.setItem("MintApproved", true);
       }
 
       // Call the mint function

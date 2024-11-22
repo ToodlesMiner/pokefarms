@@ -61,7 +61,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
 
           // Current TokenA staked balance
           const balance = await contract.userInfo(0, user);
-          setStakedBalance(parseInt(balance));
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
         }
         // TVL
         const totalPoolBalance = await getPoolBalance(pool.LP0);
@@ -133,12 +133,9 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
 
     try {
       setStakeLoading(true);
-      const amount = ethers.parseUnits(stakeInput, 18); // Assuming 18 decimals
-
-      // Create a new contract instance with the signer
+      const amount = ethers.parseUnits(stakeInput, 18);
       const contractWithSigner = contract.connect(signer);
 
-      // First approve the HeadFarm contract to spend LP tokens
       const lpTokenContract = new ethers.Contract(
         pool.LP0,
         [
@@ -148,41 +145,24 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         ],
         signer
       );
-      const lpBalance = await lpTokenContract.balanceOf(signer.getAddress());
-      console.log("LP Balance: ", lpBalance);
 
-      const currentAllowance = await lpTokenContract.allowance(
-        await signer.getAddress(),
-        pool.parentContract
-      );
-      console.log("Allowance: ", currentAllowance);
-      // const approveTx = await lpTokenContract.approve(
-      //   pool.parentContract,
-      //   amount
-      // );
-      // await approveTx.wait();
-      console.log("Awaiting deposit");
-      // Now deposit LP tokens into the farm
+      const hasApproved = localStorage.getItem("Vault1Approved");
+      if (!hasApproved) {
+        const approveTx = await lpTokenContract.approve(
+          pool.parentContract,
+          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+        );
+        await approveTx.wait();
+        localStorage.setItem("Vault1Approved", true);
+      }
 
-      const depositTx = await contractWithSigner.deposit(0, amount); // Using pool id 0
+      const depositTx = await contractWithSigner.deposit(0, amount);
       await depositTx.wait();
 
-      console.log("Deposited");
+      setStakedBalance((prev) => BigInt(prev) + BigInt(stakeInput));
 
-      //////////
-
-      const tokenBalance = await getTokenBalance(pool.tokenA, user);
-      setMainTokenBalance(tokenBalance);
-
-      const balance = await contract.userInfo(0, user);
-      setStakedBalance(parseInt(balance.amount));
-
+      setMessage(`Successfully Staked ${stakeInput} LP!`);
       setStakeInput("");
-      setMessage(
-        `Successfully Staked ${Number(stakeInput).toLocaleString()} ${
-          mainToken.baseToken.symbol
-        }!`
-      );
 
       setTimeout(() => {
         setMessage("");
@@ -283,10 +263,10 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
               </button>
             </div>
           </div>
-          <span className={stl.balanceSpan}>
+          {/* <span className={stl.balanceSpan}>
             Balance: {mainTokenBalance.toLocaleString()}{" "}
             {mainToken.baseToken.symbol}
-          </span>
+          </span> */}
         </div>
         <button
           className={stl.vaultCta}
@@ -372,8 +352,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
             </div>
           </div>
           <span className={stl.balanceSpan}>
-            Staked: {stakedBalance.toLocaleString()}{" "}
-            {mainToken.baseToken.symbol}
+            Staked: {stakedBalance.toLocaleString()} LP
           </span>
         </div>
         <button
@@ -388,12 +367,14 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
       <button
         className={stl.claimCta}
         onClick={claimReward}
-        disabled={!user || claimLoading ? true : false}
+        disabled={true}
+        // disabled={!user || claimLoading ? true : false}
       >
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (
           <>
-            CLAIM {rewardCount} {mainToken.baseToken.symbol}
+            {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
+            CLAIM {(rewardCount / 1e18).toFixed(5)} {mainToken.baseToken.symbol}
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}
