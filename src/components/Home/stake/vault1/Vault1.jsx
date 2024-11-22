@@ -249,7 +249,10 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      return;
+    }
+
     const yieldInterval = setInterval(async () => {
       const currentReward = Number(await contract.pendingReward(0, user));
       setRewardCount(currentReward);
@@ -334,13 +337,15 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
               </button>
             </div>
           </div>
-          <span className={stl.balanceSpan}>
-            Balance:{" "}
-            <span className={stl.whiteSpan}>
-              {mainTokenBalance.toLocaleString()}
-            </span>{" "}
-            LP
-          </span>
+          {user && (
+            <span className={stl.balanceSpan}>
+              Balance:{" "}
+              <span className={stl.whiteSpan}>
+                {mainTokenBalance.toLocaleString()}
+              </span>{" "}
+              LP
+            </span>
+          )}
         </div>
         <button
           className={stl.vaultCta}
@@ -425,13 +430,15 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
               </button>
             </div>
           </div>
-          <span className={stl.balanceSpan}>
-            Staked:{" "}
-            <span className={stl.whiteSpan}>
-              {stakedBalance.toLocaleString()}
-            </span>{" "}
-            LP
-          </span>
+          {user && (
+            <span className={stl.balanceSpan}>
+              Staked:{" "}
+              <span className={stl.whiteSpan}>
+                {stakedBalance.toLocaleString()}
+              </span>{" "}
+              LP
+            </span>
+          )}
         </div>
         <button
           className={stl.vaultCta}
