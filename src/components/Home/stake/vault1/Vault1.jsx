@@ -22,6 +22,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [unStakeInput, setUnstakeInput] = useState("");
   const [claimLoading, setClaimLoading] = useState(false);
   const [stakeLoading, setStakeLoading] = useState(false);
+  const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
 
@@ -180,7 +181,36 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   };
 
   const unStake = async () => {
-    if (!unStakeInput || stakedBalance === 0) return;
+    if (!unStakeInput || stakedBalance === 0 || !signer) return;
+
+    try {
+      setUnStakeLoading(true);
+      const amount = ethers.parseUnits(unStakeInput, 18);
+      const contractWithSigner = contract.connect(signer);
+
+      // Call the withdraw function from the smart contract
+      const withdrawTx = await contractWithSigner.withdraw(0, amount);
+      await withdrawTx.wait();
+
+      // Update balances
+      setStakedBalance((prev) => BigInt(prev) - BigInt(unStakeInput));
+      setMainTokenBalance((prev) => BigInt(prev) + BigInt(unStakeInput));
+
+      setMessage(`Successfully Unstaked ${unStakeInput} LP!`);
+      setUnstakeInput("");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    } catch (err) {
+      console.error("Unstaking Error:", {
+        message: err.message,
+        code: err.code,
+        stack: err.stack,
+      });
+    } finally {
+      setUnStakeLoading(false);
+    }
   };
 
   const claimReward = async () => {
@@ -274,7 +304,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         </div>
         <button
           className={stl.vaultCta}
-          // disabled={mainTokenBalance === 0 ? true : false}
+          disabled={stakeLoading || mainTokenBalance === 0 ? true : false}
           onClick={stake}
         >
           {!stakeLoading && "Stake"}
@@ -365,10 +395,11 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         </div>
         <button
           className={stl.vaultCta}
-          disabled={stakedBalance === 0 ? true : false}
+          disabled={unStakeLoading || stakedBalance === 0 ? true : false}
           onClick={unStake}
         >
-          Unstake
+          {!unStakeLoading && "Unstake"}
+          {unStakeLoading && <img src="../Spinner.svg" alt="spinner" />}
         </button>
       </div>
 
