@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import stl from "./Mint.module.css";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -6,9 +6,35 @@ import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
 import { BsBank } from "react-icons/bs";
+import { masterABI } from "../../../utils/MasterABI";
+import { ethers } from "ethers";
+import { ERC20ABI } from "../../../utils/ERC20ABI";
+import MessageOverlay from "../messageoverlay/MessageOverlay";
 
-const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
+const Mint = ({
+  mainToken,
+  lpToken,
+  setSelectingFarm,
+  emissionRate,
+  pool,
+  contract,
+  user,
+}) => {
   const [inputAmount, setInputAmount] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [signer, setSigner] = useState(null);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const initializeProvider = async () => {
+      if (window.ethereum) {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        setSigner(signer);
+      }
+    };
+    initializeProvider();
+  }, [user]);
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -21,8 +47,49 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
       });
   };
 
+  const handleSwap = async () => {
+    if (!inputAmount || isNaN(inputAmount) || +inputAmount <= 0) {
+      alert("Please enter a valid amount to mint.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const contractWithSigner = contract.connect(signer);
+      const formattedAmount = ethers.parseUnits(inputAmount.toString(), 18);
+
+      const tokenAContract = new ethers.Contract(pool.tokenA, ERC20ABI, signer);
+
+      const approveTx = await tokenAContract.approve(
+        pool.tokenB,
+        formattedAmount
+      );
+      await approveTx.wait();
+
+      // Call the mint function
+      const tx = await contractWithSigner.mint(formattedAmount);
+      console.log(`Transaction hash: ${tx.hash}`);
+
+      // Wait for confirmation
+      await tx.wait();
+      setMessage(
+        `Successfully Minted ${+(
+          inputAmount * emissionRate
+        ).toLocaleString()} ${lpToken.baseToken.symbol}!`
+      );
+      setInputAmount("");
+      setLoading(true);
+    } catch (err) {
+      console.error("Minting failed:", err);
+      alert("Minting failed. Please try again.");
+    } finally {
+      setLoading(false); // End loading indicator
+    }
+  };
+
   return (
     <div className={stl.innerModal}>
+      {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
           1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
@@ -77,7 +144,10 @@ const Mint = ({ mainToken, lpToken, setSelectingFarm, emissionRate, pool }) => {
           </div>
         </div>
       </div>
-      <button className={stl.swapCta}>Swap</button>
+      <button className={stl.swapCta} onClick={handleSwap}>
+        {!loading && "Swap"}
+        {loading && <img src="../Spinner.svg" alt="spinner" />}
+      </button>
       <div className={stl.bottomBox}>
         <div className={stl.tokenBox}>
           <div className={stl.wrapper}>

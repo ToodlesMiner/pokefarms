@@ -8,7 +8,6 @@ import Stake from "./stake/Stake";
 import ChooseFarm from "./choosefarm/ChooseFarm";
 import { ethers } from "ethers";
 import { masterABI } from "../../utils/MasterABI";
-import MessageOverlay from "./messageoverlay/MessageOverlay";
 
 const poolData = [
   {
@@ -126,6 +125,8 @@ const Home = () => {
               pool={pool}
               setSelectingFarm={setSelectingFarm}
               emissionRate={emissionRate}
+              contract={contract}
+              user={user}
             />
           )}
           {activeMenu === "Stake" && (
@@ -134,7 +135,6 @@ const Home = () => {
               lpToken={lpToken}
               pool={pool}
               setSelectingFarm={setSelectingFarm}
-              contract={contract}
               user={user}
               contract={contract}
             />

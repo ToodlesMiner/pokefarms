@@ -8,7 +8,7 @@ const MessageOverlay = ({ submittedMessage }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMessage("");
-    }, 3500);
+    }, 4000);
 
     return () => clearTimeout(timer);
   });

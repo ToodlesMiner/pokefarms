@@ -12,7 +12,7 @@
   align-items: center;
   font-size: 24px;
   padding: 1.5rem 2rem;
-  animation: mainslide 3s linear forwards;
+  animation: mainslide 3.5s linear forwards;
 }
 
 @keyframes mainslide {

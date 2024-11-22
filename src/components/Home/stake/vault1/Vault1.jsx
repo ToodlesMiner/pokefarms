@@ -20,7 +20,20 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [stakeInput, setStakeInput] = useState("");
   const [unStakeInput, setUnstakeInput] = useState("");
   const [claimLoading, setClaimLoading] = useState(false);
+  const [stakeLoading, setStakeLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [signer, setSigner] = useState(null);
+
+  useEffect(() => {
+    const initializeProvider = async () => {
+      if (window.ethereum) {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        setSigner(signer);
+      }
+    };
+    initializeProvider();
+  }, []);
 
   const handleCopyAddress = (name, address) => {
     navigator.clipboard
@@ -32,7 +45,6 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         console.error("Failed to copy: ", err);
       });
   };
-
   useEffect(() => {
     // if (!user) return;
     const initialize = async () => {
@@ -60,6 +72,7 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
           pool.LP0
         );
         console.log("SECinLP0contract: ", tokenAPoolBalance);
+
         const ratio = tokenAPoolBalance / totalPoolBalance;
         console.log("Ratio: ", ratio);
 
@@ -79,6 +92,25 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         );
         console.log("LP Staked0: ", pool0Balance);
 
+        const rewardsPerSecond =
+          (Number(formattedRewards) * Number(allocPoints[1])) /
+          Number(totalAlloc);
+        console.log("RewardRatePerSecond: ", rewardsPerSecond);
+
+        const annualRewards = rewardsPerSecond * 31536000;
+        console.log("Annual Rewards: ", annualRewards);
+
+        const blastValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
+        console.log("Blast Value Per LP Tokens: ", blastValuePerLPTokens);
+
+        const blastStaked = blastValuePerLPTokens * pool0Balance;
+        console.log("Blast staked: ", blastStaked);
+
+        const APR = annualRewards / blastStaked;
+        console.log("APR: %", APR);
+
+        const TVL = blastStaked * 2 * +mainToken.priceUsd * 10;
+        console.log("TVL: ", TVL);
         /////////
         // setPoolTVL(poolBalance);
       } catch (err) {
@@ -94,8 +126,60 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
   }, [user]);
 
   const stake = async () => {
-    if (!stakeInput || +stakeInput > mainTokenBalance) return;
+    if (!stakeInput || mainTokenBalance === 0 || !signer) return;
+
+    try {
+      setStakeLoading(true);
+      const amount = ethers.parseUnits(stakeInput, 18); // Assuming 18 decimals
+      console.log(amount);
+      console.log(BigInt(amount) / BigInt(1e18));
+
+      // Create a new contract instance with the signer
+      const contractWithSigner = contract.connect(signer);
+
+      // First approve the HeadFarm contract to spend LP tokens
+      const lpTokenContract = new ethers.Contract(
+        pool.tokenA,
+        [
+          "function approve(address spender, uint256 amount) public returns (bool)",
+        ],
+        signer
+      );
+
+      const approveTx = await lpTokenContract.approve(
+        pool.parentContract,
+        amount
+      );
+      await approveTx.wait();
+      console.log("Awaiting deposit");
+      // Now deposit LP tokens into the farm
+      const depositTx = await contractWithSigner.deposit(0, amount); // Using pool id 0
+      await depositTx.wait();
+
+      console.log("Deposited");
+      // Reset input and fetch updated balances
+      setStakeInput("");
+
+      // Fetch updated balances
+      const tokenBalance = await getTokenBalance(pool.tokenA, user);
+      setMainTokenBalance(tokenBalance);
+
+      const balance = await contract.userInfo(0, user);
+      setStakedBalance(parseInt(balance.amount));
+
+      setMessage("Stake successful!");
+    } catch (err) {
+      console.error("Staking Error:", {
+        message: err.message,
+        code: err.code,
+        stack: err.stack,
+      });
+      setMessage(err.message || "Failed to stake tokens");
+    } finally {
+      setStakeLoading(false);
+    }
   };
+
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0) return;
   };
@@ -188,10 +272,11 @@ const Vault1 = ({ mainToken, lpToken, pool, contract, user }) => {
         </div>
         <button
           className={stl.vaultCta}
-          disabled={mainTokenBalance === 0 ? true : false}
+          // disabled={mainTokenBalance === 0 ? true : false}
           onClick={stake}
         >
-          Stake
+          {!stakeLoading && "Stake"}
+          {stakeLoading && <img src="../Spinner.svg" alt="Spinner" />}
         </button>
       </div>
       <div className={stl.statsWrap}>
