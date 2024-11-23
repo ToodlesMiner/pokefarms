@@ -58,4 +58,7 @@
   .vaultToggle button {
     width: 100%;
   }
+  .vaultWrapper {
+    height: auto;
+  }
 }
