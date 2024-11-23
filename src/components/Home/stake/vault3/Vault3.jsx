@@ -297,7 +297,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
                 alt="pulse"
                 className={stl.microLogo}
               />
-              <span>SQUIRTLE LP</span>
+              <span>{lpToken.baseToken.symbol} LP</span>
             </div>
           </div>
         </div>
@@ -388,7 +388,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
                 alt="Mint"
                 className={stl.microLogo}
               />
-              <span>{mainToken.baseToken.symbol}</span>
+              <span>{mainToken?.baseToken?.symbol}</span>
             </div>
             <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
@@ -397,7 +397,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
                 alt="pulse"
                 className={stl.microLogo}
               />
-              <span>SQUIRTLE LP</span>
+              <span>{lpToken?.baseToken?.symbol} LP</span>
             </div>
           </div>
         </div>
