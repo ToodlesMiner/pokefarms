@@ -327,28 +327,6 @@ const Mint = ({
           </div>
         </div>
       </div>
-      <div className={stl.vaultStats}>
-        <div>
-          <BsBank />
-          <span className={stl.reserves}>Reserves</span>
-        </div>
-        <div className={stl.col}>
-          <span>Balance</span>
-          <span className={stl.valueSpan}>
-            {reservesAmount.toLocaleString()} {mainToken?.baseToken?.symbol}
-          </span>
-        </div>
-        <div className={stl.col}>
-          <span>USD Value</span>
-          <span className={stl.valueSpan}>
-            $
-            {(reservesAmount * +mainToken.priceUsd).toLocaleString("en-US", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}
-          </span>
-        </div>
-      </div>
     </div>
   );
 };

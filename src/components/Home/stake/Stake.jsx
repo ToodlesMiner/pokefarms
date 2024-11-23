@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import stl from "./Stake.module.css";
 import Vault1 from "./vault1/Vault1";
 import Vault2 from "./vault2/Vault2";
 import Vault3 from "./vault3/Vault3";
+import { BsBank } from "react-icons/bs";
+import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
 const Stake = ({
   mainToken,
@@ -13,6 +15,15 @@ const Stake = ({
   user,
 }) => {
   const [activeTab, setActiveTab] = useState(1);
+  const [reservesAmount, setReservesAmount] = useState(0);
+
+  useEffect(() => {
+    const init = async () => {
+      const poolReserves = await getInnerPoolBalance(pool.tokenA, pool.tokenB);
+      setReservesAmount(poolReserves);
+    };
+    init();
+  }, []);
   return (
     <div className={stl.innerModal}>
       <div className={stl.vaultToggle}>
@@ -62,6 +73,28 @@ const Stake = ({
             user={user}
           />
         )}
+        <div className={stl.vaultStats}>
+          <div>
+            <BsBank />
+            <span className={stl.reserves}>Reserves</span>
+          </div>
+          <div className={stl.col}>
+            <span>Balance</span>
+            <span className={stl.valueSpan}>
+              {reservesAmount.toLocaleString()} {mainToken?.baseToken?.symbol}
+            </span>
+          </div>
+          <div className={stl.col}>
+            <span>USD Value</span>
+            <span className={stl.valueSpan}>
+              $
+              {(reservesAmount * +mainToken.priceUsd).toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
