@@ -81,7 +81,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         const formattedRewards = Number(rewards) / 1e18;
         console.log("SEC per Second: ", formattedRewards);
 
-        const allocPoints = await contract.poolInfo(0);
+        const allocPoints = await contract.poolInfo(2);
         console.log("Alloc points: ", Number(allocPoints[1]));
 
         const totalAlloc = await contract.totalAllocPoint();
@@ -111,7 +111,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         setAPR(APR);
         console.log("APR: %", APR);
 
-        const TVL = blastStaked * 2 * +mainToken.priceUsd * 10;
+        const TVL = blastStaked * 2 * +mainToken.priceUsd;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
       } catch (err) {
@@ -373,7 +373,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         </div>
         <img src="ball.png" alt="ball" className={stl.pokeBall} />
         <div className={stl.apr}>
-          <span className={stl.statValue}>{Math.floor(APR * 10)}%</span>
+          <span className={stl.statValue}>{Math.floor(APR * 100)}%</span>
           <span className={stl.statSpan2}>APR</span>
           <FaChartSimple />
         </div>
