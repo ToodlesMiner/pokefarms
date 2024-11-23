@@ -262,6 +262,18 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
     <div className={stl.vault}>
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.titleBox}>
+        <button
+          className={stl.dexCta}
+          onClick={() =>
+            window.open(
+              `https://dex.9mm.pro/v2/add/${pool.tokenA}/PLS`,
+              "_blank"
+            )
+          }
+        >
+          <img src="../9mm.png" alt="9mm" className={stl.mmlogo} />
+          Get 9mm LP
+        </button>
         <h2>{mainToken?.baseToken?.symbol}/PLS LP</h2>
         <span>
           <FaRegCopy

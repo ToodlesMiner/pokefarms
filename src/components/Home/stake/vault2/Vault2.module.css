@@ -213,6 +213,35 @@
   flex-direction: column;
   margin-bottom: 0.75rem;
   font-size: 14px;
+  position: relative;
+}
+
+.dexCta {
+  position: absolute;
+  left: 0;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  color: white;
+  border: 1px solid rgb(0, 77, 201);
+  transition: all 0.1s ease-in-out;
+}
+
+.dexCta:hover {
+  background-color: rgb(32, 118, 255);
+}
+
+.mmlogo {
+  width: 20px;
+  height: 20px;
 }
 
 .titleBox h2 {
@@ -254,6 +283,16 @@
   width: 70%;
   text-align: center;
 }
+
+@media only screen and (max-width: 550px) {
+  .dexCta {
+    position: relative;
+    margin-bottom: 0.5rem;
+    width: 7rem;
+    justify-content: space-evenly;
+  }
+}
+
 @media only screen and (max-width: 500px) {
   .swapWrap {
     gap: 1rem;
@@ -277,6 +316,9 @@
   }
   .microRow {
     font-size: 16px;
+  }
+  .balanceSpan {
+    right: 0;
   }
 }
 

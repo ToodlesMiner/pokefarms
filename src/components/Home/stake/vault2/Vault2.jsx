@@ -11,7 +11,7 @@ import {
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
-const Vault2 = ({ lpToken, pool, contract, user }) => {
+const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
   const [rewardCount, setRewardCount] = useState(0);
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
@@ -270,6 +270,18 @@ const Vault2 = ({ lpToken, pool, contract, user }) => {
     <div className={stl.vault}>
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.titleBox}>
+        <button
+          className={stl.dexCta}
+          onClick={() =>
+            window.open(
+              `https://dex.9mm.pro/v2/add/${pool.tokenB}/PLS`,
+              "_blank"
+            )
+          }
+        >
+          <img src="../9mm.png" alt="9mm" className={stl.mmlogo} />
+          Get 9mm LP
+        </button>
         <h2>{lpToken?.baseToken?.symbol}/PLS LP</h2>
         <span>
           <FaRegCopy
@@ -467,7 +479,7 @@ const Vault2 = ({ lpToken, pool, contract, user }) => {
         {user && !claimLoading && (
           <>
             {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
-            CLAIM {(rewardCount / 1e18).toFixed(5)} {lpToken.baseToken.symbol}
+            CLAIM {(rewardCount / 1e18).toFixed(5)} {mainToken.baseToken.symbol}
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}
