@@ -67,12 +67,12 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         }
         // TVL & APR
         const totalPoolBalance = await getPoolBalance(pool.LP2);
-        console.log("Total LP2 Supply: ", totalPoolBalance);
+        console.log("Total LP3 Supply: ", totalPoolBalance);
         const tokenAPoolBalance = await getInnerPoolBalance(
           pool.tokenA,
           pool.LP2
         );
-        console.log("SECinLP0contract: ", tokenAPoolBalance);
+        console.log("SECinLP3contract: ", tokenAPoolBalance);
 
         const ratio = tokenAPoolBalance / totalPoolBalance;
         console.log("Ratio: ", ratio);
@@ -87,11 +87,11 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         const totalAlloc = await contract.totalAllocPoint();
         console.log("Total Alloc points: ", Number(totalAlloc));
 
-        const pool2Balance = await getTokenBalance(
+        const pool3Balance = await getTokenBalance(
           pool.LP2,
           pool.parentContract
         );
-        console.log("LP Staked0: ", pool2Balance);
+        console.log("LP Staked3: ", pool3Balance);
 
         const rewardsPerSecond =
           (Number(formattedRewards) * Number(allocPoints[1])) /
@@ -104,7 +104,7 @@ const Vault3 = ({ lpToken, mainToken, pool, contract, user }) => {
         const blastValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
         console.log("Blast Value Per LP Tokens: ", blastValuePerLPTokens);
 
-        const blastStaked = blastValuePerLPTokens * pool2Balance;
+        const blastStaked = blastValuePerLPTokens * pool3Balance;
         console.log("Blast staked: ", blastStaked);
 
         const APR = annualRewards / blastStaked;
