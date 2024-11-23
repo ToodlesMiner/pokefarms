@@ -246,10 +246,7 @@ const Mint = ({
             </button>
             <button
               onClick={() =>
-                window.open(
-                  `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`,
-                  "_blank"
-                )
+                (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`)
               }
             >
               <FaExchangeAlt className={stl.buyIcon} />
@@ -257,10 +254,7 @@ const Mint = ({
             </button>
             <button
               onClick={() =>
-                window.open(
-                  `https://dexscreener.com/pulsechain/${pool.LP0}`,
-                  "_blank"
-                )
+                (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP0}`)
               }
             >
               <MdCandlestickChart />
@@ -300,10 +294,7 @@ const Mint = ({
             </button>
             <button
               onClick={() =>
-                window.open(
-                  `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`,
-                  "_blank"
-                )
+                (window.location.href = `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`)
               }
             >
               <FaExchangeAlt className={stl.buyIcon} />
@@ -311,10 +302,7 @@ const Mint = ({
             </button>
             <button
               onClick={() =>
-                window.open(
-                  `https://dexscreener.com/pulsechain/${pool.LP1}`,
-                  "_blank"
-                )
+                (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP1}`)
               }
             >
               <MdCandlestickChart />
