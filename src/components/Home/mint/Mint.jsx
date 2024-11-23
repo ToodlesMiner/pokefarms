@@ -215,7 +215,7 @@ const Mint = ({
       </div>
       <button className={stl.swapCta} onClick={handleSwap}>
         {!user && "Connect A Wallet"}
-        {user && !loading && "Swap"}
+        {user && !loading && "Mint"}
         {user && loading && <img src="../Spinner.svg" alt="spinner" />}
       </button>
       <div className={stl.bottomBox}>
