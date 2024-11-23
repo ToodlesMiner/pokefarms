@@ -275,7 +275,7 @@ const Vault2 = ({ lpToken, pool, contract, user }) => {
           <FaRegCopy
             className={stl.copy}
             onClick={() =>
-              handleCopyAddress(lpToken.baseToken.symbol, pool.LP1)
+              handleCopyAddress(`${lpToken.baseToken.symbol} LP`, pool.LP1)
             }
           />{" "}
           {pool.LP1}
