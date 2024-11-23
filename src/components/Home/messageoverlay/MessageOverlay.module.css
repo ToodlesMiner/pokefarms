@@ -43,3 +43,9 @@
 .check {
   color: rgb(0, 255, 0);
 }
+
+@media only screen and (max-width: 500px) {
+  .messageOverlay {
+    left: 1rem;
+  }
+}

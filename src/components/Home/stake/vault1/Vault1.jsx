@@ -260,7 +260,7 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
 
   return (
     <div className={stl.vault}>
-      {message && <MessageOverlay submittedMessage={message} />}
+      {!message && <MessageOverlay submittedMessage={message || "hi"} />}
       <div className={stl.titleBox}>
         <button
           className={stl.dexCta}
