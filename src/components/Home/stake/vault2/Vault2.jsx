@@ -235,7 +235,7 @@ const Vault2 = ({ mainToken, lpToken, pool, contract, user }) => {
 
       setMessage(
         `Successfully claimed ${(rewardCount / 1e18).toFixed(5)} ${
-          lpToken.baseToken.symbol
+          mainToken.baseToken.symbol
         }!`
       );
 
