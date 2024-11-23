@@ -9,6 +9,29 @@
   flex-direction: column;
 }
 
+.home::before {
+  content: "";
+  height: 100%;
+  width: 400px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.657), rgba(0, 0, 0, 0.02));
+  position: absolute;
+  z-index: 50;
+  left: 0;
+}
+.home::after {
+  content: "";
+  height: 100%;
+  width: 400px;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0.657),
+    rgba(0, 0, 0, 0.02)
+  );
+  position: absolute;
+  z-index: 50;
+  right: 0;
+}
+
 .forrestBG {
   position: absolute;
   width: 100%;
@@ -21,7 +44,7 @@
   margin-top: 2rem;
   width: 100%;
   /* background-color: rgb(91, 0, 0); */
-  z-index: 10;
+  z-index: 30;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +55,7 @@
 .mainLogo {
   margin-top: 2rem;
   width: 500px;
-  z-index: 10;
+  z-index: 100;
 }
 
 .modal {
@@ -110,6 +133,17 @@
 .frame {
   width: 710px;
   height: 800px;
+}
+
+@media only screen and (max-width: 1400px) {
+  .home::before {
+    width: 300px;
+    z-index: 10;
+  }
+  .home::after {
+    width: 300px;
+    z-index: 10;
+  }
 }
 
 @media only screen and (max-width: 730px) {
