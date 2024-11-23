@@ -23,16 +23,6 @@ const poolData = [
     dexLpTokenImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
   },
-  {
-    contractName: "Blastoise-Squirtle",
-    parentContract: "0x09a454D9cfA1602F658b000d7e10d715D4A8D857",
-    mainToken: "0x8b87e80f234b9b78b7d2e477fa41734bfb4871f3", // Blastoise
-    lpToken: "0xcfe221ebc120c1f4e78f82a1f2f4762dd7d269d0", // Squirtle
-    dexMainTokenImgUrl:
-      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31.png?size=lg&key=19ffe5",
-    dexLpTokenImgUrl:
-      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
-  },
 ];
 
 const Home = () => {
