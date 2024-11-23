@@ -111,3 +111,17 @@
   width: 710px;
   height: 800px;
 }
+
+@media only screen and (max-width: 730px) {
+  .modal,
+  .toggleBox {
+    width: 100%;
+  }
+
+  .mainApp {
+    padding: 0rem 0.5rem 2rem;
+  }
+  .mainLogo {
+    width: 90%;
+  }
+}

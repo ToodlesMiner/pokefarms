@@ -95,6 +95,7 @@
   text-align: right;
   /* background-color: red; */
   height: 100%;
+  width: 100%;
   padding: 0.5rem;
 }
 
@@ -197,6 +198,7 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
+  min-height: 28px;
 }
 .ctaBox button:hover {
   background-color: rgb(255, 255, 0);
@@ -365,4 +367,50 @@
 
 .whiteBalance {
   color: white;
+}
+
+@media only screen and (max-width: 560px) {
+  .modal,
+  .toggleBox {
+    width: 100%;
+  }
+
+  .mainApp {
+    padding: 0rem 0.5rem 2rem;
+  }
+  .mainLogo {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .bottomBox {
+    flex-direction: row;
+  }
+  .ctaBox {
+    flex-direction: column;
+    margin-top: 0.25rem;
+    width: 120px;
+  }
+  .tokenBox {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .priceBox {
+    text-align: center;
+    margin-top: 0rem;
+  }
+  .border {
+    transform: rotate(90deg);
+    display: none;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .valueSpan {
+    font-size: 12px;
+    text-align: center;
+  }
+  .col {
+    text-align: center;
+  }
 }

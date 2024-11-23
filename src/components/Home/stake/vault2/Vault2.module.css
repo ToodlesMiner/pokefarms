@@ -254,3 +254,34 @@
   width: 70%;
   text-align: center;
 }
+@media only screen and (max-width: 500px) {
+  .swapWrap {
+    gap: 1rem;
+  }
+  .midInputBlock {
+    width: 9rem;
+  }
+
+  .midInputBlock input::placeholder {
+    font-size: 16px;
+  }
+  .vaultCta {
+    min-width: 3.5rem;
+    font-size: 16px;
+  }
+  .leftWrap {
+    max-width: 7rem;
+  }
+  .leftWrap span {
+    font-size: 16px;
+  }
+  .microRow {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .midInputBlock {
+    width: 8rem;
+  }
+}
