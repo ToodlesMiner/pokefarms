@@ -365,7 +365,7 @@
   .ctaBox {
     flex-direction: column;
     margin-top: 0.25rem;
-    width: 120px;
+    width: 90%;
   }
   .tokenBox {
     flex-direction: column;
