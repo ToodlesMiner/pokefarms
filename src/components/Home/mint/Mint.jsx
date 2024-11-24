@@ -21,6 +21,7 @@ const Mint = ({
   contract,
   user,
   conversionRate,
+  setUser,
 }) => {
   const [inputAmount, setInputAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -105,6 +106,24 @@ const Mint = ({
       console.error("Minting failed:", err);
     } finally {
       setLoading(false); // End loading indicator
+    }
+  };
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        // Request wallet connection
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        // Set the first account as the connected wallet
+        setUser(accounts[0]);
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+      }
+    } else {
+      alert("MetaMask is not installed. Please install MetaMask to connect.");
     }
   };
 
@@ -320,7 +339,10 @@ const Mint = ({
           {lpToken?.baseToken?.symbol}
         </div>
       </div>
-      <button className={stl.swapCta} onClick={handleSwap}>
+      <button
+        className={stl.swapCta}
+        onClick={user ? handleSwap : connectWallet}
+      >
         {!user && "Connect A Wallet"}
         {user && !loading && "Mint"}
         {user && loading && <img src="../Spinner.svg" alt="spinner" />}

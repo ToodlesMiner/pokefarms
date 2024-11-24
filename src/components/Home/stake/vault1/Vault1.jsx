@@ -12,7 +12,7 @@ import {
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
-const Vault1 = ({ mainToken, pool, contract, user }) => {
+const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
   const [rewardCount, setRewardCount] = useState(0);
   const [mainTokenBalance, setMainTokenBalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
@@ -463,9 +463,8 @@ const Vault1 = ({ mainToken, pool, contract, user }) => {
 
       <button
         className={stl.claimCta}
-        onClick={claimReward}
-        // disabled={true}
-        disabled={!user || claimLoading ? true : false}
+        onClick={user ? claimReward : connectWallet}
+        disabled={claimLoading ? true : false}
       >
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (

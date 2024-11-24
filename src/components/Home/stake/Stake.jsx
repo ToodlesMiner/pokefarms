@@ -6,16 +6,27 @@ import Vault3 from "./vault3/Vault3";
 import { BsBank } from "react-icons/bs";
 import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
-const Stake = ({
-  mainToken,
-  lpToken,
-  pool,
-  setSelectingFarm,
-  contract,
-  user,
-}) => {
+const Stake = ({ mainToken, lpToken, pool, contract, user, setUser }) => {
   const [activeTab, setActiveTab] = useState(1);
   const [reservesAmount, setReservesAmount] = useState(0);
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        // Request wallet connection
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        // Set the first account as the connected wallet
+        setUser(accounts[0]);
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+      }
+    } else {
+      alert("MetaMask is not installed. Please install MetaMask to connect.");
+    }
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -53,6 +64,7 @@ const Stake = ({
             pool={pool}
             contract={contract}
             user={user}
+            connectWallet={connectWallet}
           />
         )}
         {activeTab === 2 && (
@@ -62,6 +74,7 @@ const Stake = ({
             pool={pool}
             contract={contract}
             user={user}
+            connectWallet={connectWallet}
           />
         )}
         {activeTab === 3 && (
@@ -71,6 +84,7 @@ const Stake = ({
             pool={pool}
             contract={contract}
             user={user}
+            connectWallet={connectWallet}
           />
         )}
         <div className={stl.vaultStats}>

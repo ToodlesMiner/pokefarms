@@ -122,6 +122,7 @@ const Home = () => {
               contract={contract}
               user={user}
               conversionRate={conversionRate}
+              setUser={setUser}
             />
           )}
           {activeMenu === "Stake" && (
@@ -129,9 +130,9 @@ const Home = () => {
               mainToken={mainToken}
               lpToken={lpToken}
               pool={pool}
-              setSelectingFarm={setSelectingFarm}
               user={user}
               contract={contract}
+              setUser={setUser}
             />
           )}
           {/* <img
