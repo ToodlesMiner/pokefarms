@@ -20,6 +20,7 @@ const Mint = ({
   pool,
   contract,
   user,
+  conversionRate,
 }) => {
   const [inputAmount, setInputAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,6 @@ const Mint = ({
   const [message, setMessage] = useState("");
   const [tokenABalance, setTokenABalance] = useState(0);
   const [tokenBBalance, setTokenBBalance] = useState(0);
-  const [reservesAmount, setReservesAmount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -44,9 +44,6 @@ const Mint = ({
 
   useEffect(() => {
     const initializeProvider = async () => {
-      const poolReserves = await getInnerPoolBalance(pool.tokenA, pool.tokenB);
-      setReservesAmount(poolReserves);
-
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
@@ -127,7 +124,7 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
+          Mint: 1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
           {lpToken?.baseToken?.symbol}
         </span>
         <IoMdInformationCircleOutline className={stl.info} />
@@ -179,6 +176,7 @@ const Mint = ({
           </span>
         )}
       </div>
+
       <IoMdArrowRoundDown className={stl.swapArrow} />
       <div className={stl.swapWrap}>
         {user && (
@@ -215,100 +213,111 @@ const Mint = ({
       </div>
 
       <div className={stl.bottomBox}>
-        <div className={stl.tokenBox}>
-          <div className={stl.wrapper}>
-            <img
-              src={pool.dexMainTokenImgUrl}
-              alt="Main"
-              className={stl.logoIcon}
-            />
-            <span>{mainToken?.baseToken?.symbol}</span>
+        <div className={stl.boxWrapper}>
+          <div className={stl.tokenBox}>
+            <div className={stl.wrapper}>
+              <img
+                src={pool.dexMainTokenImgUrl}
+                alt="Main"
+                className={stl.logoIcon}
+              />
+              <span>{mainToken?.baseToken?.symbol}</span>
+            </div>
+            <div className={stl.priceBox}>
+              <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
+              <span
+                className={`${stl.priceChange} ${
+                  mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                }`}
+              >
+                24h {mainToken?.priceChange?.h24 >= 0 ? "+" : ""}
+                {mainToken?.priceChange?.h24}%
+              </span>
+            </div>
+            <div className={stl.ctaBox}>
+              <button
+                onClick={() =>
+                  handleCopyAddress(mainToken?.baseToken?.symbol, pool.LP0)
+                }
+              >
+                <FaRegCopy className={stl.copyIcon} />
+                Copy
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`)
+                }
+              >
+                <FaExchangeAlt className={stl.buyIcon} />
+                Buy
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP0}`)
+                }
+              >
+                <MdCandlestickChart />
+                Chart
+              </button>
+            </div>
           </div>
-          <div className={stl.priceBox}>
-            <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
-            <span
-              className={`${stl.priceChange} ${
-                mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
-              }`}
-            >
-              24h {mainToken?.priceChange?.h24 >= 0 ? "+" : ""}
-              {mainToken?.priceChange?.h24}%
-            </span>
-          </div>
-          <div className={stl.ctaBox}>
-            <button
-              onClick={() =>
-                handleCopyAddress(mainToken?.baseToken?.symbol, pool.LP0)
-              }
-            >
-              <FaRegCopy className={stl.copyIcon} />
-              Copy
-            </button>
-            <button
-              onClick={() =>
-                (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`)
-              }
-            >
-              <FaExchangeAlt className={stl.buyIcon} />
-              Buy
-            </button>
-            <button
-              onClick={() =>
-                (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP0}`)
-              }
-            >
-              <MdCandlestickChart />
-              Chart
-            </button>
+          <div className={stl.border}></div>
+          <div className={stl.tokenBox}>
+            <div className={stl.wrapper}>
+              <img
+                src="../Squirtlogo.webp"
+                alt="Blast"
+                className={stl.logoIcon}
+              />
+              <span>{lpToken?.baseToken?.symbol}</span>
+            </div>
+            <div className={stl.priceBox}>
+              <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
+              <span
+                className={`${stl.priceChange} ${
+                  lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                }`}
+              >
+                24h {lpToken?.priceChange?.h24 >= 0 ? "+" : ""}
+                {lpToken?.priceChange?.h24}%
+              </span>
+            </div>
+            <div className={stl.ctaBox}>
+              <button
+                onClick={() =>
+                  handleCopyAddress(lpToken?.baseToken?.symbol, pool.LP1)
+                }
+              >
+                <FaRegCopy className={stl.copyIcon} />
+                Copy
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`)
+                }
+              >
+                <FaExchangeAlt className={stl.buyIcon} />
+                Buy
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP1}`)
+                }
+              >
+                <MdCandlestickChart />
+                Chart
+              </button>
+            </div>
           </div>
         </div>
-        <div className={stl.border}></div>
-        <div className={stl.tokenBox}>
-          <div className={stl.wrapper}>
-            <img
-              src="../Squirtlogo.webp"
-              alt="Blast"
-              className={stl.logoIcon}
-            />
-            <span>{lpToken?.baseToken?.symbol}</span>
-          </div>
-          <div className={stl.priceBox}>
-            <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
-            <span
-              className={`${stl.priceChange} ${
-                lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
-              }`}
-            >
-              24h {lpToken?.priceChange?.h24 >= 0 ? "+" : ""}
-              {lpToken?.priceChange?.h24}%
-            </span>
-          </div>
-          <div className={stl.ctaBox}>
-            <button
-              onClick={() =>
-                handleCopyAddress(lpToken?.baseToken?.symbol, pool.LP1)
-              }
-            >
-              <FaRegCopy className={stl.copyIcon} />
-              Copy
-            </button>
-            <button
-              onClick={() =>
-                (window.location.href = `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`)
-              }
-            >
-              <FaExchangeAlt className={stl.buyIcon} />
-              Buy
-            </button>
-            <button
-              onClick={() =>
-                (window.location.href = `https://dexscreener.com/pulsechain/${pool.LP1}`)
-              }
-            >
-              <MdCandlestickChart />
-              Chart
-            </button>
-          </div>
+        <div
+          className={stl.dexRate}
+          onClick={() =>
+            (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=${pool.tokenA}&outputCurrency=${pool.tokenB}`)
+          }
+        >
+          9mm Swap: 1 {mainToken?.baseToken?.symbol} = {conversionRate}~{" "}
+          {lpToken?.baseToken?.symbol}
         </div>
       </div>
       <button className={stl.swapCta} onClick={handleSwap}>

@@ -33,8 +33,7 @@ const Home = () => {
   const [mainToken, setMainToken] = useState({});
   const [lpToken, setLPToken] = useState({});
   const [emissionRate, setEmissionRate] = useState(null);
-  const [pulsePrice, setPulsePrice] = useState(0);
-  const PLS_ADDRESS = "0xA1077a294dDE1B09bB078844df40758a5D0f9a27";
+  const [conversionRate, setConversionRate] = useState();
 
   const contract = new ethers.Contract(
     pool.parentContract,
@@ -63,6 +62,11 @@ const Home = () => {
       );
       const lpTokenResponse = await lpTokenRequest.json();
       setLPToken(lpTokenResponse.pairs[0]);
+
+      const tokenAPrice = +mainTokenResponse.pairs[0].priceUsd;
+      const tokenBPrice = +lpTokenResponse.pairs[0].priceUsd;
+      console.log(tokenAPrice / tokenBPrice);
+      setConversionRate(Math.floor(tokenAPrice / tokenBPrice));
 
       // Pulse price
       // const pulsePriceRequest = await fetch(
@@ -117,6 +121,7 @@ const Home = () => {
               emissionRate={emissionRate}
               contract={contract}
               user={user}
+              conversionRate={conversionRate}
             />
           )}
           {activeMenu === "Stake" && (
@@ -129,11 +134,11 @@ const Home = () => {
               contract={contract}
             />
           )}
-          <img
-            src="../BLASTOISE.webp"
+          {/* <img
+            src="../Squirtlogo.webp"
             alt="Blast"
             className={stl.blastCorner}
-          />
+          /> */}
         </div>
         {/* <iframe
           className={stl.frame}

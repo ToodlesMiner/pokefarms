@@ -34,6 +34,8 @@
   position: relative;
   border: 1px solid rgba(255, 255, 0, 0.2);
   box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
+  z-index: 20;
+  overflow: hidden;
 }
 
 .swapArrow {
@@ -166,6 +168,7 @@
   align-items: center;
   flex-direction: column;
   padding-top: 1rem;
+  z-index: 10;
 }
 
 .tokenBox {
@@ -316,7 +319,7 @@
 
 .dollarValue {
   position: absolute;
-  bottom: 1rem;
+  bottom: 3.25rem;
   right: 1rem;
   font-size: 14px;
   right: 2rem;
@@ -353,7 +356,11 @@
 
 @media only screen and (max-width: 520px) {
   .bottomBox {
+    flex-direction: column;
+  }
+  .boxWrapper {
     flex-direction: row;
+    display: flex;
   }
   .ctaBox {
     flex-direction: column;
@@ -372,4 +379,25 @@
     transform: rotate(90deg);
     display: none;
   }
+}
+
+.dexRate {
+  margin-top: 0.5rem;
+  color: white;
+  background-color: rgb(46, 0, 33);
+  width: 100%;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.dexRate:hover {
+  background-color: rgb(65, 0, 47);
+}
+
+.boxWrapper {
+  width: 100%;
 }
