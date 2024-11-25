@@ -393,7 +393,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
         </div>
         <img src="ball.png" alt="ball" className={stl.pokeBall} />
         <div className={stl.apr}>
-          <span className={stl.statValue}>{Math.floor(APR * 10)}%</span>
+          <span className={stl.statValue}>{Math.floor(APR)}%</span>
           <span className={stl.statSpan2}>APR</span>
           <FaChartSimple />
         </div>
