@@ -80,11 +80,6 @@ const Vault2 = ({
           pool.tokenB,
           pool.LP1
         );
-        console.log("SECinLP1contract: ", tokenAPoolBalance);
-
-        const ratio = tokenAPoolBalance / totalPoolBalance;
-        console.log("Ratio: ", ratio);
-        setRatio(ratio);
 
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
@@ -115,23 +110,32 @@ const Vault2 = ({
         );
         const lpTokenData = await mainTokenRequest.json();
         const nativePrice = +lpTokenData.pair.priceNative;
+        console.log("SECinLP1contract: ", tokenAPoolBalance / nativePrice);
 
-        const tokenAValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
+        const tokenAValuePerLPTokens = tokenAPoolBalance / nativePrice / totalPoolBalance;
         console.log("TokenA Value Per LP Tokens: ", tokenAValuePerLPTokens);
         setValuePerLP(tokenAValuePerLPTokens);
 
         const tokenAStaked =
-          (tokenAValuePerLPTokens * pool1Balance) / nativePrice;
+          (tokenAValuePerLPTokens * pool1Balance);
         console.log("TokenA staked: ", tokenAStaked);
 
-        const APR = annualRewards / tokenAStaked;
+        const ratio = tokenAPoolBalance / nativePrice / totalPoolBalance;
+        console.log("Ratio: ", ratio);
+        setRatio(ratio);
+
+        const APR = annualRewards / tokenAStaked * 10;
 
         setAPR(APR);
         console.log("APR: %", APR);
 
         // TVL
+        // const TVL = blastStaked * 2 * +mainToken.priceUsd * 10;
+        // setPoolTVL(TVL);
+        // console.log("TVL: ", TVL);
+        
         const tokenA = tokenAValuePerLPTokens * pool1Balance;
-        const TVL = tokenA * 2 * +lpToken.priceUsd;
+        const TVL = tokenA * 2 * +mainToken.priceUsd;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
       } catch (err) {
@@ -381,8 +385,7 @@ const Vault2 = ({
                   (+mainTokenBalance.toString() *
                     +mainToken?.priceUsd *
                     2 *
-                    valuePerLP) /
-                  ratio
+                    valuePerLP)
                 ).toFixed(2)}
               </span>
             </span>
@@ -500,8 +503,7 @@ const Vault2 = ({
                   (+stakedBalance.toString() *
                     +mainToken?.priceUsd *
                     2 *
-                    valuePerLP) /
-                  ratio
+                    valuePerLP)
                 ).toFixed(2)}
               </span>
             </span>
