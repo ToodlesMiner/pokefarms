@@ -116,7 +116,7 @@ const Vault3 = ({
         const blastStaked = blastValuePerLPTokens * pool3Balance;
         console.log("Blast staked: ", blastStaked);
 
-        const APR = annualRewards / blastStaked;
+        const APR = annualRewards / blastStaked * 10;
         setAPR(APR);
         console.log("APR: %", APR);
 
