@@ -4,6 +4,7 @@ import { FaChartSimple } from "react-icons/fa6";
 import { FaRegCopy } from "react-icons/fa";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import { formatInput } from "../../../../utils/utils";
 import {
   getTokenBalance,
   getPoolBalance,
@@ -143,10 +144,10 @@ const Vault2 = ({
 
   const stake = async () => {
     if (!stakeInput || mainTokenBalance === 0 || !signer) return;
-
+    const formattedInput = stakeInput.replaceAll(",", "");
     try {
       setStakeLoading(true);
-      const amount = ethers.parseUnits(stakeInput, 18);
+      const amount = ethers.parseUnits(formattedInput, 18);
       const contractWithSigner = contract.connect(signer);
 
       const lpTokenContract = new ethers.Contract(
@@ -172,10 +173,10 @@ const Vault2 = ({
       const depositTx = await contractWithSigner.deposit(1, amount);
       await depositTx.wait();
 
-      setStakedBalance((prev) => BigInt(prev) + BigInt(stakeInput));
-      setMainTokenBalance((prev) => BigInt(prev) - BigInt(stakeInput));
+      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      setMainTokenBalance((prev) => BigInt(prev) - BigInt(formattedInput));
 
-      setMessage(`Successfully Staked ${stakeInput} LP!`);
+      setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
 
       setTimeout(() => {
@@ -194,10 +195,10 @@ const Vault2 = ({
 
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0 || !signer) return;
-
+    const formattedInput = unStakeInput.replaceAll(",", "");
     try {
       setUnStakeLoading(true);
-      const amount = ethers.parseUnits(unStakeInput, 18);
+      const amount = ethers.parseUnits(formattedInput, 18);
       const contractWithSigner = contract.connect(signer);
 
       // Call the withdraw function from the smart contract
@@ -205,10 +206,10 @@ const Vault2 = ({
       await withdrawTx.wait();
 
       // Update balances
-      setStakedBalance((prev) => BigInt(prev) - BigInt(unStakeInput));
-      setMainTokenBalance((prev) => BigInt(prev) + BigInt(unStakeInput));
+      setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      setMainTokenBalance((prev) => BigInt(prev) + BigInt(formattedInput));
 
-      setMessage(`Successfully Unstaked ${unStakeInput} LP!`);
+      setMessage(`Successfully Unstaked ${formattedInput} LP!`);
       setUnstakeInput("");
 
       setTimeout(() => {
@@ -326,10 +327,11 @@ const Vault2 = ({
               className={stl.input}
               placeholder="Enter amount to stake"
               value={stakeInput}
-              onInput={(e) => {
-                const inputValue = e.target?.value;
-                if (/^\d*\.?\d*$/.test(inputValue)) {
-                  setStakeInput(inputValue);
+              onChange={(e) => {
+                const inputValue = e.target.value.replace(/,/g, "");
+                if (!isNaN(inputValue) || inputValue === "") {
+                  const formattedValue = formatInput(event.target.value);
+                  setStakeInput(formattedValue);
                 }
               }}
             />
@@ -374,7 +376,11 @@ const Vault2 = ({
         </div>
         <button
           className={stl.vaultCta}
-          disabled={stakeLoading || mainTokenBalance === 0 ? true : false}
+          disabled={
+            stakeLoading || unStakeLoading || mainTokenBalance === 0
+              ? true
+              : false
+          }
           onClick={stake}
         >
           {!stakeLoading && "Stake"}
@@ -422,36 +428,47 @@ const Vault2 = ({
               className={stl.input}
               placeholder="Enter amount to unstake"
               value={unStakeInput}
-              onInput={(e) => {
-                const inputValue = e.target?.value;
-                if (/^\d*\.?\d*$/.test(inputValue)) {
-                  setUnstakeInput(inputValue);
+              onChange={(e) => {
+                const inputValue = e.target.value.replace(/,/g, "");
+                if (!isNaN(inputValue) || inputValue === "") {
+                  const formattedValue = formatInput(event.target.value);
+                  setUnstakeInput(formattedValue);
                 }
               }}
             />
             <div className={stl.buttonBox}>
               <button
                 onClick={() =>
-                  setUnstakeInput((stakedBalance * 0.25).toFixed(0).toString())
+                  setUnstakeInput(
+                    (+stakedBalance.toString() * 0.25).toFixed(0).toString()
+                  )
                 }
               >
                 25%
               </button>
               <button
                 onClick={() =>
-                  setUnstakeInput((stakedBalance * 0.5).toFixed(0).toString())
+                  setUnstakeInput(
+                    (+stakedBalance.toString() * 0.5).toFixed(0).toString()
+                  )
                 }
               >
                 50%
               </button>
               <button
                 onClick={() =>
-                  setUnstakeInput((stakedBalance * 0.75).toFixed(0).toString())
+                  setUnstakeInput(
+                    (+stakedBalance.toString() * 0.75).toFixed(0).toString()
+                  )
                 }
               >
                 75%
               </button>
-              <button onClick={() => setUnstakeInput(stakedBalance.toString())}>
+              <button
+                onClick={() =>
+                  setUnstakeInput(+stakedBalance.toString().toString())
+                }
+              >
                 Max
               </button>
             </div>
@@ -468,7 +485,9 @@ const Vault2 = ({
         </div>
         <button
           className={stl.vaultCta}
-          disabled={unStakeLoading || stakedBalance === 0 ? true : false}
+          disabled={
+            stakeLoading || unStakeLoading || stakedBalance === 0 ? true : false
+          }
           onClick={unStake}
         >
           {!unStakeLoading && "Unstake"}
@@ -479,13 +498,13 @@ const Vault2 = ({
       <button
         className={stl.claimCta}
         onClick={user ? claimReward : connectWallet}
-        disabled={claimLoading ? true : false}
+        disabled={stakeLoading || unStakeLoading || claimLoading ? true : false}
       >
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (
           <>
             {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
-            CLAIM {(rewardCount / 1e18).toFixed(5)} {mainToken.baseToken.symbol}
+            CLAIM {(rewardCount / 1e18).toFixed(2)} {mainToken.baseToken.symbol}
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}

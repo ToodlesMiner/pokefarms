@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import stl from "./Mint.module.css";
 import { IoMdArrowRoundDown } from "react-icons/io";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { MdCandlestickChart } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
-import { BsBank } from "react-icons/bs";
 import { ethers } from "ethers";
 import { ERC20ABI } from "../../../utils/ERC20ABI";
 import MessageOverlay from "../messageoverlay/MessageOverlay";
 import { getTokenBalance } from "../../../utils/contractUtils";
-import { getInnerPoolBalance } from "../../../utils/contractUtils";
+import { formatInput } from "../../../utils/utils";
 
 const Mint = ({
   mainToken,
@@ -29,6 +27,12 @@ const Mint = ({
   const [message, setMessage] = useState("");
   const [tokenABalance, setTokenABalance] = useState(0);
   const [tokenBBalance, setTokenBBalance] = useState(0);
+  const [outputAmount, setOutputAmount] = useState("");
+
+  useEffect(() => {
+    const inputFormatted = inputAmount.replaceAll(",", "");
+    setOutputAmount(inputFormatted);
+  }, [inputAmount]);
 
   useEffect(() => {
     if (!user) return;
@@ -97,6 +101,8 @@ const Mint = ({
         ).toLocaleString()} ${lpToken.baseToken.symbol}!`
       );
 
+      setTokenABalance((prev) => prev - +inputAmount);
+      setTokenBBalance((prev) => prev + +inputAmount * emissionRate);
       setInputAmount("");
       setLoading(true);
       setTimeout(() => {
@@ -127,6 +133,8 @@ const Mint = ({
     }
   };
 
+  const formattedPriceInput = +inputAmount.replaceAll(",", "");
+
   return (
     <div className={stl.innerModal}>
       {loading && (
@@ -146,7 +154,10 @@ const Mint = ({
           Mint: 1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
           {lpToken?.baseToken?.symbol}
         </span>
-        <IoMdInformationCircleOutline className={stl.info} />
+        <span className={stl.rate}>
+          9mm: 1 {mainToken?.baseToken?.symbol} = {conversionRate}~{" "}
+          {lpToken?.baseToken?.symbol}
+        </span>
       </div>
       <div className={stl.swapWrap}>
         {user && (
@@ -176,22 +187,26 @@ const Mint = ({
                 +inputAmount > tokenABalance && user ? stl.redInput : ""
               }`}
               value={inputAmount}
-              onInput={(e) => {
-                const inputValue = e.target?.value;
-                if (/^\d*\.?\d*$/.test(inputValue)) {
-                  setInputAmount(inputValue);
+              onChange={(e) => {
+                const inputValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                if (!isNaN(inputValue) || inputValue === "") {
+                  const formattedValue = formatInput(event.target.value);
+                  setInputAmount(formattedValue);
                 }
               }}
             />
           </div>
         </div>
-        {inputAmount && +inputAmount * +mainToken.priceUsd > 0.01 && (
+        {inputAmount && +formattedPriceInput * +mainToken.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+inputAmount * +mainToken.priceUsd).toLocaleString("en-US", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            })}
+            {(+formattedPriceInput * +mainToken.priceUsd).toLocaleString(
+              "en-US",
+              {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              }
+            )}
           </span>
         )}
       </div>
@@ -220,11 +235,11 @@ const Mint = ({
           <div className={stl.numberBox}>
             <span
               className={`${stl.outputSpan} ${
-                +inputAmount * emissionRate > 0 ? stl.whiteBalance : ""
+                +outputAmount * emissionRate > 0 ? stl.whiteBalance : ""
               }`}
             >
-              {inputAmount
-                ? Math.floor(+inputAmount * emissionRate).toLocaleString()
+              {outputAmount
+                ? Math.floor(+outputAmount * emissionRate).toLocaleString()
                 : "0"}
             </span>
           </div>
@@ -256,7 +271,7 @@ const Mint = ({
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(mainToken?.baseToken?.symbol, pool.LP0)
+                  handleCopyAddress(mainToken?.baseToken?.symbol, pool.tokenA)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -264,7 +279,10 @@ const Mint = ({
               </button>
               <button
                 onClick={() =>
-                  (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`)
+                  window.open(
+                    `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`,
+                    "_blank"
+                  )
                 }
               >
                 <FaExchangeAlt className={stl.buyIcon} />
@@ -304,7 +322,7 @@ const Mint = ({
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lpToken?.baseToken?.symbol, pool.LP1)
+                  handleCopyAddress(lpToken?.baseToken?.symbol, pool.tokenB)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -312,7 +330,10 @@ const Mint = ({
               </button>
               <button
                 onClick={() =>
-                  (window.location.href = `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`)
+                  window.open(
+                    `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`,
+                    "_blank"
+                  )
                 }
               >
                 <FaExchangeAlt className={stl.buyIcon} />
@@ -328,15 +349,6 @@ const Mint = ({
               </button>
             </div>
           </div>
-        </div>
-        <div
-          className={stl.dexRate}
-          onClick={() =>
-            (window.location.href = `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=${pool.tokenA}&outputCurrency=${pool.tokenB}`)
-          }
-        >
-          9mm Swap: 1 {mainToken?.baseToken?.symbol} = {conversionRate}~{" "}
-          {lpToken?.baseToken?.symbol}
         </div>
       </div>
       <button

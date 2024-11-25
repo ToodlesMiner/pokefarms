@@ -147,6 +147,13 @@
   text-transform: upp;
 }
 
+.valueSpan {
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0rem;
+  color: rgb(0, 255, 0);
+}
+
 .midInputBlock {
   display: flex;
   flex-direction: column;
