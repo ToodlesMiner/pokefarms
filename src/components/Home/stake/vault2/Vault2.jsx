@@ -33,6 +33,7 @@ const Vault2 = ({
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
   const [valuePerLP, setValuePerLP] = useState(0);
+  const [ratio, setRatio] = useState(0);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -83,6 +84,7 @@ const Vault2 = ({
 
         const ratio = tokenAPoolBalance / totalPoolBalance;
         console.log("Ratio: ", ratio);
+        setRatio(ratio);
 
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
@@ -376,10 +378,11 @@ const Vault2 = ({
               <span className={stl.valueSpan}>
                 $
                 {(
-                  +mainTokenBalance.toString() *
-                  +mainToken?.priceUsd *
-                  2 *
-                  valuePerLP
+                  (+mainTokenBalance.toString() *
+                    +mainToken?.priceUsd *
+                    2 *
+                    valuePerLP) /
+                  ratio
                 ).toFixed(2)}
               </span>
             </span>
@@ -494,10 +497,11 @@ const Vault2 = ({
               <span className={stl.valueSpan}>
                 $
                 {(
-                  +stakedBalance.toString() *
-                  +mainToken?.priceUsd *
-                  2 *
-                  valuePerLP
+                  (+stakedBalance.toString() *
+                    +mainToken?.priceUsd *
+                    2 *
+                    valuePerLP) /
+                  ratio
                 ).toFixed(2)}
               </span>
             </span>
