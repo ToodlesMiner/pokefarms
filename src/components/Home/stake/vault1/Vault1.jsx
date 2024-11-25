@@ -357,7 +357,12 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
               </span>{" "}
               LP
               <span className={stl.valueSpan}>
-                ${(+mainTokenBalance * +mainToken?.priceUsd * 2).toFixed(2)}
+                $
+                {(
+                  +mainTokenBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2
+                ).toFixed(2)}
               </span>
             </span>
           )}

@@ -371,6 +371,14 @@ const Vault2 = ({
                 {mainTokenBalance.toLocaleString()}
               </span>{" "}
               LP
+              <span className={stl.valueSpan}>
+                $
+                {(
+                  +mainTokenBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2
+                ).toFixed(2)}
+              </span>
             </span>
           )}
         </div>
@@ -480,6 +488,12 @@ const Vault2 = ({
                 {stakedBalance.toLocaleString()}
               </span>{" "}
               LP
+              <span className={stl.valueSpan}>
+                $
+                {(+stakedBalance.toString() * +mainToken?.priceUsd * 2).toFixed(
+                  2
+                )}
+              </span>
             </span>
           )}
         </div>
