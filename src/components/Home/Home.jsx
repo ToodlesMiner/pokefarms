@@ -33,7 +33,7 @@ const Home = () => {
   const [mainToken, setMainToken] = useState({});
   const [lpToken, setLPToken] = useState({});
   const [emissionRate, setEmissionRate] = useState(null);
-  const [conversionRate, setConversionRate] = useState();
+  const [conversionRate, setConversionRate] = useState(null);
 
   const contract = new ethers.Contract(
     pool.parentContract,
