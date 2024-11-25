@@ -25,6 +25,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
+  const [valuePerLP, setValuePerLP] = useState(0);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -103,6 +104,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
 
         const blastValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
         console.log("Blast Value Per LP Tokens: ", blastValuePerLPTokens);
+        setValuePerLP(blastValuePerLPTokens);
 
         const blastStaked = blastValuePerLPTokens * pool0Balance;
         console.log("Blast staked: ", blastStaked);
@@ -361,7 +363,8 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
                 {(
                   +mainTokenBalance.toString() *
                   +mainToken?.priceUsd *
-                  2
+                  2 *
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>
@@ -474,7 +477,13 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
               </span>{" "}
               LP
               <span className={stl.valueSpan}>
-                ${+stakedBalance.toString() * +mainToken?.priceUsd * 2}
+                $
+                {(
+                  +stakedBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2 *
+                  valuePerLP
+                ).toFixed(2)}
               </span>
             </span>
           )}
@@ -499,7 +508,6 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (
           <>
-            {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
             CLAIM {(rewardCount / 1e18).toFixed(2)} {mainToken.baseToken.symbol}
           </>
         )}

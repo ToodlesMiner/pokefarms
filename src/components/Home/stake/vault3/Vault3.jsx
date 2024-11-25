@@ -32,6 +32,7 @@ const Vault3 = ({
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
+  const [valuePerLP, setValuePerLP] = useState(0);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -110,6 +111,7 @@ const Vault3 = ({
 
         const blastValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
         console.log("Blast Value Per LP Tokens: ", blastValuePerLPTokens);
+        setValuePerLP(blastValuePerLPTokens);
 
         const blastStaked = blastValuePerLPTokens * pool3Balance;
         console.log("Blast staked: ", blastStaked);
@@ -371,6 +373,15 @@ const Vault3 = ({
                 {mainTokenBalance.toLocaleString()}
               </span>{" "}
               LP
+              <span className={stl.valueSpan}>
+                $
+                {(
+                  +mainTokenBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2 *
+                  valuePerLP
+                ).toFixed(2)}
+              </span>
             </span>
           )}
         </div>
@@ -484,6 +495,15 @@ const Vault3 = ({
                 {stakedBalance.toLocaleString()}
               </span>{" "}
               LP
+              <span className={stl.valueSpan}>
+                $
+                {(
+                  +stakedBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2 *
+                  valuePerLP
+                ).toFixed(2)}
+              </span>
             </span>
           )}
         </div>

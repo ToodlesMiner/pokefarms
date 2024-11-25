@@ -32,6 +32,7 @@ const Vault2 = ({
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
+  const [valuePerLP, setValuePerLP] = useState(0);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -115,6 +116,7 @@ const Vault2 = ({
 
         const tokenAValuePerLPTokens = tokenAPoolBalance / totalPoolBalance;
         console.log("TokenA Value Per LP Tokens: ", tokenAValuePerLPTokens);
+        setValuePerLP(tokenAValuePerLPTokens);
 
         const tokenAStaked =
           (tokenAValuePerLPTokens * pool1Balance) / nativePrice;
@@ -376,7 +378,8 @@ const Vault2 = ({
                 {(
                   +mainTokenBalance.toString() *
                   +mainToken?.priceUsd *
-                  2
+                  2 *
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>
@@ -490,9 +493,12 @@ const Vault2 = ({
               LP
               <span className={stl.valueSpan}>
                 $
-                {(+stakedBalance.toString() * +mainToken?.priceUsd * 2).toFixed(
-                  2
-                )}
+                {(
+                  +stakedBalance.toString() *
+                  +mainToken?.priceUsd *
+                  2 *
+                  valuePerLP
+                ).toFixed(2)}
               </span>
             </span>
           )}
