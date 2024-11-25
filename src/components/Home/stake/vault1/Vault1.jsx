@@ -364,8 +364,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
                   +mainTokenBalance.toString() *
                   +mainToken?.priceUsd *
                   2 *
-                  valuePerLP *
-                  10
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>
@@ -483,8 +482,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
                   +stakedBalance.toString() *
                   +mainToken?.priceUsd *
                   2 *
-                  valuePerLP *
-                  10
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>

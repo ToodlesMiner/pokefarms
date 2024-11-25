@@ -379,8 +379,7 @@ const Vault3 = ({
                   +mainTokenBalance.toString() *
                   +mainToken?.priceUsd *
                   2 *
-                  valuePerLP *
-                  10
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>
@@ -502,8 +501,7 @@ const Vault3 = ({
                   +stakedBalance.toString() *
                   +mainToken?.priceUsd *
                   2 *
-                  valuePerLP *
-                  10
+                  valuePerLP
                 ).toFixed(2)}
               </span>
             </span>
