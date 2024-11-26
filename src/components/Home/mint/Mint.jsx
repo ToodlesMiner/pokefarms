@@ -45,7 +45,7 @@ const Mint = ({
       setTokenBBalance(tokenB);
     };
     balanceFetcher();
-  }, [user]);
+  }, [user, pool.tokenA, pool.tokenB]);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -116,6 +116,24 @@ const Mint = ({
     }
   };
 
+  // const connectWallet = async () => {
+  //   if (window.ethereum) {
+  //     try {
+  //       // Request wallet connection
+  //       const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //       });
+
+  //       // Set the first account as the connected wallet
+  //       setUser(accounts[0]);
+  //     } catch (error) {
+  //       console.error("Error connecting wallet:", error);
+  //     }
+  //   } else {
+  //     alert("MetaMask is not installed. Please install MetaMask to connect.");
+  //   }
+  // };
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -123,9 +141,28 @@ const Mint = ({
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-
+  
         // Set the first account as the connected wallet
         setUser(accounts[0]);
+  
+        // Listen for account changes
+        window.ethereum.on("accountsChanged", (newAccounts) => {
+          if (newAccounts.length === 0) {
+            // User disconnected wallet
+            setUser(null);
+            alert("Wallet disconnected.");
+          } else {
+            // Update user with new account
+            setUser(newAccounts[0]);
+          }
+        });
+  
+        // Listen for chain changes (e.g., switching networks)
+        window.ethereum.on("chainChanged", (chainId) => {
+          console.log("Chain changed to:", chainId);
+          // Optionally handle chain changes
+          // You could reset state or reload the app here if needed
+        });
       } catch (error) {
         console.error("Error connecting wallet:", error);
       }
@@ -133,6 +170,7 @@ const Mint = ({
       alert("MetaMask is not installed. Please install MetaMask to connect.");
     }
   };
+  
 
   const formattedPriceInput = +inputAmount.replaceAll(",", "");
 
