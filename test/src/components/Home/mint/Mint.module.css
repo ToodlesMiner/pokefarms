@@ -1,0 +1,393 @@
+.innerModal {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 1rem;
+  min-height: 659px;
+  opacity: 0;
+  animation: fadeIn 0.2s forwards linear;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.swapWrap {
+  width: 100%;
+  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
+  min-height: 11rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(255, 255, 0, 0.2);
+  box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
+  z-index: 20;
+  overflow: hidden;
+}
+
+.swapArrow {
+  color: rgba(255, 255, 0, 0.705);
+  font-size: 35px;
+  margin: 0.3rem 0rem;
+}
+
+.logoIcon {
+  width: 40px;
+  background-color: rgb(0, 64, 255);
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.itemWrap {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+  color: var(--yellow);
+  border-radius: 1rem;
+  padding: 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.itemWrap:hover {
+  box-shadow: 0px 0px 3px yellow;
+  background-color: rgba(255, 255, 0, 0.05);
+}
+
+.itemBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.numberBox {
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.amountInput {
+  font-size: 35px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: white;
+  text-align: right;
+  /* background-color: red; */
+  height: 100%;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.whiteSpan {
+  color: white;
+  font-size: 35px !important;
+}
+
+.rate {
+  color: rgba(246, 255, 0, 0.687);
+  font-size: 15px;
+  border: 2px solid rgba(255, 255, 0, 0.2);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  user-select: none;
+  text-align: center;
+}
+
+.toprow {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  text-align: start;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 8px;
+}
+
+.info {
+  color: yellow;
+  font-size: 20px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.info:hover {
+  opacity: 1;
+  color: yellow;
+}
+
+.swapCta {
+  width: 100%;
+  min-height: 2.75rem;
+  font-size: 2rem;
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: rgb(227, 227, 0);
+  transition: all 0.1s ease-in-out;
+  text-transform: uppercase;
+  min-height: 44px;
+}
+
+.swapCta:hover {
+  background-color: yellow;
+}
+
+.bottomBox {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.tokenBox {
+  display: flex;
+  color: rgb(0, 255, 0);
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.priceSpan {
+  font-size: 24px;
+  margin-top: 5px;
+  position: relative;
+}
+
+.ctaBox {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ctaBox button {
+  font-size: 20px;
+  background-color: transparent;
+  outline: 1px solid rgba(255, 255, 0, 0.635);
+  border: none;
+  color: white;
+  border-radius: 0.25rem;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+}
+.ctaBox button:hover {
+  background-color: rgb(255, 255, 0);
+  color: black;
+}
+
+.border {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 0, 0.4);
+  margin: 0.5rem 0rem;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+.wrapper span {
+  width: 3.5rem;
+  font-size: 16px;
+}
+
+.copyIcon {
+  font-size: 12px;
+}
+
+.buyIcon {
+  font-size: 14px;
+}
+
+.frame {
+  width: 100%;
+  height: 30rem;
+}
+
+.priceBox {
+  display: flex;
+  flex-direction: column;
+  width: 7.5rem;
+}
+
+.priceChange {
+  font-size: 16px;
+}
+
+.redPrice {
+  color: red !important;
+}
+
+.loadOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  top: 0;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 40px;
+}
+
+.loadOverlay h2 {
+  z-index: 10;
+}
+
+@keyframes fadeIn2 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+.pika {
+  width: 100%;
+  opacity: 1;
+  position: relative;
+  z-index: 10;
+}
+
+.rotate {
+  transform: scaleX(-1) !important;
+}
+
+.grassBg {
+  position: absolute;
+  background-image: url("../Grass.webp");
+  width: 100%;
+  height: 100%;
+  animation: fadeIn2 3s forwards linear;
+}
+
+.balanceSpan {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 14px;
+  color: rgb(187, 187, 187);
+}
+
+.whiteSpan {
+  font-size: 14px !important;
+  color: white;
+}
+
+.dollarValue {
+  position: absolute;
+  bottom: 3.25rem;
+  right: 1rem;
+  font-size: 14px;
+  right: 2rem;
+  color: rgb(0, 255, 0);
+}
+
+.outputSpan {
+  font-size: 35px !important;
+  color: gray;
+  user-select: none;
+}
+
+.redInput {
+  color: red !important;
+}
+
+.whiteBalance {
+  color: white;
+}
+
+.boxWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+@media only screen and (max-width: 560px) {
+  .modal,
+  .toggleBox {
+    width: 100%;
+  }
+
+  .mainApp {
+    padding: 0rem 0.5rem 2rem;
+  }
+  .mainLogo {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .bottomBox {
+    flex-direction: column;
+    padding: 1rem 0rem;
+  }
+  .boxWrapper {
+    flex-direction: row;
+    display: flex;
+  }
+  .ctaBox {
+    flex-direction: column;
+    margin-top: 0.25rem;
+    width: 90%;
+  }
+  .tokenBox {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .priceBox {
+    text-align: center;
+    margin-top: 0rem;
+  }
+  .border {
+    transform: rotate(90deg);
+    display: none;
+  }
+}
