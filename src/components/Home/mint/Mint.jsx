@@ -78,7 +78,8 @@ const Mint = ({
     try {
       setLoading(true);
       const contractWithSigner = contract.connect(signer);
-      const formattedAmount = ethers.parseUnits(inputAmount.toString(), 18);
+      const sanitizedAmount = inputAmount.replace(/,/g, "");
+      const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
 
       const tokenAContract = new ethers.Contract(pool.tokenA, ERC20ABI, signer);
 
