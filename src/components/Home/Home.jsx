@@ -23,6 +23,19 @@ const poolData = [
     dexLpTokenImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
   },
+  {
+    contractName: "Blastoise-Wartortle",
+    parentContract: "0xEFf44Bd01CAC819e8Ea31F1eE8ca6c52c58d1506",
+    LP0: "0x9e742F08B56103349B35F27412A08528552D3017",
+    LP1: "0x0AfBaD8b99Deab75b423AAD0808254bf943777b8",
+    LP2: "0x594c4c0EC9E5982d786213429f28362Bc1eb8104",
+    tokenA: "0xD219e00d0bbf6bFB74009654BB6f51b1AC9d16C7", // BLastoise
+    tokenB: "0xd47D188e308E7624C77a86352D43F49Bbe569931", // Wartortle
+    dexMainTokenImgUrl:
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31a4ffe71bfeadbda769d4a3e03bf4ae5c28ee31.png?size=lg&key=19ffe5",
+    dexLpTokenImgUrl:
+      "https://dd.dexscreener.com/dss-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
+  },
 ];
 
 const Home = () => {
@@ -67,21 +80,9 @@ const Home = () => {
       const tokenBPrice = +lpTokenResponse.pairs[0].priceUsd;
       console.log(tokenAPrice / tokenBPrice);
       setConversionRate(Math.floor(tokenAPrice / tokenBPrice));
-
-      // Pulse price
-      // const pulsePriceRequest = await fetch(
-      //   `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${PLS_ADDRESS}`
-      // );
-      // const pulseResponse = await pulsePriceRequest.json();
-      // console.log(pulseResponse);
-      // setLPToken(lpTokenResponse.pairs[0]);
     };
     initialize();
-  }, []);
-
-  useEffect(() => {
-    console.log(mainToken);
-  }, [mainToken]);
+  }, [pool]);
 
   return (
     <div className={stl.home}>
