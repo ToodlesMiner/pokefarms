@@ -45,6 +45,32 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
               )}
             </li>
           ))}
+          {poolData.map((pool, index) => (
+            <li
+              key={index}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onClick={() => {
+                setPool(pool);
+                setSelectingFarm(false);
+              }}
+            >
+              <img
+                src={pool.dexMainTokenImgUrl}
+                alt="Pair img"
+                className={stl.pairLogo}
+              />
+              <div className={stl.col}>
+                <span className={stl.poolName}>{pool.contractName}</span>
+                <span className={stl.contractSpan}>{pool.parentContract}</span>
+              </div>
+              {hoveredIndex === index && (
+                <div className={stl.visitDiv}>
+                  <FaLongArrowAltRight className={stl.arrow} />
+                  <span>Visit Pool</span>
+                </div>
+              )}
+            </li>
+          ))}
         </ul>
       </div>
     </div>
