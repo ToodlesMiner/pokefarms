@@ -294,7 +294,7 @@ const Vault1 = ({ mainToken, pool, contract, user, connectWallet }) => {
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />

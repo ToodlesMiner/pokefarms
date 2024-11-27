@@ -315,7 +315,7 @@ const Vault2 = ({
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexLpTokenImgUrl}
+                src={pool.dexTokenBImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />
@@ -425,7 +425,7 @@ const Vault2 = ({
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexLpTokenImgUrl}
+                src={pool.dexTokenBImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />

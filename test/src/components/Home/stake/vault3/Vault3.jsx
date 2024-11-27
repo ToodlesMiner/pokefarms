@@ -305,7 +305,7 @@ const Vault3 = ({
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />
@@ -314,7 +314,7 @@ const Vault3 = ({
             <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img
-                src={pool.dexLpTokenImgUrl}
+                src={pool.dexTokenBImgUrl}
                 alt="pulse"
                 className={stl.microLogo}
               />
@@ -419,7 +419,7 @@ const Vault3 = ({
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />
@@ -428,7 +428,7 @@ const Vault3 = ({
             <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
               <img
-                src={pool.dexLpTokenImgUrl}
+                src={pool.dexTokenBImgUrl}
                 alt="pulse"
                 className={stl.microLogo}
               />

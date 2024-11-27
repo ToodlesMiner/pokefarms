@@ -212,7 +212,7 @@ const Mint = ({
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src={pool.dexMainTokenImgUrl}
+              src={pool.dexTokenAImgUrl}
               alt="Main"
               className={stl.logoIcon}
             />
@@ -265,7 +265,7 @@ const Mint = ({
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src={pool.dexLpTokenImgUrl}
+              src={pool.dexTokenBImgUrl}
               alt="LP"
               className={stl.logoIcon}
             />
@@ -290,7 +290,7 @@ const Mint = ({
           <div className={stl.tokenBox}>
             <div className={stl.wrapper}>
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Main"
                 className={stl.logoIcon}
               />
