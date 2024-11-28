@@ -121,8 +121,8 @@ const Home = () => {
         <div className={stl.modal}>
           {activeMenu === "Mint" && (
             <Mint
-              mainToken={lp0Token}
-              lpToken={lp1Token}
+              lp0Token={lp0Token}
+              lp1Token={lp1Token}
               pool={pool}
               setSelectingFarm={setSelectingFarm}
               emissionRate={emissionRate}
@@ -134,8 +134,8 @@ const Home = () => {
           )}
           {activeMenu === "Stake" && (
             <Stake
-              mainToken={lp0Token}
-              lpToken={lp1Token}
+              lp0Token={lp0Token}
+              lp1Token={lp1Token}
               pool={pool}
               user={user}
               contract={contract}
@@ -159,6 +159,8 @@ const Home = () => {
     </div>
   );
 };
+
+export default Home;
 
 // const Home = () => {
 //   const [pool, setPool] = useState(poolData[0]);
@@ -289,7 +291,7 @@ const Home = () => {
 //   );
 // };
 
-export default Home;
+
 
 /* Thats the only ABI I think youll need. 
 
