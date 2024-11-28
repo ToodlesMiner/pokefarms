@@ -1,0 +1,335 @@
+.vault {
+  width: 100%;
+  height: 100%;
+}
+
+.swapWrap {
+  width: 100%;
+  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
+  min-height: 11rem;
+  border-radius: 1rem;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(255, 255, 0, 0.2);
+  box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
+  overflow: hidden;
+}
+
+.statsWrap {
+  width: 100%;
+  height: 2rem;
+  /* background-color: red; */
+  margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tvl {
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, rgb(37, 37, 175), rgb(65, 65, 255));
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: flex;
+  padding: 4px;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 0.5rem;
+  color: rgb(0, 176, 0);
+  border: 1px solid rgb(65, 65, 255);
+}
+.apr {
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, rgb(65, 65, 255), rgb(37, 37, 175));
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  display: flex;
+  padding: 4px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 0.5rem;
+  color: rgb(0, 176, 0);
+  border: 1px solid rgb(65, 65, 255);
+}
+
+.statSpan {
+  color: white;
+  margin-top: 3px;
+  margin-left: 5px;
+}
+
+.statSpan2 {
+  color: white;
+  margin-top: 3px;
+  margin-right: 5px;
+}
+
+.statValue {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 255, 0);
+  font-size: 20px;
+}
+
+.microLogo {
+  width: 25px;
+  height: 25px;
+  background-color: rgb(0, 64, 255);
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.microStake {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-top: 1.75rem;
+}
+
+.microRow {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.leftWrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 1rem 0rem 1rem 1rem;
+  max-width: 8rem;
+}
+
+.vaultCta {
+  min-width: 4.5rem;
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  background-color: rgba(96, 96, 249, 0.615);
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.vaultCta:hover {
+  background-color: rgb(96, 96, 249);
+}
+
+.midblock {
+  flex: 1;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.balanceSpan {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 14px;
+  color: rgb(187, 187, 187);
+}
+
+.valueSpan {
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0rem;
+  color: rgb(0, 255, 0);
+}
+
+.midInputBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: red; */
+  height: 100%;
+  width: 12rem;
+  margin-top: 1.5rem;
+}
+
+.input {
+  font-size: 20px;
+  padding: 4px;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  outline: none;
+  border: 1px solid rgba(62, 62, 255, 0.522);
+  background-color: rgba(62, 62, 255, 0.164);
+  width: 100%;
+  color: white;
+  transition: all 0.1s ease-in-out;
+}
+
+.input:focus {
+  box-shadow: 0px 0px 5px rgb(67, 67, 255);
+}
+
+.buttonBox {
+  /* background-color: red; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  margin-top: 5px;
+}
+
+.buttonBox button {
+  width: 25%;
+  font-size: 16px;
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  background-color: rgb(96, 96, 249);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.buttonBox button:hover {
+  background-color: rgb(123, 123, 255);
+  color: yellow;
+}
+
+.titleBox {
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  position: relative;
+}
+
+.dexCta {
+  position: absolute;
+  left: 0;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  color: white;
+  border: 1px solid rgb(0, 77, 201);
+  transition: all 0.1s ease-in-out;
+}
+
+.dexCta:hover {
+  background-color: rgb(32, 118, 255);
+}
+
+.mmlogo {
+  width: 20px;
+  height: 20px;
+}
+
+.titleBox h2 {
+  font-size: 36px;
+  color: yellow;
+  text-transform: uppercase;
+}
+
+.copy {
+  font-size: 12px;
+  cursor: pointer;
+}
+.copy:hover {
+  color: rgb(0, 255, 0);
+}
+
+.claimCta {
+  width: 100%;
+  height: 2.75rem;
+  margin-top: 1rem;
+  font-size: 24px;
+  border-radius: 0.75rem;
+  border: none;
+  outline: none;
+  background-color: rgb(218, 218, 0);
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  text-transform: uppercase;
+}
+.claimCta:hover {
+  background-color: var(--yellow);
+}
+
+.whiteSpan {
+  color: white;
+}
+.grayPlus {
+  color: gray;
+  width: 70%;
+  text-align: center;
+}
+
+@media only screen and (max-width: 550px) {
+  .dexCta {
+    position: relative;
+    margin-bottom: 0.5rem;
+    width: 7rem;
+    justify-content: space-evenly;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .swapWrap {
+    gap: 1rem;
+  }
+  .midInputBlock {
+    width: 9rem;
+  }
+
+  .midInputBlock input::placeholder {
+    font-size: 16px;
+  }
+  .vaultCta {
+    min-width: 3.5rem;
+    font-size: 16px;
+  }
+  .leftWrap {
+    max-width: 7rem;
+  }
+  .leftWrap span {
+    font-size: 16px;
+  }
+  .microRow {
+    font-size: 16px;
+  }
+  .balanceSpan {
+    right: 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .midInputBlock {
+    width: 8rem;
+  }
+}

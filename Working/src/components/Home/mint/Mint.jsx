@@ -11,8 +11,8 @@ import { getTokenBalance } from "../../../utils/contractUtils";
 import { formatInput } from "../../../utils/utils";
 
 const Mint = ({
-  lp0Token,
-  lp1Token,
+  mainToken,
+  lpToken,
   setSelectingFarm,
   emissionRate,
   pool,
@@ -99,7 +99,7 @@ const Mint = ({
       setMessage(
         `Successfully Minted ${Number(
           inputAmount * emissionRate
-        ).toLocaleString()} ${lp1Token.baseToken.symbol}!`
+        ).toLocaleString()} ${lpToken.baseToken.symbol}!`
       );
 
       setTokenABalance((prev) => prev - +inputAmount);
@@ -190,12 +190,12 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          Mint: 1 {lp0Token?.baseToken?.symbol} = {emissionRate}{" "}
-          {lp1Token?.baseToken?.symbol}
+          Mint: 1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
+          {lpToken?.baseToken?.symbol}
         </span>
         <span className={stl.rate}>
-          9mm: 1 {lp0Token?.baseToken?.symbol} = {conversionRate}~{" "}
-          {lp1Token?.baseToken?.symbol}
+          9mm: 1 {mainToken?.baseToken?.symbol} = {conversionRate}~{" "}
+          {lpToken?.baseToken?.symbol}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -205,18 +205,18 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenABalance.toLocaleString()}
             </span>{" "}
-            {lp0Token.baseToken.symbol}
+            {mainToken.baseToken.symbol}
           </span>
         )}
         <span>You're Freezing</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src={pool.dexTokenAImgUrl}
+              src={pool.dexMainTokenImgUrl}
               alt="Main"
               className={stl.logoIcon}
             />
-            <span>{lp0Token?.baseToken?.symbol}</span>
+            <span>{mainToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <input
@@ -236,10 +236,10 @@ const Mint = ({
             />
           </div>
         </div>
-        {inputAmount && +formattedPriceInput * +lp0Token.priceUsd > 0.01 && (
+        {inputAmount && +formattedPriceInput * +mainToken.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+formattedPriceInput * +lp0Token.priceUsd).toLocaleString(
+            {(+formattedPriceInput * +mainToken.priceUsd).toLocaleString(
               "en-US",
               {
                 minimumFractionDigits: 0,
@@ -258,18 +258,18 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenBBalance.toLocaleString()}
             </span>{" "}
-            {lp1Token.baseToken.symbol}
+            {lpToken.baseToken.symbol}
           </span>
         )}
         <span>You're Minting</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src={pool.dexTokenBImgUrl}
+              src={pool.dexLpTokenImgUrl}
               alt="LP"
               className={stl.logoIcon}
             />
-            <span>{lp1Token?.baseToken?.symbol}</span>
+            <span>{lpToken?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <span
@@ -290,27 +290,27 @@ const Mint = ({
           <div className={stl.tokenBox}>
             <div className={stl.wrapper}>
               <img
-                src={pool.dexTokenAImgUrl}
+                src={pool.dexMainTokenImgUrl}
                 alt="Main"
                 className={stl.logoIcon}
               />
-              <span>{lp0Token?.baseToken?.symbol}</span>
+              <span>{mainToken?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp0Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp0Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp0Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp0Token?.priceChange?.h24}%
+                24h {mainToken?.priceChange?.h24 >= 0 ? "+" : ""}
+                {mainToken?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp0Token?.baseToken?.symbol, pool.tokenA)
+                  handleCopyAddress(mainToken?.baseToken?.symbol, pool.tokenA)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -345,23 +345,23 @@ const Mint = ({
                 alt="Blast"
                 className={stl.logoIcon}
               />
-              <span>{lp1Token?.baseToken?.symbol}</span>
+              <span>{lpToken?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp1Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp1Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp1Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp1Token?.priceChange?.h24}%
+                24h {lpToken?.priceChange?.h24 >= 0 ? "+" : ""}
+                {lpToken?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp1Token?.baseToken?.symbol, pool.tokenB)
+                  handleCopyAddress(lpToken?.baseToken?.symbol, pool.tokenB)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
