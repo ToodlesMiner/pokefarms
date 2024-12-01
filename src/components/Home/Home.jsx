@@ -31,7 +31,6 @@ const Home = () => {
   // Initialize network & contract
   useEffect(() => {
     const chainInit = async () => {
-      let RPC_URL = "";
       const chainId = Number(
         await window.ethereum.request({
           method: "eth_chainId",
@@ -41,11 +40,9 @@ const Home = () => {
       // Testnet
       if (chainId === 943) {
         setCurrentNetwork(NETWORKS[1]);
-        RPC_URL = NETWORKS[1].rpcUrl;
       } else {
         // Mainnet
         setCurrentNetwork(NETWORKS[0]);
-        RPC_URL = NETWORKS[0].rpcUrl;
       }
     };
 
@@ -54,7 +51,6 @@ const Home = () => {
 
   // Update contract intance on network change
   useEffect(() => {
-    console.log(currentNetwork);
     const newContract = new ethers.Contract(
       pool.trainerContract,
       masterABI,
@@ -88,7 +84,6 @@ const Home = () => {
 
       const tokenAPrice = +LP0Response.pairs[0].priceUsd;
       const tokenBPrice = +LP1Response.pairs[0].priceUsd;
-      // console.log(tokenAPrice / tokenBPrice);
       setConversionRate(Math.floor(tokenAPrice / tokenBPrice));
     };
     initialize();
