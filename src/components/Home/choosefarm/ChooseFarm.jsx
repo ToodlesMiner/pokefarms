@@ -29,13 +29,13 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
               }}
             >
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Pair img"
                 className={stl.pairLogo}
               />
               <div className={stl.col}>
                 <span className={stl.poolName}>{pool.contractName}</span>
-                <span className={stl.contractSpan}>{pool.parentContract}</span>
+                <span className={stl.contractSpan}>{pool.trainerContract}</span>
               </div>
               {hoveredIndex === index && (
                 <div className={stl.visitDiv}>

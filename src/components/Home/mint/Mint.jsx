@@ -11,8 +11,8 @@ import { getTokenBalance } from "../../../utils/contractUtils";
 import { formatInput } from "../../../utils/utils";
 
 const Mint = ({
-  mainToken,
-  lpToken,
+  lp0Token,
+  lp1Token,
   setSelectingFarm,
   emissionRate,
   pool,
@@ -20,6 +20,7 @@ const Mint = ({
   user,
   conversionRate,
   setUser,
+  currentNetwork,
 }) => {
   const [inputAmount, setInputAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,11 +39,29 @@ const Mint = ({
     if (!user) return;
 
     const balanceFetcher = async () => {
-      const tokenA = await getTokenBalance(pool.tokenA, user);
-      setTokenABalance(tokenA);
+      try {
+        const tokenA = await getTokenBalance(
+          pool.tokenA,
+          user,
+          currentNetwork.rpcUrl
+        );
+        console.log(tokenA);
+        console.log(currentNetwork.rpcUrl);
+        setTokenABalance(tokenA);
+      } catch (err) {
+        setTokenABalance(0);
+      }
 
-      const tokenB = await getTokenBalance(pool.tokenB, user);
-      setTokenBBalance(tokenB);
+      try {
+        const tokenB = await getTokenBalance(
+          pool.tokenB,
+          user,
+          currentNetwork.rpcUrl
+        );
+        setTokenBBalance(tokenB);
+      } catch (err) {
+        setTokenBBalance(0);
+      }
     };
     balanceFetcher();
   }, [user, pool.tokenA, pool.tokenB]);
@@ -99,7 +118,7 @@ const Mint = ({
       setMessage(
         `Successfully Minted ${Number(
           inputAmount * emissionRate
-        ).toLocaleString()} ${lpToken.baseToken.symbol}!`
+        ).toLocaleString()} ${lp1Token.baseToken.symbol}!`
       );
 
       setTokenABalance((prev) => prev - +inputAmount);
@@ -141,10 +160,10 @@ const Mint = ({
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-  
+
         // Set the first account as the connected wallet
         setUser(accounts[0]);
-  
+
         // Listen for account changes
         window.ethereum.on("accountsChanged", (newAccounts) => {
           if (newAccounts.length === 0) {
@@ -156,7 +175,7 @@ const Mint = ({
             setUser(newAccounts[0]);
           }
         });
-  
+
         // Listen for chain changes (e.g., switching networks)
         window.ethereum.on("chainChanged", (chainId) => {
           console.log("Chain changed to:", chainId);
@@ -170,7 +189,6 @@ const Mint = ({
       alert("MetaMask is not installed. Please install MetaMask to connect.");
     }
   };
-  
 
   const formattedPriceInput = +inputAmount.replaceAll(",", "");
 
@@ -190,12 +208,12 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          Mint: 1 {mainToken?.baseToken?.symbol} = {emissionRate}{" "}
-          {lpToken?.baseToken?.symbol}
+          Mint: 1 {lp0Token?.baseToken?.symbol} = {emissionRate}{" "}
+          {lp1Token?.baseToken?.symbol}
         </span>
         <span className={stl.rate}>
-          9mm: 1 {mainToken?.baseToken?.symbol} = {conversionRate}~{" "}
-          {lpToken?.baseToken?.symbol}
+          9mm: 1 {lp0Token?.baseToken?.symbol} = {conversionRate}~{" "}
+          {lp1Token?.baseToken?.symbol}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -205,18 +223,18 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenABalance.toLocaleString()}
             </span>{" "}
-            {mainToken.baseToken.symbol}
+            {lp0Token.baseToken.symbol}
           </span>
         )}
         <span>You're Freezing</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img
-              src={pool.dexMainTokenImgUrl}
+              src={pool.dexTokenAImgUrl}
               alt="Main"
               className={stl.logoIcon}
             />
-            <span>{mainToken?.baseToken?.symbol}</span>
+            <span>{lp0Token?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <input
@@ -236,10 +254,10 @@ const Mint = ({
             />
           </div>
         </div>
-        {inputAmount && +formattedPriceInput * +mainToken.priceUsd > 0.01 && (
+        {inputAmount && +formattedPriceInput * +lp0Token.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+formattedPriceInput * +mainToken.priceUsd).toLocaleString(
+            {(+formattedPriceInput * +lp0Token.priceUsd).toLocaleString(
               "en-US",
               {
                 minimumFractionDigits: 0,
@@ -258,18 +276,14 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenBBalance.toLocaleString()}
             </span>{" "}
-            {lpToken.baseToken.symbol}
+            {lp1Token.baseToken.symbol}
           </span>
         )}
         <span>You're Minting</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
-            <img
-              src={pool.dexLpTokenImgUrl}
-              alt="LP"
-              className={stl.logoIcon}
-            />
-            <span>{lpToken?.baseToken?.symbol}</span>
+            <img src={pool.dexTokenBImgUrl} alt="LP" className={stl.logoIcon} />
+            <span>{lp1Token?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <span
@@ -290,27 +304,27 @@ const Mint = ({
           <div className={stl.tokenBox}>
             <div className={stl.wrapper}>
               <img
-                src={pool.dexMainTokenImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Main"
                 className={stl.logoIcon}
               />
-              <span>{mainToken?.baseToken?.symbol}</span>
+              <span>{lp0Token?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${mainToken?.priceUsd}</span>
+              <span className={stl.priceSpan}>${lp0Token?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  mainToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  lp0Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {mainToken?.priceChange?.h24 >= 0 ? "+" : ""}
-                {mainToken?.priceChange?.h24}%
+                24h {lp0Token?.priceChange?.h24 >= 0 ? "+" : ""}
+                {lp0Token?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(mainToken?.baseToken?.symbol, pool.tokenA)
+                  handleCopyAddress(lp0Token?.baseToken?.symbol, pool.tokenA)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -345,23 +359,23 @@ const Mint = ({
                 alt="Blast"
                 className={stl.logoIcon}
               />
-              <span>{lpToken?.baseToken?.symbol}</span>
+              <span>{lp1Token?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lpToken?.priceUsd}</span>
+              <span className={stl.priceSpan}>${lp1Token?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lpToken?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  lp1Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lpToken?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lpToken?.priceChange?.h24}%
+                24h {lp1Token?.priceChange?.h24 >= 0 ? "+" : ""}
+                {lp1Token?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lpToken?.baseToken?.symbol, pool.tokenB)
+                  handleCopyAddress(lp1Token?.baseToken?.symbol, pool.tokenB)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />

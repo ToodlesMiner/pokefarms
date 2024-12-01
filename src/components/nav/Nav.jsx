@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import stl from "./Nav.module.css";
 import { IoWalletOutline } from "react-icons/io5";
+import { FaExclamationTriangle } from "react-icons/fa";
 
-const Nav = ({ user, setUser }) => {
+const Nav = ({ user, setUser, currentNetwork }) => {
   const [hovered, setHovered] = useState(false);
 
   const connectWallet = async () => {
@@ -38,6 +39,15 @@ const Nav = ({ user, setUser }) => {
 
   return (
     <nav className={stl.nav}>
+      <span className={stl.networkSpan}>
+        {+currentNetwork.chainId === 943 ? (
+          <span className={stl.testSpan}>
+            Pulse Testnet <FaExclamationTriangle className={stl.excIcon} />
+          </span>
+        ) : (
+          "Pulse Mainnet"
+        )}
+      </span>
       {!user && (
         <button onClick={connectWallet} className={stl.connectButton}>
           <>Connect Wallet</>

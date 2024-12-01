@@ -54,3 +54,24 @@ nav {
 .disconnectSpan {
   margin: 0 auto;
 }
+
+.networkSpan {
+  color: white;
+  margin-right: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(70deg, red, purple, blue, rgb(0, 123, 255));
+  user-select: none;
+}
+
+.testSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.excIcon {
+  color: yellow;
+  font-size: 14px;
+}

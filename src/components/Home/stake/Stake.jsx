@@ -6,7 +6,15 @@ import Vault3 from "./vault3/Vault3";
 import { BsBank } from "react-icons/bs";
 import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
-const Stake = ({ mainToken, lpToken, pool, contract, user, setUser }) => {
+const Stake = ({
+  lp0Token,
+  lp1Token,
+  pool,
+  contract,
+  user,
+  setUser,
+  currentNetwork,
+}) => {
   const [activeTab, setActiveTab] = useState(1);
   const [reservesAmount, setReservesAmount] = useState(0);
 
@@ -30,8 +38,16 @@ const Stake = ({ mainToken, lpToken, pool, contract, user, setUser }) => {
 
   useEffect(() => {
     const init = async () => {
-      const poolReserves = await getInnerPoolBalance(pool.tokenA, pool.tokenB);
-      setReservesAmount(poolReserves);
+      try {
+        const poolReserves = await getInnerPoolBalance(
+          pool.tokenA,
+          pool.tokenB,
+          currentNetwork.rpcUrl
+        );
+        setReservesAmount(poolReserves);
+      } catch (err) {
+        setReservesAmount(0);
+      }
     };
     init();
   }, []);
@@ -42,49 +58,52 @@ const Stake = ({ mainToken, lpToken, pool, contract, user, setUser }) => {
           className={activeTab === 1 ? stl.activeCta : ""}
           onClick={() => setActiveTab(1)}
         >
-          {mainToken?.baseToken?.symbol}/PLS LP
+          {lp0Token?.baseToken?.symbol}/PLS LP
         </button>
         <button
           className={activeTab === 2 ? stl.activeCta : ""}
           onClick={() => setActiveTab(2)}
         >
-          {lpToken?.baseToken?.symbol}/PLS LP
+          {lp1Token?.baseToken?.symbol}/PLS LP
         </button>
         <button
           className={activeTab === 3 ? stl.activeCta : ""}
           onClick={() => setActiveTab(3)}
         >
-          {mainToken?.baseToken?.symbol}/{lpToken?.baseToken?.symbol} LP
+          {lp0Token?.baseToken?.symbol}/{lp1Token?.baseToken?.symbol} LP
         </button>
       </div>
       <div className={stl.vaultWrapper}>
         {activeTab === 1 && (
           <Vault1
-            mainToken={mainToken}
+            lp0Token={lp0Token}
             pool={pool}
             contract={contract}
             user={user}
             connectWallet={connectWallet}
+            currentNetwork={currentNetwork}
           />
         )}
         {activeTab === 2 && (
           <Vault2
-            lpToken={lpToken}
-            mainToken={mainToken}
+            lp1Token={lp1Token}
+            lp0Token={lp0Token}
             pool={pool}
             contract={contract}
             user={user}
             connectWallet={connectWallet}
+            currentNetwork={currentNetwork}
           />
         )}
         {activeTab === 3 && (
           <Vault3
-            mainToken={mainToken}
-            lpToken={lpToken}
+            lp0Token={lp0Token}
+            lp1Token={lp1Token}
             pool={pool}
             contract={contract}
             user={user}
             connectWallet={connectWallet}
+            currentNetwork={currentNetwork}
           />
         )}
         <div className={stl.vaultStats}>
@@ -95,14 +114,15 @@ const Stake = ({ mainToken, lpToken, pool, contract, user, setUser }) => {
           <div className={stl.col}>
             <span>Balance</span>
             <span className={stl.valueSpan}>
-              {reservesAmount.toLocaleString()} {mainToken?.baseToken?.symbol}
+              {reservesAmount ? reservesAmount.toLocaleString() : 0}{" "}
+              {lp0Token?.baseToken?.symbol}
             </span>
           </div>
           <div className={stl.col}>
             <span>USD Value</span>
             <span className={stl.valueSpan}>
               $
-              {(reservesAmount * +mainToken.priceUsd).toLocaleString("en-US", {
+              {(reservesAmount * +lp0Token.priceUsd).toLocaleString("en-US", {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })}
