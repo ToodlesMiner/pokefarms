@@ -1,4 +1,4 @@
-import CONFIG from "../../config/config";
+import CONFIG from "../../utils/config";
 import { useEffect, useState } from "react";
 import stl from "./Nav.module.css";
 import { IoWalletOutline } from "react-icons/io5";

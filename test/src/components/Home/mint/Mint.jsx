@@ -12,8 +12,8 @@ import { getTokenBalance } from "../../../utils/contractUtils";
 import { formatInput } from "../../../utils/utils";
 
 const Mint = ({
-  lp0Token,
-  lp1Token,
+  PairA,
+  PairB,
   setSelectingFarm,
   emissionRate,
   pool,
@@ -99,7 +99,7 @@ const Mint = ({
       setMessage(
         `Successfully Minted ${Number(
           inputAmount * emissionRate
-        ).toLocaleString()} ${lp1Token.baseToken.symbol}!`
+        ).toLocaleString()} ${PairB.baseToken.symbol}!`
       );
 
       setTokenABalance((prev) => prev - +inputAmount);
@@ -134,12 +134,12 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          Mint: 1 {lp0Token?.baseToken?.symbol} = {emissionRate}{" "}
-          {lp1Token?.baseToken?.symbol}
+          Mint: 1 {PairA?.baseToken?.symbol} = {emissionRate}{" "}
+          {PairB?.baseToken?.symbol}
         </span>
         <span className={stl.rate}>
-          9mm: 1 {lp0Token?.baseToken?.symbol} = {conversionRate}~{" "}
-          {lp1Token?.baseToken?.symbol}
+          9mm: 1 {PairA?.baseToken?.symbol} = {conversionRate}~{" "}
+          {PairB?.baseToken?.symbol}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -149,7 +149,7 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenABalance.toLocaleString()}
             </span>{" "}
-            {lp0Token.baseToken.symbol}
+            {PairA.baseToken.symbol}
           </span>
         )}
         <span>You're Freezing</span>
@@ -160,7 +160,7 @@ const Mint = ({
               alt="Main"
               className={stl.logoIcon}
             />
-            <span>{lp0Token?.baseToken?.symbol}</span>
+            <span>{PairA?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <input
@@ -180,10 +180,10 @@ const Mint = ({
             />
           </div>
         </div>
-        {inputAmount && +formattedPriceInput * +lp0Token.priceUsd > 0.01 && (
+        {inputAmount && +formattedPriceInput * +PairA.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+formattedPriceInput * +lp0Token.priceUsd).toLocaleString(
+            {(+formattedPriceInput * +PairA.priceUsd).toLocaleString(
               "en-US",
               {
                 minimumFractionDigits: 0,
@@ -202,7 +202,7 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenBBalance.toLocaleString()}
             </span>{" "}
-            {lp1Token.baseToken.symbol}
+            {PairB.baseToken.symbol}
           </span>
         )}
         <span>You're Minting</span>
@@ -213,7 +213,7 @@ const Mint = ({
               alt="LP"
               className={stl.logoIcon}
             />
-            <span>{lp1Token?.baseToken?.symbol}</span>
+            <span>{PairB?.baseToken?.symbol}</span>
           </div>
           <div className={stl.numberBox}>
             <span
@@ -238,23 +238,23 @@ const Mint = ({
                 alt="Main"
                 className={stl.logoIcon}
               />
-              <span>{lp0Token?.baseToken?.symbol}</span>
+              <span>{PairA?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp0Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${PairA?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp0Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  PairA?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp0Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp0Token?.priceChange?.h24}%
+                24h {PairA?.priceChange?.h24 >= 0 ? "+" : ""}
+                {PairA?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp0Token?.baseToken?.symbol, pool.tokenA)
+                  handleCopyAddress(PairA?.baseToken?.symbol, pool.tokenA)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -289,23 +289,23 @@ const Mint = ({
                 alt="Blast"
                 className={stl.logoIcon}
               />
-              <span>{lp1Token?.baseToken?.symbol}</span>
+              <span>{PairB?.baseToken?.symbol}</span>
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp1Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${PairB?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp1Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  PairB?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp1Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp1Token?.priceChange?.h24}%
+                24h {PairB?.priceChange?.h24 >= 0 ? "+" : ""}
+                {PairB?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp1Token?.baseToken?.symbol, pool.tokenB)
+                  handleCopyAddress(PairB?.baseToken?.symbol, pool.tokenB)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />

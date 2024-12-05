@@ -13,15 +13,15 @@ import {
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
 const Vault2 = ({
-  lp0Token,
-  lp1Token,
+  PairA,
+  PairB,
   pool,
   contract,
   user,
   connectWallet,
 }) => {
   const [rewardCount, setRewardCount] = useState(0);
-  const [lp0TokenBalance, setlp0TokenBalance] = useState(0);
+  const [PairABalance, setPairABalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
   const [poolTVL, setPoolTVL] = useState(0);
   const [APR, setAPR] = useState(0);
@@ -67,7 +67,7 @@ const Vault2 = ({
 
           // Current TokenB wallet balance
           const tokenBalance = await getTokenBalance(pool.LP1, user);
-          setlp0TokenBalance(tokenBalance);
+          setPairABalance(tokenBalance);
 
           // Current TokenB staked balance
           const balance = await contract.userInfo(1, user);
@@ -105,19 +105,19 @@ const Vault2 = ({
         const annualRewards = rewardsPerSecond * 31536000;
         console.log("Annual Rewards: ", annualRewards);
 
-        const lp0TokenRequest = await fetch(
+        const PairARequest = await fetch(
           `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP2}`
         );
-        const lp1TokenData = await lp0TokenRequest.json();
-        const nativePrice = +lp1TokenData.pair.priceNative;
+        const PairBData = await PairARequest.json();
+        const nativePrice = +PairBData.pair.priceNative;
         console.log("SECinLP1contract: ", tokenAPoolBalance / nativePrice);
 
-        const tokenAValuePerlp1Tokens = tokenAPoolBalance / nativePrice / totalPoolBalance;
-        console.log("TokenA Value Per LP Tokens: ", tokenAValuePerlp1Tokens);
-        setValuePerLP(tokenAValuePerlp1Tokens);
+        const tokenAValuePerPairBs = tokenAPoolBalance / nativePrice / totalPoolBalance;
+        console.log("TokenA Value Per LP Tokens: ", tokenAValuePerPairBs);
+        setValuePerLP(tokenAValuePerPairBs);
 
         const tokenAStaked =
-          (tokenAValuePerlp1Tokens * pool1Balance);
+          (tokenAValuePerPairBs * pool1Balance);
         console.log("TokenA staked: ", tokenAStaked);
 
         const ratio = tokenAPoolBalance / nativePrice / totalPoolBalance;
@@ -130,12 +130,12 @@ const Vault2 = ({
         console.log("APR: %", APR);
 
         // TVL
-        // const TVL = blastStaked * 2 * +lp0Token.priceUsd * 10;
+        // const TVL = blastStaked * 2 * +PairA.priceUsd * 10;
         // setPoolTVL(TVL);
         // console.log("TVL: ", TVL);
         
-        const tokenA = tokenAValuePerlp1Tokens * pool1Balance;
-        const TVL = tokenA * 2 * +lp0Token.priceUsd;
+        const tokenA = tokenAValuePerPairBs * pool1Balance;
+        const TVL = tokenA * 2 * +PairA.priceUsd;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
       } catch (err) {
@@ -151,14 +151,14 @@ const Vault2 = ({
   }, [user]);
 
   const stake = async () => {
-    if (!stakeInput || lp0TokenBalance === 0 || !signer) return;
+    if (!stakeInput || PairABalance === 0 || !signer) return;
     const formattedInput = stakeInput.replaceAll(",", "");
     try {
       setStakeLoading(true);
       const amount = ethers.parseUnits(formattedInput, 18);
       const contractWithSigner = contract.connect(signer);
 
-      const lp1TokenContract = new ethers.Contract(
+      const PairBContract = new ethers.Contract(
         pool.LP1,
         [
           "function approve(address spender, uint256 amount) public returns (bool)",
@@ -170,7 +170,7 @@ const Vault2 = ({
 
       const hasApproved = localStorage.getItem("Vault2Approved");
       if (!hasApproved) {
-        const approveTx = await lp1TokenContract.approve(
+        const approveTx = await PairBContract.approve(
           pool.trainerContract,
           (BigInt(100_000_000_000) * BigInt(1e18)).toString()
         );
@@ -182,7 +182,7 @@ const Vault2 = ({
       await depositTx.wait();
 
       setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-      setlp0TokenBalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      setPairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
 
       setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
@@ -215,7 +215,7 @@ const Vault2 = ({
 
       // Update balances
       setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
-      setlp0TokenBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      setPairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
 
       setMessage(`Successfully Unstaked ${formattedInput} LP!`);
       setUnstakeInput("");
@@ -251,7 +251,7 @@ const Vault2 = ({
 
       setMessage(
         `Successfully claimed ${(rewardCount / 1e18).toFixed(5)} ${
-          lp0Token.baseToken.symbol
+          PairA.baseToken.symbol
         }!`
       );
 
@@ -298,12 +298,12 @@ const Vault2 = ({
           <img src="../9mm.png" alt="9mm" className={stl.mmlogo} />
           Get 9mm LP
         </button>
-        <h2>{lp1Token?.baseToken?.symbol}/PLS LP</h2>
+        <h2>{PairB?.baseToken?.symbol}/PLS LP</h2>
         <span>
           <FaRegCopy
             className={stl.copy}
             onClick={() =>
-              handleCopyAddress(`${lp1Token.baseToken.symbol} LP`, pool.LP1)
+              handleCopyAddress(`${PairB.baseToken.symbol} LP`, pool.LP1)
             }
           />{" "}
           {pool.LP1}
@@ -319,7 +319,7 @@ const Vault2 = ({
                 alt="Mint"
                 className={stl.microLogo}
               />
-              <span>{lp1Token.baseToken.symbol}</span>
+              <span>{PairB.baseToken.symbol}</span>
             </div>
             <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
@@ -346,27 +346,27 @@ const Vault2 = ({
             <div className={stl.buttonBox}>
               <button
                 onClick={() =>
-                  setStakeInput((lp0TokenBalance * 0.25).toFixed(0).toString())
+                  setStakeInput((PairABalance * 0.25).toFixed(0).toString())
                 }
               >
                 25%
               </button>
               <button
                 onClick={() =>
-                  setStakeInput((lp0TokenBalance * 0.5).toFixed(0).toString())
+                  setStakeInput((PairABalance * 0.5).toFixed(0).toString())
                 }
               >
                 50%
               </button>
               <button
                 onClick={() =>
-                  setStakeInput((lp0TokenBalance * 0.75).toFixed(0).toString())
+                  setStakeInput((PairABalance * 0.75).toFixed(0).toString())
                 }
               >
                 75%
               </button>
               <button
-                onClick={() => setStakeInput(lp0TokenBalance.toString())}
+                onClick={() => setStakeInput(PairABalance.toString())}
               >
                 Max
               </button>
@@ -376,14 +376,14 @@ const Vault2 = ({
             <span className={stl.balanceSpan}>
               Balance:{" "}
               <span className={stl.whiteSpan}>
-                {lp0TokenBalance.toLocaleString()}
+                {PairABalance.toLocaleString()}
               </span>{" "}
               LP
               <span className={stl.valueSpan}>
                 $
                 {(
-                  (+lp0TokenBalance.toString() *
-                    +lp0Token?.priceUsd *
+                  (+PairABalance.toString() *
+                    +PairA?.priceUsd *
                     2 *
                     valuePerLP)
                 ).toFixed(2)}
@@ -394,7 +394,7 @@ const Vault2 = ({
         <button
           className={stl.vaultCta}
           disabled={
-            stakeLoading || unStakeLoading || lp0TokenBalance === 0
+            stakeLoading || unStakeLoading || PairABalance === 0
               ? true
               : false
           }
@@ -429,7 +429,7 @@ const Vault2 = ({
                 alt="Mint"
                 className={stl.microLogo}
               />
-              <span>{lp1Token.baseToken.symbol}</span>
+              <span>{PairB.baseToken.symbol}</span>
             </div>
             <span className={stl.grayPlus}>+</span>
             <div className={stl.microRow}>
@@ -501,7 +501,7 @@ const Vault2 = ({
                 $
                 {(
                   (+stakedBalance.toString() *
-                    +lp0Token?.priceUsd *
+                    +PairA?.priceUsd *
                     2 *
                     valuePerLP)
                 ).toFixed(2)}
@@ -530,7 +530,7 @@ const Vault2 = ({
         {user && !claimLoading && (
           <>
             {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
-            CLAIM {(rewardCount / 1e18).toFixed(2)} {lp0Token.baseToken.symbol}
+            CLAIM {(rewardCount / 1e18).toFixed(2)} {PairA.baseToken.symbol}
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}

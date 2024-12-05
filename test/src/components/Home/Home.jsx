@@ -1,4 +1,4 @@
-import CONFIG, { farmsConfig } from "../../config/config";
+import CONFIG, { farmsConfig } from "../../utils/config.js";
 import Nav from "../nav/Nav";
 import stl from "./Home.module.css";
 import { useEffect, useState } from "react";
@@ -15,8 +15,8 @@ const Home = () => {
   const [selectingFarm, setSelectingFarm] = useState(false);
   const [user, setUser] = useState("");
   const [activeMenu, setActiveMenu] = useState("Mint");
-  const [lp0Token, setLP0Token] = useState({});
-  const [lp1Token, setLP1Token] = useState({});
+  const [PairA, setPairA] = useState({});
+  const [PairB, setPairB] = useState({});
   const [emissionRate, setEmissionRate] = useState(null);
   const [conversionRate, setConversionRate] = useState(null);
   const [network, setNetwork] = useState(null);
@@ -73,14 +73,14 @@ const Home = () => {
           `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP0}`
         );
         const LP0Response = await LP0Request.json();
-        setLP0Token(LP0Response.pairs[0]);
+        setPairA(LP0Response.pairs[0]);
 
         // Token B
         const LP1Request = await fetch(
           `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
         );
         const LP1Response = await LP1Request.json();
-        setLP1Token(LP1Response.pairs[0]);
+        setPairB(LP1Response.pairs[0]);
 
         const tokenAPrice = +LP0Response.pairs[0].priceUsd;
         const tokenBPrice = +LP1Response.pairs[0].priceUsd;
@@ -94,8 +94,8 @@ const Home = () => {
   }, [network]);
 
   useEffect(() => {
-    console.log("LP0 Token:", lp0Token);
-  }, [lp0Token]);
+    console.log("LP0 Token:", PairA);
+  }, [PairA]);
 
   return (
     <div className={stl.home}>
@@ -128,8 +128,8 @@ const Home = () => {
         <div className={stl.modal}>
           {activeMenu === "Mint" && (
             <Mint
-              lp0Token={lp0Token}
-              lp1Token={lp1Token}
+              PairA={PairA}
+              PairB={PairB}
               pool={pool}
               setSelectingFarm={setSelectingFarm}
               emissionRate={emissionRate}
@@ -141,8 +141,8 @@ const Home = () => {
           )}
           {activeMenu === "Stake" && (
             <Stake
-              lp0Token={lp0Token}
-              lp1Token={lp1Token}
+              PairA={PairA}
+              PairB={PairB}
               pool={pool}
               user={user}
               contract={contract}
@@ -181,8 +181,8 @@ export default Home;
 //   const [selectingFarm, setSelectingFarm] = useState(false);
 //   const [user, setUser] = useState("");
 //   const [activeMenu, setActiveMenu] = useState("Mint");
-//   const [lp0Token, setLP0Token] = useState({});
-//   const [lp1Token, setLP1Token] = useState({});
+//   const [PairA, setPairA] = useState({});
+//   const [PairB, setPairB] = useState({});
 //   const [emissionRate, setEmissionRate] = useState(null);
 //   const [conversionRate, setConversionRate] = useState(null);
 //   const [network, setNetwork] = useState(null);
@@ -206,14 +206,14 @@ export default Home;
 //       );
 //       const LP0Response = await LP0Request.json();
 //       console.log(LP0Response);
-//       setLP0Token(LP0Response.pairs[0]);
+//       setPairA(LP0Response.pairs[0]);
 
 //       // token B
 //       const LP1Request = await fetch(
 //         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
 //       );
 //       const LP1Response = await LP1Request.json();
-//       setLP1Token(LP1Response.pairs[0]);
+//       setPairB(LP1Response.pairs[0]);
 
 //       const tokenAPrice = +LP0Response.pairs[0].priceUsd;
 //       const tokenBPrice = +LP1Response.pairs[0].priceUsd;
@@ -224,8 +224,8 @@ export default Home;
 //   }, []);
 
 //   useEffect(() => {
-//     console.log(lp0Token);
-//   }, [lp0Token]);
+//     console.log(PairA);
+//   }, [PairA]);
 
 //   return (
 //     <div className={stl.home}>
@@ -258,8 +258,8 @@ export default Home;
 //         <div className={stl.modal}>
 //           {activeMenu === "Mint" && (
 //             <Mint
-//               lp0Token={lp0Token}
-//               lp1Token={lp1Token}
+//               PairA={PairA}
+//               PairB={PairB}
 //               pool={pool}
 //               setSelectingFarm={setSelectingFarm}
 //               emissionRate={emissionRate}
@@ -271,8 +271,8 @@ export default Home;
 //           )}
 //           {activeMenu === "Stake" && (
 //             <Stake
-//               lp0Token={lp0Token}
-//               lp1Token={lp1Token}
+//               PairA={PairA}
+//               PairB={PairB}
 //               pool={pool}
 //               user={user}
 //               contract={contract}
