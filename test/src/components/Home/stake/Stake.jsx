@@ -1,3 +1,4 @@
+import connectWallet from "/src/components/nav/Nav.jsx";
 import { useEffect, useState } from "react";
 import stl from "./Stake.module.css";
 import Vault1 from "./vault1/Vault1";
@@ -6,27 +7,9 @@ import Vault3 from "./vault3/Vault3";
 import { BsBank } from "react-icons/bs";
 import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
-const Stake = ({ lp0Token, lp1Token, pool, contract, user, setUser }) => {
+const Stake = ({ lp0Token, lp1Token, pool, contract, user}) => {
   const [activeTab, setActiveTab] = useState(1);
   const [reservesAmount, setReservesAmount] = useState(0);
-
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        // Request wallet connection
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-
-        // Set the first account as the connected wallet
-        setUser(accounts[0]);
-      } catch (error) {
-        console.error("Error connecting wallet:", error);
-      }
-    } else {
-      alert("MetaMask is not installed. Please install MetaMask to connect.");
-    }
-  };
 
   useEffect(() => {
     const init = async () => {

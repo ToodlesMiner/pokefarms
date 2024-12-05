@@ -54,3 +54,14 @@ nav {
 .disconnectSpan {
   margin: 0 auto;
 }
+
+.networkInfo {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.testnetIndicator {
+  color: #ff6f61;  /* Example color for testnet */
+  font-weight: bold;
+}
