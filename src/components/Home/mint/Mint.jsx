@@ -45,8 +45,6 @@ const Mint = ({
           user,
           currentNetwork.rpcUrl
         );
-        console.log(tokenA);
-        console.log(currentNetwork.rpcUrl);
         setTokenABalance(tokenA);
       } catch (err) {
         setTokenABalance(0);
@@ -97,19 +95,22 @@ const Mint = ({
     try {
       setLoading(true);
       const contractWithSigner = contract.connect(signer);
+
       const sanitizedAmount = inputAmount.replace(/,/g, "");
       const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
 
       const tokenAContract = new ethers.Contract(pool.tokenA, ERC20ABI, signer);
 
-      const hasApproved = localStorage.getItem("MintApproved");
+      const hasApproved = localStorage.getItem(
+        `MintApproved:${pool.trainerContract}`
+      );
       if (!hasApproved) {
         const approveTx = await tokenAContract.approve(
           pool.tokenB,
           (BigInt(100_000_000_000) * BigInt(1e18)).toString()
         );
         await approveTx.wait();
-        localStorage.setItem("MintApproved", true);
+        localStorage.setItem(`MintApproved:${pool.trainerContract}`, true);
       }
 
       const tx = await contractWithSigner.mint(formattedAmount);
@@ -121,8 +122,8 @@ const Mint = ({
         ).toLocaleString()} ${lp1Token.baseToken.symbol}!`
       );
 
-      setTokenABalance((prev) => prev - +inputAmount);
-      setTokenBBalance((prev) => prev + +inputAmount * emissionRate);
+      setTokenABalance((prev) => prev - +sanitizedAmount);
+      setTokenBBalance((prev) => prev + +sanitizedAmount * emissionRate);
       setInputAmount("");
       setLoading(true);
       setTimeout(() => {

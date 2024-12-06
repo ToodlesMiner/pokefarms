@@ -34,7 +34,7 @@ export const FARMS_CONFIG = [
     dexTokenAImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
     dexTokenBImgUrl:
-      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0xeE9Dc6BD7058C823FD6c26FA3bE2b1a10471a293.png?size=lg&key=61cf87",
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
   },
   // Add more farms as needed
 ];

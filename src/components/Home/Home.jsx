@@ -58,7 +58,7 @@ const Home = () => {
     );
 
     setContract(newContract);
-  }, [currentNetwork]);
+  }, [currentNetwork, pool]);
 
   //Initialize app
   useEffect(() => {

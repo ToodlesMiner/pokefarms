@@ -163,14 +163,16 @@ const Vault3 = ({
         signer
       );
 
-      const hasApproved = localStorage.getItem("Vault3Approved");
+      const hasApproved = localStorage.getItem(
+        `Vault3Approved:${pool.trainerContract}`
+      );
       if (!hasApproved) {
         const approveTx = await lp1TokenContract.approve(
           pool.trainerContract,
           (BigInt(100_000_000_000) * BigInt(1e18)).toString()
         );
         await approveTx.wait();
-        localStorage.setItem("Vault3Approved", true);
+        localStorage.setItem(`Vault3Approved:${pool.trainerContract}`, true);
       }
 
       const depositTx = await contractWithSigner.deposit(2, amount);
