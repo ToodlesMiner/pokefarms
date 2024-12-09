@@ -11,14 +11,14 @@ import { getTokenBalance } from "../../../utils/contractUtils";
 import { formatInput } from "../../../utils/utils";
 
 const Mint = ({
-  lp0Token,
-  lp1Token,
+  pairA,
+  pairB,
   setSelectingFarm,
-  emissionRate,
+  mintRatio,
   pool,
   contract,
   user,
-  conversionRate,
+  marketRatio,
   setUser,
   currentNetwork,
 }) => {
@@ -29,6 +29,16 @@ const Mint = ({
   const [tokenABalance, setTokenABalance] = useState(0);
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [outputAmount, setOutputAmount] = useState("");
+
+  // useEffect(() => {
+  //   const newContract = new ethers.Contract(
+  //     pool.trainerContract,
+  //     masterABI,
+  //     new ethers.JsonRpcProvider(currentNetwork.rpcUrl)
+  //   );
+
+  //   setContract(newContract);
+  // }, [currentNetwork, pool]);
 
   useEffect(() => {
     const inputFormatted = inputAmount.replaceAll(",", "");
@@ -41,7 +51,7 @@ const Mint = ({
     const balanceFetcher = async () => {
       try {
         const tokenA = await getTokenBalance(
-          pool.tokenA,
+          pool.tokenA.address,
           user,
           currentNetwork.rpcUrl
         );
@@ -52,7 +62,7 @@ const Mint = ({
 
       try {
         const tokenB = await getTokenBalance(
-          pool.tokenB,
+          pool.tokenB.address,
           user,
           currentNetwork.rpcUrl
         );
@@ -62,7 +72,7 @@ const Mint = ({
       }
     };
     balanceFetcher();
-  }, [user, pool.tokenA, pool.tokenB]);
+  }, [user, pool.tokenA.address, pool.tokenB.address]);
 
   useEffect(() => {
     const initializeProvider = async () => {
@@ -95,11 +105,14 @@ const Mint = ({
     try {
       setLoading(true);
       const contractWithSigner = contract.connect(signer);
+      console.log("contractWithSigner" , contractWithSigner);
 
       const sanitizedAmount = inputAmount.replace(/,/g, "");
       const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
 
-      const tokenAContract = new ethers.Contract(pool.tokenA, ERC20ABI, signer);
+      const tokenAContract = new ethers.Contract(pool.tokenA.address, ERC20ABI, signer);
+      console.log("tokenAContract:", tokenAContract);
+
 
       const hasApproved = localStorage.getItem(
         `MintApproved:${pool.trainerContract}`
@@ -114,16 +127,18 @@ const Mint = ({
       }
 
       const tx = await contractWithSigner.mint(formattedAmount);
+      console.log("tx", tx);
+
       await tx.wait();
 
       setMessage(
         `Successfully Minted ${Number(
-          inputAmount * emissionRate
-        ).toLocaleString()} ${lp1Token.baseToken.symbol}!`
+          inputAmount * mintRatio
+        ).toLocaleString()} ${pairB.baseToken.symbol}!`
       );
 
       setTokenABalance((prev) => prev - +sanitizedAmount);
-      setTokenBBalance((prev) => prev + +sanitizedAmount * emissionRate);
+      setTokenBBalance((prev) => prev + +sanitizedAmount * mintRatio);
       setInputAmount("");
       setLoading(true);
       setTimeout(() => {
@@ -209,12 +224,16 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          Mint: 1 {lp0Token?.baseToken?.symbol} = {emissionRate}{" "}
-          {lp1Token?.baseToken?.symbol}
+          Mint: 1 {pool.tokenA.name} = {mintRatio}{" "}
+          {pool.tokenB.name}
+          {/* Mint: 1 {pairA?.baseToken?.symbol} = {mintRatio}{" "}
+          {pairB?.baseToken?.symbol} */}
         </span>
         <span className={stl.rate}>
-          9mm: 1 {lp0Token?.baseToken?.symbol} = {conversionRate}~{" "}
-          {lp1Token?.baseToken?.symbol}
+        9mm: 1 {pool.tokenA.name} = {marketRatio}{" "}
+          {pool.tokenB.name}
+          {/* 9mm: 1 {pairA?.baseToken?.symbol} = {marketRatio}{" "}
+          {pairB?.baseToken?.symbol} */}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -224,7 +243,8 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenABalance.toLocaleString()}
             </span>{" "}
-            {lp0Token.baseToken.symbol}
+            {pool.tokenA.name}
+            {/* {pairA.baseToken.symbol} */}
           </span>
         )}
         <span>You're Freezing</span>
@@ -235,7 +255,8 @@ const Mint = ({
               alt="Main"
               className={stl.logoIcon}
             />
-            <span>{lp0Token?.baseToken?.symbol}</span>
+            <span>{pool.tokenA.name}</span>
+            {/* <span>{pairA?.baseToken?.symbol}</span> */}
           </div>
           <div className={stl.numberBox}>
             <input
@@ -255,10 +276,10 @@ const Mint = ({
             />
           </div>
         </div>
-        {inputAmount && +formattedPriceInput * +lp0Token.priceUsd > 0.01 && (
+        {inputAmount && +formattedPriceInput * +pairA.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+formattedPriceInput * +lp0Token.priceUsd).toLocaleString(
+            {(+formattedPriceInput * +pairA.priceUsd).toLocaleString(
               "en-US",
               {
                 minimumFractionDigits: 0,
@@ -277,23 +298,24 @@ const Mint = ({
             <span className={stl.whiteSpan}>
               {tokenBBalance.toLocaleString()}
             </span>{" "}
-            {lp1Token.baseToken.symbol}
+            {pairB.baseToken.symbol}
           </span>
         )}
         <span>You're Minting</span>
         <div className={stl.itemBox}>
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img src={pool.dexTokenBImgUrl} alt="LP" className={stl.logoIcon} />
-            <span>{lp1Token?.baseToken?.symbol}</span>
+            <span>{pool.tokenB.name}</span>
+            {/* <span>{pairB?.baseToken?.symbol}</span> */}
           </div>
           <div className={stl.numberBox}>
             <span
               className={`${stl.outputSpan} ${
-                +outputAmount * emissionRate > 0 ? stl.whiteBalance : ""
+                +outputAmount * mintRatio > 0 ? stl.whiteBalance : ""
               }`}
             >
               {outputAmount
-                ? Math.floor(+outputAmount * emissionRate).toLocaleString()
+                ? Math.floor(+outputAmount * mintRatio).toLocaleString()
                 : "0"}
             </span>
           </div>
@@ -309,23 +331,25 @@ const Mint = ({
                 alt="Main"
                 className={stl.logoIcon}
               />
-              <span>{lp0Token?.baseToken?.symbol}</span>
+              <span>{pool.tokenA.name}</span>
+              {/* <span>{pairA?.baseToken?.symbol}</span> */}
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp0Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${pairA?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp0Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  pairA?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp0Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp0Token?.priceChange?.h24}%
+                24h {pairA?.priceChange?.h24 >= 0 ? "+" : ""}
+                {pairA?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp0Token?.baseToken?.symbol, pool.tokenA)
+                  handleCopyAddress(pool.tokenA.name, pool.tokenA.address)
+                  // handleCopyAddress(pairA?.baseToken?.symbol, pool.tokenA)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -334,7 +358,7 @@ const Mint = ({
               <button
                 onClick={() =>
                   window.open(
-                    `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA}`,
+                    `https://dex.9mm.pro/swap?chain=pulsechain&inputCurrency=PLS&outputCurrency=${pool.tokenA.address}`,
                     "_blank"
                   )
                 }
@@ -360,23 +384,25 @@ const Mint = ({
                 alt="Blast"
                 className={stl.logoIcon}
               />
-              <span>{lp1Token?.baseToken?.symbol}</span>
+              <span>{pool.tokenB.name}</span>
+              {/* <span>{pairB?.baseToken?.symbol}</span> */}
             </div>
             <div className={stl.priceBox}>
-              <span className={stl.priceSpan}>${lp1Token?.priceUsd}</span>
+              <span className={stl.priceSpan}>${pairB?.priceUsd}</span>
               <span
                 className={`${stl.priceChange} ${
-                  lp1Token?.priceChange?.h24 >= 0 ? "" : stl.redPrice
+                  pairB?.priceChange?.h24 >= 0 ? "" : stl.redPrice
                 }`}
               >
-                24h {lp1Token?.priceChange?.h24 >= 0 ? "+" : ""}
-                {lp1Token?.priceChange?.h24}%
+                24h {pairB?.priceChange?.h24 >= 0 ? "+" : ""}
+                {pairB?.priceChange?.h24}%
               </span>
             </div>
             <div className={stl.ctaBox}>
               <button
                 onClick={() =>
-                  handleCopyAddress(lp1Token?.baseToken?.symbol, pool.tokenB)
+                  handleCopyAddress(pool.tokenB.name, pool.tokenB.address)
+                  // handleCopyAddress(pairB?.baseToken?.symbol, pool.tokenB)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -385,7 +411,7 @@ const Mint = ({
               <button
                 onClick={() =>
                   window.open(
-                    `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB}&inputCurrency=PLS`,
+                    `https://dex.9mm.pro/?chain=pulsechain&outputCurrency=${pool.tokenB.address}&inputCurrency=PLS`,
                     "_blank"
                   )
                 }

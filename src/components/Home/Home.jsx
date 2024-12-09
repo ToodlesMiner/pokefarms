@@ -23,10 +23,10 @@ const Home = () => {
   const [contract, setContract] = useState(initContract);
   const [user, setUser] = useState("");
   const [activeMenu, setActiveMenu] = useState("Mint");
-  const [lp0Token, setLP0Token] = useState({});
-  const [lp1Token, setLP1Token] = useState({});
-  const [emissionRate, setEmissionRate] = useState(null);
-  const [conversionRate, setConversionRate] = useState(null);
+  const [pairA, setpairA] = useState({});
+  const [pairB, setpairB] = useState({});
+  const [mintRatio, setmintRatio] = useState(null);
+  const [marketRatio, setmarketRatio] = useState(null);
 
   // Initialize network & contract
   useEffect(() => {
@@ -65,26 +65,26 @@ const Home = () => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
       const truncEmission = +emission.toString().slice(0, 3);
-      setEmissionRate(truncEmission);
+      setmintRatio(truncEmission);
 
       // Token A
-      const LP0Request = await fetch(
+      const pairArequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP0}`
       );
-      const LP0Response = await LP0Request.json();
-      // console.log(LP0Response);
-      setLP0Token(LP0Response.pairs[0]);
+      const pairAresponse = await pairArequest.json();
+      // console.log(pairAresponse);
+      setpairA(pairAresponse.pairs[0]);
 
       // token B
-      const LP1Request = await fetch(
+      const pairBrequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
       );
-      const LP1Response = await LP1Request.json();
-      setLP1Token(LP1Response.pairs[0]);
+      const pairBresponse = await pairBrequest.json();
+      setpairB(pairBresponse.pairs[0]);
 
-      const tokenAPrice = +LP0Response.pairs[0].priceUsd;
-      const tokenBPrice = +LP1Response.pairs[0].priceUsd;
-      setConversionRate(Math.floor(tokenAPrice / tokenBPrice));
+      const tokenAPrice = +pairAresponse.pairs[0].priceUsd;
+      const tokenBPrice = +pairBresponse.pairs[0].priceUsd;
+      setmarketRatio(Math.floor(tokenAPrice / tokenBPrice));
     };
     initialize();
   }, [pool, contract]);
@@ -120,22 +120,22 @@ const Home = () => {
         <div className={stl.modal}>
           {activeMenu === "Mint" && (
             <Mint
-              lp0Token={lp0Token}
-              lp1Token={lp1Token}
+              pairA={pairA}
+              pairB={pairB}
               pool={pool}
               setSelectingFarm={setSelectingFarm}
-              emissionRate={emissionRate}
+              mintRatio={mintRatio}
               contract={contract}
               user={user}
-              conversionRate={conversionRate}
+              marketRatio={marketRatio}
               setUser={setUser}
               currentNetwork={currentNetwork}
             />
           )}
           {activeMenu === "Stake" && (
             <Stake
-              lp0Token={lp0Token}
-              lp1Token={lp1Token}
+              pairA={pairA}
+              pairB={pairB}
               pool={pool}
               user={user}
               contract={contract}

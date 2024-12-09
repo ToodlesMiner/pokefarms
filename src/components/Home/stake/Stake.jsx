@@ -7,8 +7,8 @@ import { BsBank } from "react-icons/bs";
 import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
 const Stake = ({
-  lp0Token,
-  lp1Token,
+  pairA,
+  pairB,
   pool,
   contract,
   user,
@@ -40,8 +40,8 @@ const Stake = ({
     const init = async () => {
       try {
         const poolReserves = await getInnerPoolBalance(
-          pool.tokenA,
-          pool.tokenB,
+          pool.tokenA.address,
+          pool.tokenB.address,
           currentNetwork.rpcUrl
         );
         setReservesAmount(poolReserves);
@@ -58,25 +58,25 @@ const Stake = ({
           className={activeTab === 1 ? stl.activeCta : ""}
           onClick={() => setActiveTab(1)}
         >
-          {lp0Token?.baseToken?.symbol}/PLS LP
+          {pool.tokenA.name}/PLS LP
         </button>
         <button
           className={activeTab === 2 ? stl.activeCta : ""}
           onClick={() => setActiveTab(2)}
         >
-          {lp1Token?.baseToken?.symbol}/PLS LP
+          {pool.tokenB.name}/PLS LP
         </button>
         <button
           className={activeTab === 3 ? stl.activeCta : ""}
           onClick={() => setActiveTab(3)}
         >
-          {lp0Token?.baseToken?.symbol}/{lp1Token?.baseToken?.symbol} LP
+          {pool.tokenA.name}/{pool.tokenB.name} LP
         </button>
       </div>
       <div className={stl.vaultWrapper}>
         {activeTab === 1 && (
           <Vault1
-            lp0Token={lp0Token}
+            pairA={pairA}
             pool={pool}
             contract={contract}
             user={user}
@@ -86,8 +86,8 @@ const Stake = ({
         )}
         {activeTab === 2 && (
           <Vault2
-            lp1Token={lp1Token}
-            lp0Token={lp0Token}
+            pairB={pairB}
+            pairA={pairA}
             pool={pool}
             contract={contract}
             user={user}
@@ -97,8 +97,8 @@ const Stake = ({
         )}
         {activeTab === 3 && (
           <Vault3
-            lp0Token={lp0Token}
-            lp1Token={lp1Token}
+            pairA={pairA}
+            pairB={pairB}
             pool={pool}
             contract={contract}
             user={user}
@@ -115,14 +115,14 @@ const Stake = ({
             <span>Balance</span>
             <span className={stl.valueSpan}>
               {reservesAmount ? reservesAmount.toLocaleString() : 0}{" "}
-              {lp0Token?.baseToken?.symbol}
+              {pool.tokenA.name}
             </span>
           </div>
           <div className={stl.col}>
             <span>USD Value</span>
             <span className={stl.valueSpan}>
               $
-              {(reservesAmount * +lp0Token.priceUsd).toLocaleString("en-US", {
+              {(reservesAmount * +pairA.priceUsd).toLocaleString("en-US", {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })}
