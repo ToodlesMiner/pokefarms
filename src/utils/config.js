@@ -48,5 +48,5 @@ export const FARMS_CONFIG = [
   dexTokenBImgUrl:
     "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0xeE9Dc6BD7058C823FD6c26FA3bE2b1a10471a293.png?size=lg&key=19ffe5",
   },
-  // Add more farms as needed
+  // Add more farms as needed, may need to add difrent parms for tokens that have stronger ratios.
 ];
