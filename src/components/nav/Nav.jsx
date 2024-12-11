@@ -39,7 +39,7 @@ const Nav = ({ user, setUser, currentNetwork }) => {
 
   return (
     <nav className={stl.nav}>
-      <span className={stl.networkSpan}>
+      {/* <span className={stl.networkSpan}>
         {+currentNetwork.chainId === 943 ? (
           <span className={stl.testSpan}>
             Pulse Testnet <FaExclamationTriangle className={stl.excIcon} />
@@ -47,7 +47,7 @@ const Nav = ({ user, setUser, currentNetwork }) => {
         ) : (
           "Pulse Mainnet"
         )}
-      </span>
+      </span> */}
       {!user && (
         <button onClick={connectWallet} className={stl.connectButton}>
           <>Connect Wallet</>
