@@ -36,10 +36,10 @@ export const FARMS_CONFIG = [
     name: "Squirtle",
   },
   tokenB: {
-    address: "0xeE9Dc6BD7058C823FD6c26FA3bE2b1a10471a293",
+    address: "0x657aa5bAc463c43adaA7f4664D1C9f9E9a95F91a",
     name: "Wartortle",
   },
-  trainerContract: "0xDBF6d72251869f47D8912Cb63Ba06f4c75e4F8A3",
+  trainerContract: "0xD72fcff97c3ce9e7Cfd5818330ef215b59ECF6C1",
   LP0: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0",
   LP1: "0x706D506D9C22aeA107a46eFA7D7818cDc562b6F9",
   LP2: "0xe0989CB00ef99E26B94C702A769f0c248e8B2636",
