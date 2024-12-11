@@ -163,17 +163,25 @@ const Vault1 = ({
         signer
       );
 
-      const hasApproved = localStorage.getItem(
-        `Vault1Approved:${pool.trainerContract}`
+      const approveTx = await pairBContract.approve(
+        pool.trainerContract,
+        amount
       );
-      if (!hasApproved) {
-        const approveTx = await pairBContract.approve(
-          pool.trainerContract,
-          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-        );
-        await approveTx.wait();
-        localStorage.setItem(`Vault1Approved:${pool.trainerContract}`, true);
-      }
+  
+      await approveTx.wait();
+      console.log("Approval successful!");
+
+      // const hasApproved = localStorage.getItem(
+      //   `Vault1Approved:${pool.trainerContract}`
+      // );
+      // if (!hasApproved) {
+      //   const approveTx = await pairBContract.approve(
+      //     pool.trainerContract,
+      //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+      //   );
+      //   await approveTx.wait();
+      //   localStorage.setItem(`Vault1Approved:${pool.trainerContract}`, true);
+      // }
 
       const depositTx = await contractWithSigner.deposit(0, amount);
       await depositTx.wait();
