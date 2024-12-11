@@ -10,7 +10,8 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family:  'Indie Flower', cursive;
+  font-family:  'RSFont', cursive;
+  /* font-family:  'Indie Flower', cursive; */
 }
 :root {
   --yellow: #f2ff00;
