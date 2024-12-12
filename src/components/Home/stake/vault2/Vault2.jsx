@@ -160,7 +160,11 @@ const Vault2 = ({
     const formattedInput = stakeInput.replaceAll(",", "");
     try {
       setStakeLoading(true);
-      const amount = ethers.parseUnits(formattedInput, 18);
+      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
+
+      // Convert back to BigNumber for contract operations
+      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
       const contractWithSigner = contract.connect(signer);
 
       const pairBContract = new ethers.Contract(
@@ -177,21 +181,21 @@ const Vault2 = ({
         pool.trainerContract,
         amount
       );
-  
+
       await approveTx.wait();
       console.log("Approval successful!");
 
-      // const hasApproved = localStorage.getItem(
-      //   `Vault2Approved:${pool.trainerContract}`
-      // );
-      // if (!hasApproved) {
-      //   const approveTx = await pairBContract.approve(
-      //     pool.trainerContract,
-      //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-      //   );
-      //   await approveTx.wait();
-      //   localStorage.setItem(`Vault2Approved:${pool.trainerContract}`, true);
-      // }
+      const hasApproved = localStorage.getItem(
+        `Vault2Approved:${pool.trainerContract}`
+      );
+      if (!hasApproved) {
+        const approveTx = await pairBContract.approve(
+          pool.trainerContract,
+          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+        );
+        await approveTx.wait();
+        localStorage.setItem(`Vault2Approved:${pool.trainerContract}`, true);
+      }
 
       const depositTx = await contractWithSigner.deposit(1, amount);
       await depositTx.wait();
@@ -221,7 +225,11 @@ const Vault2 = ({
     const formattedInput = unStakeInput.replaceAll(",", "");
     try {
       setUnStakeLoading(true);
-      const amount = ethers.parseUnits(formattedInput, 18);
+      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
+
+      // Convert back to BigNumber for contract operations
+      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
       const contractWithSigner = contract.connect(signer);
 
       // Call the withdraw function from the smart contract
@@ -407,9 +415,7 @@ const Vault2 = ({
         <button
           className={stl.vaultCta}
           disabled={
-            stakeLoading || unStakeLoading || pairABalance === 0
-              ? true
-              : false
+            stakeLoading || unStakeLoading || pairABalance === 0 ? true : false
           }
           onClick={stake}
         >

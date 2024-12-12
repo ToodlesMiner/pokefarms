@@ -150,7 +150,11 @@ const Vault3 = ({
     const formattedInput = stakeInput.replaceAll(",", "");
     try {
       setStakeLoading(true);
-      const amount = ethers.parseUnits(formattedInput, 18);
+      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
+
+      // Convert back to BigNumber for contract operations
+      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
       const contractWithSigner = contract.connect(signer);
 
       const pairBContract = new ethers.Contract(
@@ -167,7 +171,7 @@ const Vault3 = ({
         pool.trainerContract,
         amount
       );
-  
+
       await approveTx.wait();
       console.log("Approval successful!");
 
@@ -175,8 +179,8 @@ const Vault3 = ({
       //   `Vault3Approved:${pool.trainerContract}`
       // );
       // if (!hasApproved) {
-        // const approveTx = await pairBContract.approve(
-        //   pool.trainerContract,
+      // const approveTx = await pairBContract.approve(
+      //   pool.trainerContract,
       //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
       //   );
       //   await approveTx.wait();
@@ -211,7 +215,11 @@ const Vault3 = ({
     const formattedInput = unStakeInput.replaceAll(",", "");
     try {
       setUnStakeLoading(true);
-      const amount = ethers.parseUnits(formattedInput, 18);
+      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
+
+      // Convert back to BigNumber for contract operations
+      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
       const contractWithSigner = contract.connect(signer);
 
       // Call the withdraw function from the smart contract
@@ -406,9 +414,7 @@ const Vault3 = ({
         <button
           className={stl.vaultCta}
           disabled={
-            stakeLoading || unStakeLoading || pairABalance === 0
-              ? true
-              : false
+            stakeLoading || unStakeLoading || pairABalance === 0 ? true : false
           }
           onClick={stake}
         >
