@@ -30,16 +30,6 @@ const Mint = ({
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [outputAmount, setOutputAmount] = useState("");
 
-  // useEffect(() => {
-  //   const newContract = new ethers.Contract(
-  //     pool.trainerContract,
-  //     masterABI,
-  //     new ethers.JsonRpcProvider(currentNetwork.rpcUrl)
-  //   );
-
-  //   setContract(newContract);
-  // }, [currentNetwork, pool]);
-
   useEffect(() => {
     const inputFormatted = inputAmount.replaceAll(",", "");
     setOutputAmount(inputFormatted);
@@ -101,98 +91,39 @@ const Mint = ({
       alert("Please enter valid input values.");
       return;
     }
-  
+
     try {
       setLoading(true);
-  
+
       const sanitizedAmount = inputAmount.replace(/,/g, "");
       const formattedAmount = ethers.parseUnits(sanitizedAmount, 18);
-      console.log("formattedAmount", formattedAmount ) // Format as ethers
-  
+      console.log("formattedAmount", formattedAmount); // Format as ethers
+
       // Ensure contract and signer are properly initialized
       if (!contract || !signer) {
         throw new Error("Contract or signer is not initialized.");
       }
-  
+
       const contractWithSigner = contract.connect(signer);
       console.log("contractWithSigner", contractWithSigner);
-  
-      const tokenAContract = new ethers.Contract(pool.tokenA.address, ERC20ABI, signer);
-  
+
+      const tokenAContract = new ethers.Contract(
+        pool.tokenA.address,
+        ERC20ABI,
+        signer
+      );
+
       // Approve the exact amount
       const approveTx = await tokenAContract.approve(
         pool.tokenB.address,
         formattedAmount
       );
-  
+
       await approveTx.wait();
       console.log("Approval successful!");
-  
+
       // After approval, proceed with minting
-      handleMint();
-    } catch (error) {
-      console.error("Error during handleSwap:", error);
-      alert("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-
-  // const handleSwap = async () => {
-  //   if (!inputAmount || +inputAmount > tokenABalance) {
-  //     alert("Please enter correct values.");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const contractWithSigner = contract.connect(signer);
-  //     console.log("contractWithSigner" , contractWithSigner);
-
-  //     const sanitizedAmount = inputAmount.replace(/,/g, "");
-  //     const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
-  //     const tokenAContract = new ethers.Contract(pool.tokenA.address, ERC20ABI, signer);
-
-  //     const approveTx = await tokenAContract.approve(
-  //       pool.tokenB.address,
-  //       formattedAmount // Approve the exact amount that will be used
-  //     );
-  //     await approveTx.wait();
-  //     console.log("Approval successful!");
-  
-  //     // After approval, proceed with minting
-  //     handleMint();
-  //   }
-  // };
-  
-    // const sanitizedAmount = inputAmount.replace(/,/g, "");
-    // const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
-  
-    // const tokenAContract = new ethers.Contract(pool.tokenA.address, ERC20ABI, signer);
-  
-    // try {
-    //   // Approve the maximum amount (or the specific amount if needed)
-    //   const approveTx = await tokenAContract.approve(
-    //     pool.tokenB.address,
-    //     formattedAmount // Approve the exact amount that will be used
-    //   );
-    //   await approveTx.wait();
-    //   console.log("Approval successful!");
-  
-    //   // After approval, proceed with minting
-    //   handleMint();
-    // } catch (error) {
-    //   console.error("Approval failed:", error);
-    // }
-  // };
-  
-  const handleMint = async () => {
-    const sanitizedAmount = inputAmount.replace(/,/g, "");
-    const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
-    const contractWithSigner = contract.connect(signer);
-  //     console.log("contractWithSigner" , contractWithSigner);
-    const tx = await contractWithSigner.mint(formattedAmount);
+      const tx = await contractWithSigner.mint(formattedAmount);
       console.log("tx", tx);
 
       await tx.wait();
@@ -202,127 +133,13 @@ const Mint = ({
           inputAmount * mintRatio
         ).toLocaleString()} ${pairB.baseToken.symbol}!`
       );
-    // Your minting logic here
-    console.log("Proceeding with minting...");
+    } catch (error) {
+      console.error("Error during handleSwap:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
-  
-
-  // const handleSwap = async () => {
-  //   if (!inputAmount || +inputAmount > tokenABalance) {
-  //     alert("Please enter correct values.");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const contractWithSigner = contract.connect(signer);
-  //     console.log("contractWithSigner" , contractWithSigner);
-
-  //     const sanitizedAmount = inputAmount.replace(/,/g, "");
-  //     const formattedAmount = ethers.parseUnits(sanitizedAmount.toString(), 18);
-
-  //     const tokenAContract = new ethers.Contract(pool.tokenA.address, ERC20ABI, signer);
-  //     console.log("tokenAContract:", tokenAContract);
-
-  //     const hasApproval = async () => {
-  //       console.log("User:", user);
-  //       console.log("TokenB Address:", pool.tokenB.address);
-      
-  //       // Get the current allowance
-  //       const allowance = await tokenAContract.allowance(user, pool.tokenB.address);
-  //       console.log("Allowance:", allowance);
-      
-  //       // Check if the allowance is sufficient
-  //       if (!allowance || allowance.isZero()) {
-  //         console.log("Allowance is insufficient. Approving...");
-  //         return false; // Need to approve
-  //       }
-      
-  //       return ethers.BigNumber.from(allowance).gte(formattedAmount); // Compare with formattedAmount
-  //     };
-      
-  //     const handleApprove = async () => {
-  //       // Check if the user has sufficient approval
-  //       if (!(await hasApproval())) {
-  //         try {
-  //           // Approve the max amount (MaxUint256) to avoid frequent re-approvals
-  //           const approveTx = await tokenAContract.approve(
-  //             pool.tokenB.address,
-  //             (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-  //           );
-  //           console.log("Approving transaction...");
-  //           await approveTx.wait();
-  //           console.log("Approval successful!");
-      
-  //           // Proceed with the minting or swap logic after approval
-  //           handleSwap();
-  //         } catch (error) {
-  //           console.error("Approval failed:", error);
-  //         }
-  //       } else {
-  //         // Proceed with the minting or swap logic directly
-  //         handleSwap();
-  //       }
-  //     };
-
-  //     handleApprove();
-
-
-  //     // const hasApproved = localStorage.getItem(
-  //     //   `MintApproved:${pool.trainerContract}`
-  //     // );
-  //     // if (!hasApproved) {
-  //     //   const approveTx = await tokenAContract.approve(
-  //     //     pool.tokenB,
-  //     //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-  //     //   );
-  //     //   await approveTx.wait();
-  //     //   localStorage.setItem(`MintApproved:${pool.trainerContract}`, true);
-  //     // }
-
-  //     // const hasApproval = async () => {
-  //     //   const allowance = await tokenAContract.allowance(user, pool.tokenB.address);
-  //     //   console.log("Allowance:", allowance);
-
-  //     //   if (!allowance || allowance === 'undefined') {
-  //     //     console.error('Allowance is undefined or invalid');
-  //     //     return false; // or handle it as needed
-  //     //   }
-  //     //   return ethers.BigNumber.from(allowance).gte(formattedAmount); // Use BigNumber comparison
-  //     // };
-
-  //     // if (!(await hasApproval())) {
-  //     //   const approveTx = await tokenAContract.approve(
-  //     //     pool.tokenB.address,
-  //     //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-  //     //   );
-  //     //   await approveTx.wait();
-  //     // }
-
-  //     const tx = await contractWithSigner.mint(formattedAmount);
-  //     console.log("tx", tx);
-
-  //     await tx.wait();
-
-  //     setMessage(
-  //       `Successfully Minted ${Number(
-  //         inputAmount * mintRatio
-  //       ).toLocaleString()} ${pairB.baseToken.symbol}!`
-  //     );
-
-  //     setTokenABalance((prev) => prev - +sanitizedAmount);
-  //     setTokenBBalance((prev) => prev + +sanitizedAmount * mintRatio);
-  //     setInputAmount("");
-  //     setLoading(true);
-  //     setTimeout(() => {
-  //       setMessage("");
-  //     }, 4500);
-  //   } catch (err) {
-  //     console.error("Minting failed:", err);
-  //   } finally {
-  //     setLoading(false); // End loading indicator
-  //   }
-  // };
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -379,14 +196,12 @@ const Mint = ({
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
         <span className={stl.rate}>
-          Mint: 1 {pool.tokenA.name} = {mintRatio}{" "}
-          {pool.tokenB.name}
+          Mint: 1 {pool.tokenA.name} = {mintRatio} {pool.tokenB.name}
           {/* Mint: 1 {pairA?.baseToken?.symbol} = {mintRatio}{" "}
           {pairB?.baseToken?.symbol} */}
         </span>
         <span className={stl.rate}>
-        9mm: 1 {pool.tokenA.name} = {marketRatio}{" "}
-          {pool.tokenB.name}
+          9mm: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
           {/* 9mm: 1 {pairA?.baseToken?.symbol} = {marketRatio}{" "}
           {pairB?.baseToken?.symbol} */}
         </span>
@@ -434,13 +249,10 @@ const Mint = ({
         {inputAmount && +formattedPriceInput * +pairA.priceUsd > 0.01 && (
           <span className={stl.dollarValue}>
             $
-            {(+formattedPriceInput * +pairA.priceUsd).toLocaleString(
-              "en-US",
-              {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2,
-              }
-            )}
+            {(+formattedPriceInput * +pairA.priceUsd).toLocaleString("en-US", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}
           </span>
         )}
       </div>
@@ -503,8 +315,8 @@ const Mint = ({
             </div>
             <div className={stl.ctaBox}>
               <button
-                onClick={() =>
-                  handleCopyAddress(pool.tokenA.name, pool.tokenA.address)
+                onClick={
+                  () => handleCopyAddress(pool.tokenA.name, pool.tokenA.address)
                   // handleCopyAddress(pairA?.baseToken?.symbol, pool.tokenA)
                 }
               >
@@ -556,8 +368,8 @@ const Mint = ({
             </div>
             <div className={stl.ctaBox}>
               <button
-                onClick={() =>
-                  handleCopyAddress(pool.tokenB.name, pool.tokenB.address)
+                onClick={
+                  () => handleCopyAddress(pool.tokenB.name, pool.tokenB.address)
                   // handleCopyAddress(pairB?.baseToken?.symbol, pool.tokenB)
                 }
               >
