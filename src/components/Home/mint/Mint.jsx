@@ -113,14 +113,20 @@ const Mint = ({
         signer
       );
 
-      // Approve the exact amount
-      const approveTx = await tokenAContract.approve(
-        pool.tokenB.address,
-        formattedAmount
+      const hasApproved = localStorage.getItem(
+        `MintApproved:${pool.trainerContract}:${user}`
       );
-
-      await approveTx.wait();
-      console.log("Approval successful!");
+      if (!hasApproved) {
+        const approveTx = await tokenAContract.approve(
+          pool.tokenB.address,
+          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+        );
+        await approveTx.wait();
+        localStorage.setItem(
+          `MintApproved:${pool.trainerContract}:${user}`,
+          true
+        );
+      }
 
       // After approval, proceed with minting
       const tx = await contractWithSigner.mint(formattedAmount);
