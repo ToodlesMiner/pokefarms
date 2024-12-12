@@ -166,8 +166,8 @@ const Vault2 = ({
     try {
       setStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
-
+      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
+      console.log(roundedDownAmount.toString());
       // Convert back to BigNumber for contract operations
       const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
       const contractWithSigner = contract.connect(signer);
@@ -232,7 +232,7 @@ const Vault2 = ({
     try {
       setUnStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-      const roundedDownAmount = fixedInput.floor(); // Explicitly rounds down
+      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
 
       // Convert back to BigNumber for contract operations
       const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
