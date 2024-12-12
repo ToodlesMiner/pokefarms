@@ -86,18 +86,18 @@ const Mint = ({
       });
   };
 
-  const handleSwap = async () => {
-    if (!inputAmount || +inputAmount > tokenABalance) {
-      alert("Please enter valid input values.");
-      return;
-    }
-
+  const handleMint = async () => {
     try {
       setLoading(true);
 
       const sanitizedAmount = inputAmount.replace(/,/g, "");
+
+      if (!inputAmount || +sanitizedAmount > tokenABalance) {
+        alert("Please enter valid input values.");
+        return;
+      }
+
       const formattedAmount = ethers.parseUnits(sanitizedAmount, 18);
-      console.log("formattedAmount", formattedAmount); // Format as ethers
 
       // Ensure contract and signer are properly initialized
       if (!contract || !signer) {
@@ -197,13 +197,9 @@ const Mint = ({
       <div className={stl.toprow}>
         <span className={stl.rate}>
           Mint: 1 {pool.tokenA.name} = {mintRatio} {pool.tokenB.name}
-          {/* Mint: 1 {pairA?.baseToken?.symbol} = {mintRatio}{" "}
-          {pairB?.baseToken?.symbol} */}
         </span>
         <span className={stl.rate}>
           9mm: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
-          {/* 9mm: 1 {pairA?.baseToken?.symbol} = {marketRatio}{" "}
-          {pairB?.baseToken?.symbol} */}
         </span>
       </div>
       <div className={stl.swapWrap}>
@@ -214,7 +210,6 @@ const Mint = ({
               {tokenABalance.toLocaleString()}
             </span>{" "}
             {pool.tokenA.name}
-            {/* {pairA.baseToken.symbol} */}
           </span>
         )}
         <span>You're Freezing</span>
@@ -226,7 +221,6 @@ const Mint = ({
               className={stl.logoIcon}
             />
             <span>{pool.tokenA.name}</span>
-            {/* <span>{pairA?.baseToken?.symbol}</span> */}
           </div>
           <div className={stl.numberBox}>
             <input
@@ -266,7 +260,6 @@ const Mint = ({
               {tokenBBalance.toLocaleString()}
             </span>{" "}
             {pool.tokenB.name}
-            {/* {pairB.baseToken.symbol} */}
           </span>
         )}
         <span>You're Minting</span>
@@ -274,7 +267,6 @@ const Mint = ({
           <div className={stl.itemWrap} onClick={() => setSelectingFarm(true)}>
             <img src={pool.dexTokenBImgUrl} alt="LP" className={stl.logoIcon} />
             <span>{pool.tokenB.name}</span>
-            {/* <span>{pairB?.baseToken?.symbol}</span> */}
           </div>
           <div className={stl.numberBox}>
             <span
@@ -300,7 +292,6 @@ const Mint = ({
                 className={stl.logoIcon}
               />
               <span>{pool.tokenA.name}</span>
-              {/* <span>{pairA?.baseToken?.symbol}</span> */}
             </div>
             <div className={stl.priceBox}>
               <span className={stl.priceSpan}>${pairA?.priceUsd}</span>
@@ -315,9 +306,8 @@ const Mint = ({
             </div>
             <div className={stl.ctaBox}>
               <button
-                onClick={
-                  () => handleCopyAddress(pool.tokenA.name, pool.tokenA.address)
-                  // handleCopyAddress(pairA?.baseToken?.symbol, pool.tokenA)
+                onClick={() =>
+                  handleCopyAddress(pool.tokenA.name, pool.tokenA.address)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -353,7 +343,6 @@ const Mint = ({
                 className={stl.logoIcon}
               />
               <span>{pool.tokenB.name}</span>
-              {/* <span>{pairB?.baseToken?.symbol}</span> */}
             </div>
             <div className={stl.priceBox}>
               <span className={stl.priceSpan}>${pairB?.priceUsd}</span>
@@ -368,9 +357,8 @@ const Mint = ({
             </div>
             <div className={stl.ctaBox}>
               <button
-                onClick={
-                  () => handleCopyAddress(pool.tokenB.name, pool.tokenB.address)
-                  // handleCopyAddress(pairB?.baseToken?.symbol, pool.tokenB)
+                onClick={() =>
+                  handleCopyAddress(pool.tokenB.name, pool.tokenB.address)
                 }
               >
                 <FaRegCopy className={stl.copyIcon} />
@@ -401,7 +389,7 @@ const Mint = ({
       </div>
       <button
         className={stl.swapCta}
-        onClick={user ? handleSwap : connectWallet}
+        onClick={user ? handleMint : connectWallet}
       >
         {!user && "Connect A Wallet"}
         {user && !loading && "Mint"}
