@@ -157,7 +157,12 @@ const Vault2 = ({
 
   const stake = async () => {
     if (!stakeInput || pairABalance === 0 || !signer) return;
-    const formattedInput = stakeInput.replaceAll(",", "");
+
+    let formattedInput = stakeInput.toString();
+    if (typeof stakeInput === "string") {
+      formattedInput = stakeInput.replaceAll(",", "");
+    }
+
     try {
       setStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
@@ -222,7 +227,13 @@ const Vault2 = ({
 
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0 || !signer) return;
-    const formattedInput = unStakeInput.replaceAll(",", "");
+
+    let formattedInput = unStakeInput.toString();
+
+    if (typeof unStakeInput === "string") {
+      formattedInput = unStakeInput.replaceAll(",", "");
+    }
+
     try {
       setUnStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);

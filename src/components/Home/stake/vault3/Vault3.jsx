@@ -147,7 +147,12 @@ const Vault3 = ({
 
   const stake = async () => {
     if (!stakeInput || pairABalance === 0 || !signer) return;
-    const formattedInput = stakeInput.replaceAll(",", "");
+
+    let formattedInput = stakeInput.toString();
+    if (typeof stakeInput === "string") {
+      formattedInput = stakeInput.replaceAll(",", "");
+    }
+
     try {
       setStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
@@ -175,17 +180,17 @@ const Vault3 = ({
       await approveTx.wait();
       console.log("Approval successful!");
 
-      // const hasApproved = localStorage.getItem(
-      //   `Vault3Approved:${pool.trainerContract}`
-      // );
-      // if (!hasApproved) {
-      // const approveTx = await pairBContract.approve(
-      //   pool.trainerContract,
-      //     (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-      //   );
-      //   await approveTx.wait();
-      //   localStorage.setItem(`Vault3Approved:${pool.trainerContract}`, true);
-      // }
+      const hasApproved = localStorage.getItem(
+        `Vault3Approved:${pool.trainerContract}`
+      );
+      if (!hasApproved) {
+        const approveTx = await pairBContract.approve(
+          pool.trainerContract,
+          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+        );
+        await approveTx.wait();
+        localStorage.setItem(`Vault3Approved:${pool.trainerContract}`, true);
+      }
 
       const depositTx = await contractWithSigner.deposit(2, amount);
       await depositTx.wait();
@@ -212,7 +217,13 @@ const Vault3 = ({
 
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0 || !signer) return;
-    const formattedInput = unStakeInput.replaceAll(",", "");
+
+    let formattedInput = unStakeInput.toString();
+
+    if (typeof unStakeInput === "string") {
+      formattedInput = unStakeInput.replaceAll(",", "");
+    }
+
     try {
       setUnStakeLoading(true);
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
