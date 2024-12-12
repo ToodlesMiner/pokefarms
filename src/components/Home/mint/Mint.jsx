@@ -136,9 +136,10 @@ const Mint = ({
 
       setMessage(
         `Successfully Minted ${Number(
-          inputAmount * mintRatio
+          outputAmount * mintRatio
         ).toLocaleString()} ${pairB.baseToken.symbol}!`
       );
+      setInputAmount("");
     } catch (error) {
       console.error("Error during handleSwap:", error);
       alert("An error occurred. Please try again.");

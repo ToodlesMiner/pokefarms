@@ -72,10 +72,9 @@ const Home = () => {
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP0}`
       );
       const pairAresponse = await pairArequest.json();
-      // console.log(pairAresponse);
       setpairA(pairAresponse.pairs[0]);
 
-      // token B
+      // Token B
       const pairBrequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
       );
