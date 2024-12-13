@@ -116,7 +116,7 @@ const Vault1 = ({
           Number(totalAlloc);
         console.log("RewardRatePerSecond: ", rewardsPerSecond);
 
-        const annualRewards = rewardsPerSecond * 31536000;
+        const annualRewards = rewardsPerSecond * 315360000;
         console.log("Annual Rewards: ", annualRewards);
 
         const blastValuePerpairBs = tokenAPoolBalance / totalPoolBalance;
