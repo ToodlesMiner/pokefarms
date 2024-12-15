@@ -65,8 +65,8 @@ const Mint = ({
   }, [user, pool.tokenA.address, pool.tokenB.address]);
 
   useEffect(() => {
+    if (!user) return;
     const initializeProvider = async () => {
-      if (!user) return;
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
