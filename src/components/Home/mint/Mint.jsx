@@ -66,6 +66,7 @@ const Mint = ({
 
   useEffect(() => {
     const initializeProvider = async () => {
+      if (!user) return;
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
