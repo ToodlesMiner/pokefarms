@@ -146,9 +146,6 @@ const Home = () => {
       </div>
 
       <img src="../bg.png" alt="Forrest" className={stl.forrestBG} />
-      <span className={stl.rate}>
-          9mm: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
-        </span>
     </div>
   );
 };

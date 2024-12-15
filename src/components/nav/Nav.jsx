@@ -32,10 +32,10 @@ const Nav = ({ user, setUser, currentNetwork }) => {
     window.location.reload();
   };
 
-  window.ethereum.on("accountsChanged", (accounts) => {
-    setUser(accounts[0]);
-  });
-  window.ethereum.on("chainChanged", chainChangedHandler);
+  // window.ethereum.on("accountsChanged", (accounts) => {
+  //   setUser(accounts[0]);
+  // });
+  // window.ethereum.on("chainChanged", chainChangedHandler);
 
   return (
     <nav className={stl.nav}>
