@@ -1,20 +1,45 @@
 import { useEffect, useState } from "react";
 import stl from "./Nav.module.css";
 import { IoWalletOutline } from "react-icons/io5";
-import { FaExclamationTriangle } from "react-icons/fa";
 
 const Nav = ({ user, setUser, currentNetwork }) => {
   const [hovered, setHovered] = useState(false);
 
+  useEffect(() => {
+    if (window.ethereum) {
+      // Handle account and chain change events
+      const handleAccountsChanged = (accounts) => {
+        if (accounts.length > 0) {
+          setUser(accounts[0]);
+        } else {
+          setUser("");
+        }
+      };
+
+      const handleChainChanged = () => {
+        window.location.reload();
+      };
+
+      window.ethereum.on("accountsChanged", handleAccountsChanged);
+      window.ethereum.on("chainChanged", handleChainChanged);
+
+      // Cleanup listeners on component unmount
+      return () => {
+        window.ethereum.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        );
+        window.ethereum.removeListener("chainChanged", handleChainChanged);
+      };
+    }
+  }, [setUser]);
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        // Request wallet connection
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-
-        // Set the first account as the connected wallet
         setUser(accounts[0]);
       } catch (error) {
         console.error("Error connecting wallet:", error);
@@ -28,26 +53,8 @@ const Nav = ({ user, setUser, currentNetwork }) => {
     setUser("");
   };
 
-  const chainChangedHandler = () => {
-    window.location.reload();
-  };
-
-  window.ethereum.on("accountsChanged", (accounts) => {
-    setUser(accounts[0]);
-  });
-  window.ethereum.on("chainChanged", chainChangedHandler);
-
   return (
     <nav className={stl.nav}>
-      {/* <span className={stl.networkSpan}>
-        {+currentNetwork.chainId === 943 ? (
-          <span className={stl.testSpan}>
-            Pulse Testnet <FaExclamationTriangle className={stl.excIcon} />
-          </span>
-        ) : (
-          "Pulse Mainnet"
-        )}
-      </span> */}
       {!user && (
         <button onClick={connectWallet} className={stl.connectButton}>
           <>Connect Wallet</>
