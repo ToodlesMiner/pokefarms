@@ -65,6 +65,7 @@ const Mint = ({
   }, [user, pool.tokenA.address, pool.tokenB.address]);
 
   useEffect(() => {
+    if (!user) return;
     const initializeProvider = async () => {
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);

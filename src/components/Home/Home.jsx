@@ -30,6 +30,7 @@ const Home = () => {
 
   // Initialize network & contract
   useEffect(() => {
+    if (!window.ethereum) return;
     const chainInit = async () => {
       const chainId = Number(
         await window.ethereum.request({

@@ -37,6 +37,7 @@ const Vault2 = ({
   const [ratio, setRatio] = useState(0);
 
   useEffect(() => {
+    if (!user) return;
     const initializeProvider = async () => {
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
