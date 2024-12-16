@@ -131,7 +131,7 @@ const Vault1 = ({
         setAPR(APR);
         console.log("APR: %", APR);
 
-        const TVL = blastStaked * 2 * +pairA.priceUsd * 10;
+        const TVL = blastStaked * 2 * +pairA.priceUsd * 1;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
       } catch (err) {
