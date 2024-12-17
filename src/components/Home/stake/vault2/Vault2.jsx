@@ -555,8 +555,8 @@ const Vault2 = ({
         {user && claimLoading && <img src="../Spinner.svg" alt="Spinner" />}
         {user && !claimLoading && (
           <>
-            {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
-            CLAIM {(rewardCount / 1e18).toFixed(2)} {pairA.baseToken.symbol}
+            CLAIM {(rewardCount / 1e18).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {pairA.baseToken.symbol}
+
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}
