@@ -27,7 +27,11 @@ export const FARMS_CONFIG = [
     dexTokenAImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31.png?size=lg&key=19ffe5",
     dexTokenBImgUrl:
-      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=61cf87",
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
+    mintingCost: (emission) => {
+        const truncEmission = +emission.toString().slice(0, 3);  // Truncate to 8 digits for Squirtle-Wartortle
+        return truncEmission;
+      }
   },
   {
     contractName: "Squirtle-Wartortle",
@@ -45,8 +49,17 @@ export const FARMS_CONFIG = [
   LP2: "0xCA68536810302bd9518860405c502a3D9E686c22",
   dexTokenAImgUrl:
     "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
-  dexTokenBImgUrl:
-    "../wartortle.png",
+  dexTokenBImgUrl: "../wartortle.png",
+  mintingCost: (emission) => {
+      const truncEmission = "0.0"+emission.toString().slice(0, 4);  // Truncate to 8 digits for Squirtle-Wartortle
+      return truncEmission;
+    }
+
+  // const initialize = async () => {
+  //   const emission = Number(await contract.calculateRatio());
+  //   const truncEmission = +emission.toString().slice(0, 3);
+  //   setmintRatio(truncEmission);
+
   },
   // Add more farms as needed, may need to add difrent parms for tokens that have stronger ratios.
 ];
