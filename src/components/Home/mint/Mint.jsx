@@ -188,7 +188,7 @@ const Mint = ({
           Mint: 1 {pool.tokenA.name} = {mintRatio} {pool.tokenB.name}
         </span>
         <span className={stl.rate}>
-          9mm: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
+          DEX: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
         </span>
       </div>
       <div className={stl.swapWrap}>

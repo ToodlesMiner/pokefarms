@@ -316,7 +316,7 @@ const Vault3 = ({
           }
         >
           <img src="../9mm.png" alt="9mm" className={stl.mmlogo} />
-          Get 9mm LP
+          Get LP
         </button>
         <h2>
           {pool.tokenA.name}/{pool.tokenB.name} LP
