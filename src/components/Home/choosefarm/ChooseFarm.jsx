@@ -4,7 +4,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
-const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
+const ChooseFarm = ({ poolData, setSelectingFarm, setPool, setMintRatio }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   return (
     <div className={stl.farmoverlay} onClick={() => setSelectingFarm(false)}>
@@ -16,7 +16,7 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
         <h2>
           {" "}
           <FaFlaskVial />
-          Active Pokémon
+          Active Pokéfarms
         </h2>
         <ul className={stl.list}>
           {poolData.map((pool, index) => (
@@ -25,6 +25,7 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool }) => {
               onMouseEnter={() => setHoveredIndex(index)}
               onClick={() => {
                 setPool(pool);
+                setMintRatio(pool.mintRatio)
                 setSelectingFarm(false);
               }}
             >
