@@ -59,7 +59,7 @@ const Home = () => {
     );
 
     setContract(newContract);
-  }, [currentNetwork, pool]);
+  }, [currentNetwork]);
 
   //Initialize app
   useEffect(() => {
@@ -100,7 +100,8 @@ const Home = () => {
           poolData={FARMS_CONFIG}
           setSelectingFarm={setSelectingFarm}
           setPool={setPool}
-          setMintRatio={setMintRatio}
+          setContract={setContract}
+          currentNetwork={currentNetwork}
         />
       )}
       <div className={stl.mainApp}>
