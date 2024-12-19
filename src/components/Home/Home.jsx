@@ -25,7 +25,7 @@ const Home = () => {
   const [activeMenu, setActiveMenu] = useState("Mint");
   const [pairA, setpairA] = useState({});
   const [pairB, setpairB] = useState({});
-  const [mintRatio, setmintRatio] = useState(null);
+  const [mintRatio, setMintRatio] = useState(null);
   const [marketRatio, setmarketRatio] = useState(null);
 
   // Initialize network & contract
@@ -65,19 +65,14 @@ const Home = () => {
   useEffect(() => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
-      // const truncEmission = +emission.toString().slice(0, 3);
-      // setmintRatio(truncEmission);
-
-      // setmintRatio(emission);
       const mintingCost = pool.mintingCost(emission);
-      setmintRatio(mintingCost);
+      setMintRatio(mintingCost);
 
       // Token A
       const pairArequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP0}`
       );
       const pairAresponse = await pairArequest.json();
-      // console.log("pairAresponse", pairAresponse)
       setpairA(pairAresponse.pairs[0]);
 
       // Token B
@@ -85,19 +80,13 @@ const Home = () => {
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP1}`
       );
       const pairBresponse = await pairBrequest.json();
-      // console.log("pairBresponse", pairBresponse)
       setpairB(pairBresponse.pairs[0]);
 
       const ratioRequest = await fetch(
         `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP2}`
       );
       const ratioResponse = await ratioRequest.json();
-      // console.log("ratioResponse", ratioResponse)
       setmarketRatio(ratioResponse.pairs[0].priceNative);
-
-      // const tokenAPrice = +pairAresponse.pairs[0].priceUsd;
-      // const tokenBPrice = +pairBresponse.pairs[0].priceUsd;
-      // setmarketRatio(Math.floor(tokenAPrice / tokenBPrice));
     };
     initialize();
   }, [pool, contract]);
@@ -111,6 +100,7 @@ const Home = () => {
           poolData={FARMS_CONFIG}
           setSelectingFarm={setSelectingFarm}
           setPool={setPool}
+          setMintRatio={setMintRatio}
         />
       )}
       <div className={stl.mainApp}>

@@ -54,12 +54,6 @@ export const FARMS_CONFIG = [
       const truncEmission = "0.00"+emission.toString().slice(0, 4);  // Truncate to 8 digits for Squirtle-Wartortle
       return truncEmission;
     }
-
-  // const initialize = async () => {
-  //   const emission = Number(await contract.calculateRatio());
-  //   const truncEmission = +emission.toString().slice(0, 3);
-  //   setmintRatio(truncEmission);
-
   },
   // Add more farms as needed, may need to add difrent parms for tokens that have stronger ratios.
 ];
