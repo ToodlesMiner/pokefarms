@@ -51,7 +51,7 @@ export const FARMS_CONFIG = [
     "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
   dexTokenBImgUrl: "../wartortle.png",
   mintingCost: (emission) => {
-      const truncEmission = "0.0"+emission.toString().slice(0, 4);  // Truncate to 8 digits for Squirtle-Wartortle
+      const truncEmission = "0.00"+emission.toString().slice(0, 4);  // Truncate to 8 digits for Squirtle-Wartortle
       return truncEmission;
     }
 
