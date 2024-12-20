@@ -61,11 +61,24 @@ const Home = () => {
     setContract(newContract);
   }, [currentNetwork]);
 
+  const mintCostConversion = (pool, emission) => {
+    const poolName = pool.contractName;
+
+    if (poolName === "Blastoise-Squirtle") {
+      const truncEmission = +emission.toString().slice(0, 3); // Truncate to 8 digits for Squirtle-Wartortle
+      return truncEmission;
+    }
+    if (poolName === "Squirtle-Wartortle") {
+      const truncEmission = "0.00" + emission.toString().slice(0, 4); // Truncate to 8 digits for Squirtle-Wartortle
+      return truncEmission;
+    }
+  };
+
   //Initialize app
   useEffect(() => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
-      const mintingCost = pool.mintingCost(emission);
+      const mintingCost = mintCostConversion(pool, emission);
       setMintRatio(mintingCost);
 
       // Token A
