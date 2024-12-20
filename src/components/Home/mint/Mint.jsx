@@ -327,7 +327,7 @@ const Mint = ({
           <div className={stl.tokenBox}>
             <div className={stl.wrapper}>
               <img
-                src="../Squirtlogo.webp"
+                src={pool.dexTokenBImgUrl}
                 alt="Blast"
                 className={stl.logoIcon}
               />

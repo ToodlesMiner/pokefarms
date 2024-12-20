@@ -440,7 +440,7 @@ const Vault1 = ({
           <div className={stl.microStake}>
             <div className={stl.microRow}>
               <img
-                src={pool.dexpairAImgUrl}
+                src={pool.dexTokenAImgUrl}
                 alt="Mint"
                 className={stl.microLogo}
               />
