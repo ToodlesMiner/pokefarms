@@ -65,12 +65,10 @@ const Home = () => {
     const poolName = pool.contractName;
 
     if (poolName === "Blastoise-Squirtle") {
-      const truncEmission = +emission.toString().slice(0, 3); // Truncate to 8 digits for Squirtle-Wartortle
-      return truncEmission;
+      return Number(emission.toString().slice(0, 3)); // Truncate to 8 digits for Squirtle-Wartortle
     }
     if (poolName === "Squirtle-Wartortle") {
-      const truncEmission = "0.00" + emission.toString().slice(0, 4); // Truncate to 8 digits for Squirtle-Wartortle
-      return truncEmission;
+      return Number("0.00" + emission.toString().slice(0, 4)); // Truncate to 8 digits for Squirtle-Wartortle
     }
   };
 
@@ -79,6 +77,7 @@ const Home = () => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
       const mintingCost = mintCostConversion(pool, emission);
+      console.log(mintingCost);
       setMintRatio(mintingCost);
 
       // Token A
