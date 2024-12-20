@@ -510,11 +510,7 @@ const Vault3 = ({
               >
                 75%
               </button>
-              <button
-                onClick={() =>
-                  setUnstakeInput(+stakedBalance.toString().toString())
-                }
-              >
+              <button onClick={() => setUnstakeInput(stakedBalance.toString())}>
                 Max
               </button>
             </div>
