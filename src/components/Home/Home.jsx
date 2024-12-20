@@ -105,7 +105,13 @@ const Home = () => {
 
   return (
     <div className={stl.home}>
-      <Nav user={user} setUser={setUser} currentNetwork={currentNetwork} />
+      <Nav
+        user={user}
+        setUser={setUser}
+        currentNetwork={currentNetwork}
+        pool={pool}
+        setSelectingFarm={setSelectingFarm}
+      />
       <img src="../Logo.png" alt="Mainlogo" className={stl.mainLogo} />
       {selectingFarm && (
         <ChooseFarm
