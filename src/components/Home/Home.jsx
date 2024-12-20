@@ -120,6 +120,7 @@ const Home = () => {
           setPool={setPool}
           setContract={setContract}
           currentNetwork={currentNetwork}
+          pool={pool}
         />
       )}
       <div className={stl.mainApp}>

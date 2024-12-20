@@ -12,6 +12,7 @@ const ChooseFarm = ({
   setPool,
   setContract,
   currentNetwork,
+  pool: currentPool,
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -27,6 +28,8 @@ const ChooseFarm = ({
     setSelectingFarm(false);
   };
 
+  console.log(currentPool);
+
   return (
     <div className={stl.farmoverlay} onClick={() => setSelectingFarm(false)}>
       <div className={stl.poolList} onClick={(e) => e.stopPropagation()}>
@@ -39,12 +42,24 @@ const ChooseFarm = ({
           <FaFlaskVial />
           Active Pokéfarms
         </h2>
+        <span className={stl.currentPool}>
+          Current Pool:{" "}
+          {currentPool?.contractName?.split("-")[0] +
+            " " +
+            currentPool?.contractName?.split("-")[1]}
+        </span>
         <ul className={stl.list}>
           {poolData.map((pool, index) => (
             <li
               key={index}
               onMouseEnter={() => setHoveredIndex(index)}
               onClick={() => changePool(pool)}
+              style={{
+                backgroundColor:
+                  pool.contractName === currentPool.contractName
+                    ? "#14008c"
+                    : "",
+              }}
             >
               <img
                 src={pool.dexTokenAImgUrl}
