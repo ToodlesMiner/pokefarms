@@ -145,3 +145,8 @@
 .close:hover {
   color: white;
 }
+
+.currentPool {
+  margin-top: 0.25rem;
+  color: yellow;
+}

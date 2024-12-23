@@ -3,9 +3,33 @@ import { FaFlaskVial } from "react-icons/fa6";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
+import { ethers } from "ethers";
+import { masterABI } from "../../../utils/MasterABI";
 
-const ChooseFarm = ({ poolData, setSelectingFarm, setPool, setMintRatio }) => {
+const ChooseFarm = ({
+  poolData,
+  setSelectingFarm,
+  setPool,
+  setContract,
+  currentNetwork,
+  pool: currentPool,
+}) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const changePool = (pool) => {
+    const newContract = new ethers.Contract(
+      pool.trainerContract,
+      masterABI,
+      new ethers.JsonRpcProvider(currentNetwork.rpcUrl)
+    );
+
+    setContract(newContract);
+    setPool(pool);
+    setSelectingFarm(false);
+  };
+
+  console.log(currentPool);
+
   return (
     <div className={stl.farmoverlay} onClick={() => setSelectingFarm(false)}>
       <div className={stl.poolList} onClick={(e) => e.stopPropagation()}>
@@ -18,15 +42,23 @@ const ChooseFarm = ({ poolData, setSelectingFarm, setPool, setMintRatio }) => {
           <FaFlaskVial />
           Active Pokéfarms
         </h2>
+        <span className={stl.currentPool}>
+          Current Pool:{" "}
+          {currentPool?.contractName?.split("-")[0] +
+            " " +
+            currentPool?.contractName?.split("-")[1]}
+        </span>
         <ul className={stl.list}>
           {poolData.map((pool, index) => (
             <li
               key={index}
               onMouseEnter={() => setHoveredIndex(index)}
-              onClick={() => {
-                setPool(pool);
-                setMintRatio(pool.mintRatio)
-                setSelectingFarm(false);
+              onClick={() => changePool(pool)}
+              style={{
+                backgroundColor:
+                  pool.contractName === currentPool.contractName
+                    ? "#14008c"
+                    : "",
               }}
             >
               <img

@@ -59,13 +59,25 @@ const Home = () => {
     );
 
     setContract(newContract);
-  }, [currentNetwork, pool]);
+  }, [currentNetwork]);
+
+  const mintCostConversion = (pool, emission) => {
+    const poolName = pool.contractName;
+
+    if (poolName === "Blastoise-Squirtle") {
+      return Number(emission.toString().slice(0, 3)); // Truncate to 8 digits for Squirtle-Wartortle
+    }
+    if (poolName === "Squirtle-Wartortle") {
+      return Number("0.00" + emission.toString().slice(0, 4)); // Truncate to 8 digits for Squirtle-Wartortle
+    }
+  };
 
   //Initialize app
   useEffect(() => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
-      const mintingCost = pool.mintingCost(emission);
+      const mintingCost = mintCostConversion(pool, emission);
+      console.log(mintingCost);
       setMintRatio(mintingCost);
 
       // Token A
@@ -93,14 +105,22 @@ const Home = () => {
 
   return (
     <div className={stl.home}>
-      <Nav user={user} setUser={setUser} currentNetwork={currentNetwork} />
+      <Nav
+        user={user}
+        setUser={setUser}
+        currentNetwork={currentNetwork}
+        pool={pool}
+        setSelectingFarm={setSelectingFarm}
+      />
       <img src="../Logo.png" alt="Mainlogo" className={stl.mainLogo} />
       {selectingFarm && (
         <ChooseFarm
           poolData={FARMS_CONFIG}
           setSelectingFarm={setSelectingFarm}
           setPool={setPool}
-          setMintRatio={setMintRatio}
+          setContract={setContract}
+          currentNetwork={currentNetwork}
+          pool={pool}
         />
       )}
       <div className={stl.mainApp}>

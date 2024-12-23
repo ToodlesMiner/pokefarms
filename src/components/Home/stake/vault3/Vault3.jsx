@@ -510,11 +510,7 @@ const Vault3 = ({
               >
                 75%
               </button>
-              <button
-                onClick={() =>
-                  setUnstakeInput(+stakedBalance.toString().toString())
-                }
-              >
+              <button onClick={() => setUnstakeInput(stakedBalance.toString())}>
                 Max
               </button>
             </div>
@@ -559,9 +555,7 @@ const Vault3 = ({
         {user && !claimLoading && (
           <>
             {/* CLAIM {Number(BigInt(rewardCount) / BigInt(1e18))}{" "} */}
-            {/* CLAIM {(rewardCount / 1e18).toFixed(2)} {pairA.baseToken.symbol} */}
             CLAIM {(rewardCount / 1e18).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {pairA.baseToken.symbol}
-
           </>
         )}
         {!user && "Connect A Wallet To Claim Rewards"}

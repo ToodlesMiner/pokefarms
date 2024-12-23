@@ -27,33 +27,25 @@ export const FARMS_CONFIG = [
     dexTokenAImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31.png?size=lg&key=19ffe5",
     dexTokenBImgUrl:
-      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=61cf87",
-    mintingCost: (emission) => {
-        const truncEmission = +emission.toString().slice(0, 3);  // Truncate to 8 digits for Squirtle-Wartortle
-        return truncEmission;
-      }
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2d9eb4f3cb4131287d5c76c88c275139da57.png?size=lg&key=61cf87",
   },
   {
     contractName: "Squirtle-Wartortle",
-  tokenA: {
-    address: "0x44de2D9EB4f3CB4131287D5C76C88c275139DA57",
-    name: "Squirtle",
-  },
-  tokenB: {
-    address: "0xF830a25dbcf0A420C3c97e9ff1e353488a935645",
-    name: "Wartortle",
-  },
-  trainerContract: "0xA761cF14cAC5D97ee9F9564A38e1e707F8cc7b4C",
-  LP0: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0",
-  LP1: "0x01609637D9Fb1f39cEd2C6059fb2867f9dCD90A1",
-  LP2: "0xCA68536810302bd9518860405c502a3D9E686c22",
-  dexTokenAImgUrl:
-    "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
-  dexTokenBImgUrl: "../wartortle.png",
-  mintingCost: (emission) => {
-      const truncEmission = "0.00"+emission.toString().slice(0, 4);  // Truncate to 8 digits for Squirtle-Wartortle
-      return truncEmission;
-    }
+    tokenA: {
+      address: "0x44de2D9EB4f3CB4131287D5C76C88c275139DA57",
+      name: "Squirtle",
+    },
+    tokenB: {
+      address: "0xF830a25dbcf0A420C3c97e9ff1e353488a935645",
+      name: "Wartortle",
+    },
+    trainerContract: "0xA761cF14cAC5D97ee9F9564A38e1e707F8cc7b4C",
+    LP0: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0",
+    LP1: "0x01609637D9Fb1f39cEd2C6059fb2867f9dCD90A1",
+    LP2: "0xCA68536810302bd9518860405c502a3D9E686c22",
+    dexTokenAImgUrl:
+      "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
+    dexTokenBImgUrl: "../wartortle.png",
   },
   // Add more farms as needed, may need to add difrent parms for tokens that have stronger ratios.
 ];

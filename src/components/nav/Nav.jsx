@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import stl from "./Nav.module.css";
 import { IoWalletOutline } from "react-icons/io5";
 
-const Nav = ({ user, setUser, currentNetwork }) => {
+const Nav = ({ user, setUser, pool, setSelectingFarm }) => {
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
@@ -64,6 +64,22 @@ const Nav = ({ user, setUser, currentNetwork }) => {
 
   return (
     <nav className={stl.nav}>
+      <div className={stl.activeFarm}>
+        <button className={stl.farmCta} onClick={() => setSelectingFarm(true)}>
+          <span className={stl.activeFarmSpan}>Active Farm:</span>
+          <img
+            src={pool.dexTokenAImgUrl}
+            alt={pool.tokenA.name}
+            className={stl.miniImg}
+          />
+          {pool.contractName}
+          <img
+            src={pool.dexTokenBImgUrl}
+            alt={pool.tokenB.name}
+            className={stl.miniImg}
+          />
+        </button>
+      </div>
       {!user && (
         <button onClick={connectWallet} className={stl.connectButton}>
           <>Connect Wallet</>
