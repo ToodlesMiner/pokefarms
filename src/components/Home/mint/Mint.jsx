@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo} from "react";
 import stl from "./Mint.module.css";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { MdCandlestickChart } from "react-icons/md";
@@ -29,6 +29,11 @@ const Mint = ({
   const [tokenABalance, setTokenABalance] = useState(0);
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [outputAmount, setOutputAmount] = useState("");
+
+  const isHigherRatio = useMemo(() => mintRatio > marketRatio, [mintRatio, marketRatio]);
+  // const isHigherRatio = useMemo(() => {
+  //   return mintRatio > marketRatio;
+  // }, [mintRatio, marketRatio]);
 
   useEffect(() => {
     const inputFormatted = inputAmount.replaceAll(",", "");
@@ -88,7 +93,7 @@ const Mint = ({
   };
 
   const handleMint = async () => {
-    try {
+    try {const isMintRatioHigher = useMemo(() => mintRatio > marketRatio, [mintRatio, marketRatio]);
       setLoading(true);
 
       const sanitizedAmount = inputAmount.replace(/,/g, "");
@@ -184,13 +189,21 @@ const Mint = ({
       )}
       {message && <MessageOverlay submittedMessage={message} />}
       <div className={stl.toprow}>
-        <span className={stl.rate}>
+        <span className={`${stl.rate} ${isHigherRatio ? stl.greenHighlight : ''}`}>
           Mint: 1 {pool.tokenA.name} = {mintRatio} {pool.tokenB.name}
         </span>
         <span className={stl.rate}>
           DEX: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
         </span>
       </div>
+      {/* <div className={stl.toprow}>
+        <span className={stl.rate}>
+          Mint: 1 {pool.tokenA.name} = {mintRatio} {pool.tokenB.name}
+        </span>
+        <span className={stl.rate}>
+          DEX: 1 {pool.tokenA.name} = {marketRatio} {pool.tokenB.name}
+        </span>
+      </div> */}
       <div className={stl.swapWrap}>
         {user && (
           <span className={stl.balanceSpan}>

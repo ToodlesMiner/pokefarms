@@ -350,6 +350,11 @@
   gap: 0.45rem;
 }
 
+.greenHighlight {
+  color: rgb(0, 255, 0); /* Or any other styling */
+  font-weight: bold; /* Optional: make it bold */
+}
+
 @media only screen and (max-width: 560px) {
   .modal,
   .toggleBox {
