@@ -27,6 +27,7 @@ const Home = () => {
   const [pairB, setpairB] = useState({});
   const [mintRatio, setMintRatio] = useState(null);
   const [marketRatio, setmarketRatio] = useState(null);
+  console.log("marketRatio",marketRatio);
 
   // Initialize network & contract
   useEffect(() => {
@@ -77,7 +78,7 @@ const Home = () => {
     const initialize = async () => {
       const emission = Number(await contract.calculateRatio());
       const mintingCost = mintCostConversion(pool, emission);
-      console.log(mintingCost);
+      console.log("mintRatio", mintingCost);
       setMintRatio(mintingCost);
 
       // Token A
