@@ -93,7 +93,7 @@ const Mint = ({
   };
 
   const handleMint = async () => {
-    try {const isMintRatioHigher = useMemo(() => mintRatio > marketRatio, [mintRatio, marketRatio]);
+    try {
       setLoading(true);
 
       const sanitizedAmount = inputAmount.replace(/,/g, "");
