@@ -9,8 +9,11 @@ import {
   getTokenBalance,
   getPoolBalance,
   getInnerPoolBalance,
+  getRawTokenBalance,
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
+// import { maxAmountSpend } from "../../../../utils/maxAmountSpend";
+
 
 const Vault1 = ({
   pairA,
@@ -23,6 +26,7 @@ const Vault1 = ({
   const [rewardCount, setRewardCount] = useState(0);
   const [pairABalance, setpairABalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
+  const [rawBalance, setRawBalance] = useState(0);
   const [poolTVL, setPoolTVL] = useState(0);
   const [APR, setAPR] = useState(0);
   const [stakeInput, setStakeInput] = useState("");
@@ -33,6 +37,12 @@ const Vault1 = ({
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
   const [valuePerLP, setValuePerLP] = useState(0);
+  // const [maxAmountSpend, setMaxAmountSpend] = useState(0);
+
+  console.log("stakedBalance", stakedBalance);
+  console.log("stakeInput", stakeInput);
+  console.log("pairABalance", pairABalance);
+  console.log("rawBalance", rawBalance);
 
   useEffect(() => {
     if (!user) return;
@@ -75,8 +85,16 @@ const Vault1 = ({
 
           setpairABalance(tokenBalance);
 
+          const rawBalance = await getRawTokenBalance(
+            pool.LP0,
+            user,
+            currentNetwork.rpcUrl
+          );
+          setRawBalance(rawBalance);
+
           // Current TokenA staked balance
           const balance = await contract.userInfo(0, user);
+          console.log("balance", balance);
           setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
         }
         // TVL & APR
@@ -90,14 +108,14 @@ const Vault1 = ({
           pool.LP0,
           currentNetwork.rpcUrl
         );
-        console.log("SECinLP0contract: ", tokenAPoolBalance);
+        console.log("tokenAinLP0contract: ", tokenAPoolBalance);
 
         const ratio = tokenAPoolBalance / totalPoolBalance;
         console.log("Ratio: ", ratio);
 
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
-        console.log("SEC per Second: ", formattedRewards);
+        console.log("Reward per Second: ", formattedRewards);
 
         const allocPoints = await contract.poolInfo(0);
         console.log("Alloc points: ", Number(allocPoints[1]));
@@ -152,15 +170,23 @@ const Vault1 = ({
     let formattedInput = stakeInput.toString();
     if (typeof stakeInput === "string") {
       formattedInput = stakeInput.replaceAll(",", "");
+      console.log("formattedInput", formattedInput)
     }
 
     try {
       setStakeLoading(true);
-      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
+      // const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      // const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
 
-      // Convert back to BigNumber for contract operations
-      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+      // // Convert back to BigNumber for contract operations
+      // const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+      const inputAmountWei = ethers.parseUnits(formattedInput, 18);
+      // const balanceInWei = BigInt(rawBalance) * BigInt(1e18);
+      if (inputAmountWei > rawBalance) {
+        setMessage("Input amount exceeds available balance.");
+        setTimeout(() => setMessage(""), 5000);
+        return;
+      }
 
       const contractWithSigner = contract.connect(signer);
 
@@ -189,11 +215,21 @@ const Vault1 = ({
         );
       }
 
-      const depositTx = await contractWithSigner.deposit(0, amount);
+      const depositTx = await contractWithSigner.deposit(0, inputAmountWei);
       await depositTx.wait();
 
-      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+
+      const balance = await contract.userInfo(0, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP0,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
@@ -233,8 +269,18 @@ const Vault1 = ({
       await withdrawTx.wait();
 
       // Update balances
-      setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+
+      const balance = await contract.userInfo(1, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP0,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Unstaked ${formattedInput} LP!`);
       setUnstakeInput("");
@@ -384,7 +430,8 @@ const Vault1 = ({
               >
                 75%
               </button>
-              <button onClick={() => setStakeInput(pairABalance.toString())}>
+              {/* <button onClick={() => setStakeInput(pairABalance.toString())}> */}
+              <button onClick={() => setStakeInput(ethers.formatUnits(rawBalance, 18))}>
                 Max
               </button>
             </div>

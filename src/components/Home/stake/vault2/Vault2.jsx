@@ -9,6 +9,7 @@ import {
   getTokenBalance,
   getPoolBalance,
   getInnerPoolBalance,
+  getRawTokenBalance,
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
@@ -24,6 +25,7 @@ const Vault2 = ({
   const [rewardCount, setRewardCount] = useState(0);
   const [pairABalance, setpairABalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
+  const [rawBalance, setRawBalance] = useState(0);
   const [poolTVL, setPoolTVL] = useState(0);
   const [APR, setAPR] = useState(0);
   const [stakeInput, setStakeInput] = useState("");
@@ -35,6 +37,11 @@ const Vault2 = ({
   const [signer, setSigner] = useState(null);
   const [valuePerLP, setValuePerLP] = useState(0);
   const [ratio, setRatio] = useState(0);
+
+  console.log("stakedBalance", stakedBalance);
+  console.log("stakeInput", stakeInput);
+  console.log("pairABalance", pairABalance);
+  console.log("rawBalance", rawBalance);
 
   useEffect(() => {
     if (!user) return;
@@ -67,13 +74,19 @@ const Vault2 = ({
           const currentReward = Number(await contract.pendingReward(1, user));
           setRewardCount(currentReward);
 
-          // Current TokenB wallet balance
           const tokenBalance = await getTokenBalance(
             pool.LP1,
             user,
             currentNetwork.rpcUrl
           );
           setpairABalance(tokenBalance);
+
+          const rawBalance = await getRawTokenBalance(
+            pool.LP1,
+            user,
+            currentNetwork.rpcUrl
+          );
+          setRawBalance(rawBalance);
 
           // Current TokenB staked balance
           const balance = await contract.userInfo(1, user);
@@ -93,7 +106,7 @@ const Vault2 = ({
 
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
-        console.log("SEC per Second: ", formattedRewards);
+        console.log("Reward per Second: ", formattedRewards);
 
         const allocPoints = await contract.poolInfo(1);
         console.log("Alloc points: ", Number(allocPoints[1]));
@@ -121,7 +134,7 @@ const Vault2 = ({
         );
         const pairBData = await pairARequest.json();
         const nativePrice = +pairBData.pair.priceNative;
-        console.log("SECinLP1contract: ", tokenAPoolBalance / nativePrice);
+        console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
 
         const tokenAValuePerpairBs =
           tokenAPoolBalance / nativePrice / totalPoolBalance;
@@ -158,21 +171,30 @@ const Vault2 = ({
 
   const stake = async () => {
     if (!stakeInput || pairABalance === 0 || !signer) return;
-
+  
     let formattedInput = stakeInput.toString();
     if (typeof stakeInput === "string") {
       formattedInput = stakeInput.replaceAll(",", "");
+      console.log("formattedInput", formattedInput)
     }
-
+  
     try {
       setStakeLoading(true);
-      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
-      console.log(roundedDownAmount.toString());
-      // Convert back to BigNumber for contract operations
-      const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+  
+      const inputAmountWei = ethers.parseUnits(formattedInput, 18);
+      console.log("inputAmountWei", inputAmountWei);
+      // const balanceInWei = BigInt(rawBalance) * BigInt(1e18);
+      // console.log("balanceInWei", balanceInWei);
+      if (inputAmountWei > rawBalance) {
+        setMessage("Input amount exceeds available balance.");
+        setTimeout(() => setMessage(""), 5000);
+        return;
+      }
+  
+      // Connect contract with signer
       const contractWithSigner = contract.connect(signer);
-
+  
+      // Pair B Contract for approval
       const pairBContract = new ethers.Contract(
         pool.LP1,
         [
@@ -182,14 +204,15 @@ const Vault2 = ({
         ],
         signer
       );
-
+  
+      // Check and approve if necessary
       const hasApproved = localStorage.getItem(
         `Vault2Approved:${pool.trainerContract}:${user}`
       );
       if (!hasApproved) {
         const approveTx = await pairBContract.approve(
           pool.trainerContract,
-          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+          ethers.constants.MaxUint256 // Approve maximum amount
         );
         await approveTx.wait();
         localStorage.setItem(
@@ -197,16 +220,28 @@ const Vault2 = ({
           true
         );
       }
-
-      const depositTx = await contractWithSigner.deposit(1, amount);
+  
+      // Deposit into the contract
+      const depositTx = await contractWithSigner.deposit(1, inputAmountWei);
       await depositTx.wait();
+  
+      // Update balances
+      // setStakedBalance((prev) => prev + inputAmountWei);
+      // setpairABalance((prev) => prev - inputAmountWei);
 
-      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      const balance = await contract.userInfo(1, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
 
+      const tokenBalance = await getTokenBalance(
+        pool.LP1,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
+  
       setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
-
+  
       setTimeout(() => {
         setMessage("");
       }, 5000);
@@ -220,6 +255,73 @@ const Vault2 = ({
       setStakeLoading(false);
     }
   };
+  
+
+  // const stake = async () => {
+  //   if (!stakeInput || pairABalance === 0 || !signer) return;
+
+  //   let formattedInput = stakeInput.toString();
+  //   if (typeof stakeInput === "string") {
+  //     formattedInput = stakeInput.replaceAll(",", "");
+  //   }
+
+  //   try {
+  //     setStakeLoading(true);
+  //     const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+  //     const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
+  //     console.log(roundedDownAmount.toString());
+  //     // Convert back to BigNumber for contract operations
+  //     const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+  //     console.log("amount", amount);
+  //     const contractWithSigner = contract.connect(signer);
+
+  //     const pairBContract = new ethers.Contract(
+  //       pool.LP1,
+  //       [
+  //         "function approve(address spender, uint256 amount) public returns (bool)",
+  //         "function allowance(address owner, address spender) public view returns (uint256)",
+  //         "function balanceOf(address account) public view returns (uint256)",
+  //       ],
+  //       signer
+  //     );
+
+  //     const hasApproved = localStorage.getItem(
+  //       `Vault2Approved:${pool.trainerContract}:${user}`
+  //     );
+  //     if (!hasApproved) {
+  //       const approveTx = await pairBContract.approve(
+  //         pool.trainerContract,
+  //         (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+  //       );
+  //       await approveTx.wait();
+  //       localStorage.setItem(
+  //         `Vault2Approved:${pool.trainerContract}:${user}`,
+  //         true
+  //       );
+  //     }
+
+  //     const depositTx = await contractWithSigner.deposit(1, amount);
+  //     await depositTx.wait();
+
+  //     setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+  //     setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+
+  //     setMessage(`Successfully Staked ${formattedInput} LP!`);
+  //     setStakeInput("");
+
+  //     setTimeout(() => {
+  //       setMessage("");
+  //     }, 5000);
+  //   } catch (err) {
+  //     console.error("Staking Error:", {
+  //       message: err.message,
+  //       code: err.code,
+  //       stack: err.stack,
+  //     });
+  //   } finally {
+  //     setStakeLoading(false);
+  //   }
+  // };
 
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0 || !signer) return;
@@ -244,8 +346,17 @@ const Vault2 = ({
       await withdrawTx.wait();
 
       // Update balances
-      setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      const balance = await contract.userInfo(1, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP1,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Unstaked ${formattedInput} LP!`);
       setUnstakeInput("");
@@ -395,7 +506,9 @@ const Vault2 = ({
               >
                 75%
               </button>
-              <button onClick={() => setStakeInput(pairABalance.toString())}>
+              <button onClick={() => setStakeInput(ethers.formatUnits(rawBalance, 18))}>
+              {/* <button onClick={() => setStakeInput(rawBalance.toString())}> */}
+              {/* <button onClick={() => setStakeInput(pairABalance.toString())}> */}
                 Max
               </button>
             </div>

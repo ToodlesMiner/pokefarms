@@ -9,6 +9,7 @@ import {
   getTokenBalance,
   getPoolBalance,
   getInnerPoolBalance,
+  getRawTokenBalance,
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
 
@@ -24,6 +25,7 @@ const Vault3 = ({
   const [rewardCount, setRewardCount] = useState(0);
   const [pairABalance, setpairABalance] = useState(0);
   const [stakedBalance, setStakedBalance] = useState(0);
+  const [rawBalance, setRawBalance] = useState(0);
   const [poolTVL, setPoolTVL] = useState(0);
   const [APR, setAPR] = useState(0);
   const [stakeInput, setStakeInput] = useState("");
@@ -34,6 +36,11 @@ const Vault3 = ({
   const [message, setMessage] = useState("");
   const [signer, setSigner] = useState(null);
   const [valuePerLP, setValuePerLP] = useState(0);
+
+  console.log("stakedBalance", stakedBalance);
+  console.log("stakeInput", stakeInput);
+  console.log("pairABalance", pairABalance);
+  console.log("rawBalance", rawBalance);
 
   useEffect(() => {
     if (!user) return;
@@ -72,8 +79,14 @@ const Vault3 = ({
             user,
             currentNetwork.rpcUrl
           );
-
           setpairABalance(tokenBalance);
+
+          const rawBalance = await getRawTokenBalance(
+            pool.LP2,
+            user,
+            currentNetwork.rpcUrl
+          );
+          setRawBalance(rawBalance);
 
           // Current TokenA staked balance
           const balance = await contract.userInfo(2, user);
@@ -152,10 +165,22 @@ const Vault3 = ({
     let formattedInput = stakeInput.toString();
     if (typeof stakeInput === "string") {
       formattedInput = stakeInput.replaceAll(",", "");
+      console.log("formattedInput", formattedInput)
     }
 
     try {
       setStakeLoading(true);
+
+      const inputAmountWei = ethers.parseUnits(formattedInput, 18);
+      console.log("inputAmountWei", inputAmountWei);
+      // const balanceInWei = BigInt(rawBalance) * BigInt(1e18);
+      // console.log("balanceInWei", balanceInWei);
+      if (inputAmountWei > rawBalance) {
+        setMessage("Input amount exceeds available balance.");
+        setTimeout(() => setMessage(""), 5000);
+        return;
+      }
+
       const fixedInput = ethers.FixedNumber.fromString(formattedInput);
       const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
 
@@ -188,11 +213,20 @@ const Vault3 = ({
         );
       }
 
-      const depositTx = await contractWithSigner.deposit(2, amount);
+      const depositTx = await contractWithSigner.deposit(2, inputAmountWei);
       await depositTx.wait();
 
-      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      const balance = await contract.userInfo(2, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP2,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
@@ -234,8 +268,17 @@ const Vault3 = ({
       await withdrawTx.wait();
 
       // Update balances
-      setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      const balance = await contract.userInfo(2, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP2,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Unstaked ${formattedInput} LP!`);
       setUnstakeInput("");
@@ -394,7 +437,8 @@ const Vault3 = ({
               >
                 75%
               </button>
-              <button onClick={() => setStakeInput(pairABalance.toString())}>
+              {/* <button onClick={() => setStakeInput(pairABalance.toString())}> */}
+              <button onClick={() => setStakeInput(ethers.formatUnits(rawBalance, 18))}>
                 Max
               </button>
             </div>
