@@ -209,8 +209,18 @@ const Vault2 = ({
       const depositTx = await contractWithSigner.deposit(1, inputAmountWei);
       await depositTx.wait();
 
-      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-      setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+      // setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      // setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+
+      const balance = await contract.userInfo(1, user);
+          setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
+
+      const tokenBalance = await getTokenBalance(
+        pool.LP1,
+        user,
+        currentNetwork.rpcUrl
+      );
+      setpairABalance(tokenBalance);
 
       setMessage(`Successfully Staked ${formattedInput} LP!`);
       setStakeInput("");
