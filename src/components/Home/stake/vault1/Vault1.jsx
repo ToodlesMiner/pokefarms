@@ -12,8 +12,6 @@ import {
   getRawTokenBalance,
 } from "../../../../utils/contractUtils";
 import MessageOverlay from "../../messageoverlay/MessageOverlay";
-// import { maxAmountSpend } from "../../../../utils/maxAmountSpend";
-
 
 const Vault1 = ({
   pairA,

@@ -37,10 +37,10 @@ const Vault3 = ({
   const [signer, setSigner] = useState(null);
   const [valuePerLP, setValuePerLP] = useState(0);
 
-  console.log("stakedBalance", stakedBalance);
-  console.log("stakeInput", stakeInput);
-  console.log("pairABalance", pairABalance);
-  console.log("rawBalance", rawBalance);
+  // console.log("stakedBalance", stakedBalance);
+  // console.log("stakeInput", stakeInput);
+  // console.log("pairABalance", pairABalance);
+  // console.log("rawBalance", rawBalance);
 
   useEffect(() => {
     if (!user) return;
