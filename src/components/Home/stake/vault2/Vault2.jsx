@@ -38,10 +38,10 @@ const Vault2 = ({
   const [valuePerLP, setValuePerLP] = useState(0);
   const [ratio, setRatio] = useState(0);
 
-  console.log("stakedBalance", stakedBalance);
-  console.log("stakeInput", stakeInput);
-  console.log("pairABalance", pairABalance);
-  console.log("rawBalance", rawBalance);
+  // console.log("stakedBalance", stakedBalance);
+  // console.log("stakeInput", stakeInput);
+  // console.log("pairABalance", pairABalance);
+  // console.log("rawBalance", rawBalance);
 
   useEffect(() => {
     if (!user) return;
@@ -171,6 +171,72 @@ const Vault2 = ({
 
   const stake = async () => {
     if (!stakeInput || pairABalance === 0 || !signer) return;
+
+    let formattedInput = stakeInput.toString();
+    if (typeof stakeInput === "string") {
+      formattedInput = stakeInput.replaceAll(",", "");
+    }
+
+    try {
+      setStakeLoading(true);
+      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
+      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
+      console.log(roundedDownAmount.toString());
+      // Convert back to BigNumber for contract operations
+      // const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+      const contractWithSigner = contract.connect(signer);
+
+      const pairBContract = new ethers.Contract(
+        pool.LP1,
+        [
+          "function approve(address spender, uint256 amount) public returns (bool)",
+          "function allowance(address owner, address spender) public view returns (uint256)",
+          "function balanceOf(address account) public view returns (uint256)",
+        ],
+        signer
+      );
+
+      const hasApproved = localStorage.getItem(
+        `Vault2Approved:${pool.trainerContract}:${user}`
+      );
+      if (!hasApproved) {
+        const approveTx = await pairBContract.approve(
+          pool.trainerContract,
+          (BigInt(100_000_000_000) * BigInt(1e18)).toString()
+        );
+        await approveTx.wait();
+        localStorage.setItem(
+          `Vault2Approved:${pool.trainerContract}:${user}`,
+          true
+        );
+      }
+
+      const depositTx = await contractWithSigner.deposit(1, inputAmountWei);
+      await depositTx.wait();
+
+      setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
+      setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
+
+      setMessage(`Successfully Staked ${formattedInput} LP!`);
+      setStakeInput("");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    } catch (err) {
+      console.error("Staking Error:", {
+        message: err.message,
+        code: err.code,
+        stack: err.stack,
+      });
+    } finally {
+      setStakeLoading(false);
+    }
+  };
+
+    //this is older working version
+  const stake = async () => {
+    if (!stakeInput || pairABalance === 0 || !signer) return;
   
     let formattedInput = stakeInput.toString();
     if (typeof stakeInput === "string") {
@@ -255,73 +321,6 @@ const Vault2 = ({
       setStakeLoading(false);
     }
   };
-  
-
-  // const stake = async () => {
-  //   if (!stakeInput || pairABalance === 0 || !signer) return;
-
-  //   let formattedInput = stakeInput.toString();
-  //   if (typeof stakeInput === "string") {
-  //     formattedInput = stakeInput.replaceAll(",", "");
-  //   }
-
-  //   try {
-  //     setStakeLoading(true);
-  //     const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-  //     const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
-  //     console.log(roundedDownAmount.toString());
-  //     // Convert back to BigNumber for contract operations
-  //     const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
-  //     console.log("amount", amount);
-  //     const contractWithSigner = contract.connect(signer);
-
-  //     const pairBContract = new ethers.Contract(
-  //       pool.LP1,
-  //       [
-  //         "function approve(address spender, uint256 amount) public returns (bool)",
-  //         "function allowance(address owner, address spender) public view returns (uint256)",
-  //         "function balanceOf(address account) public view returns (uint256)",
-  //       ],
-  //       signer
-  //     );
-
-  //     const hasApproved = localStorage.getItem(
-  //       `Vault2Approved:${pool.trainerContract}:${user}`
-  //     );
-  //     if (!hasApproved) {
-  //       const approveTx = await pairBContract.approve(
-  //         pool.trainerContract,
-  //         (BigInt(100_000_000_000) * BigInt(1e18)).toString()
-  //       );
-  //       await approveTx.wait();
-  //       localStorage.setItem(
-  //         `Vault2Approved:${pool.trainerContract}:${user}`,
-  //         true
-  //       );
-  //     }
-
-  //     const depositTx = await contractWithSigner.deposit(1, amount);
-  //     await depositTx.wait();
-
-  //     setStakedBalance((prev) => BigInt(prev) + BigInt(formattedInput));
-  //     setpairABalance((prev) => BigInt(prev) - BigInt(formattedInput));
-
-  //     setMessage(`Successfully Staked ${formattedInput} LP!`);
-  //     setStakeInput("");
-
-  //     setTimeout(() => {
-  //       setMessage("");
-  //     }, 5000);
-  //   } catch (err) {
-  //     console.error("Staking Error:", {
-  //       message: err.message,
-  //       code: err.code,
-  //       stack: err.stack,
-  //     });
-  //   } finally {
-  //     setStakeLoading(false);
-  //   }
-  // };
 
   const unStake = async () => {
     if (!unStakeInput || stakedBalance === 0 || !signer) return;
