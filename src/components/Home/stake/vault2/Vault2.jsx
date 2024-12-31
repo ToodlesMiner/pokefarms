@@ -179,13 +179,8 @@ const Vault2 = ({
 
     try {
       setStakeLoading(true);
-      const fixedInput = ethers.FixedNumber.fromString(formattedInput);
-      const roundedDownAmount = Math.floor(fixedInput.floor()); // Explicitly rounds down
-      console.log(roundedDownAmount.toString());
-      // Convert back to BigNumber for contract operations
-      // const amount = ethers.parseUnits(roundedDownAmount.toString(), 18);
+      const inputAmountWei = ethers.parseUnits(formattedInput, 18);
       const contractWithSigner = contract.connect(signer);
-
       const pairBContract = new ethers.Contract(
         pool.LP1,
         [
