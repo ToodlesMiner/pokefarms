@@ -37,6 +37,18 @@ const getTokenBalance = async (tokenAddress, walletAddress, rpcUrl) => {
   return formattedBalance || 0;
 };
 
+const getRawTokenBalance = async (tokenAddress, walletAddress, rpcUrl) => {
+  const tokenContract = new ethers.Contract(
+    tokenAddress,
+    tokenABI,
+    new ethers.JsonRpcProvider(rpcUrl)
+  );
+  // Fetch balance and decimals
+  const rawBalance = await tokenContract.balanceOf(walletAddress);
+
+  return rawBalance || 0;
+};
+
 const getInnerPoolBalance = async (tokenAddress, targetAddress, rpcUrl) => {
   try {
     const tokenContract = new ethers.Contract(
@@ -55,4 +67,4 @@ const getInnerPoolBalance = async (tokenAddress, targetAddress, rpcUrl) => {
   }
 };
 
-export { getPoolBalance, getTokenBalance, getInnerPoolBalance };
+export { getPoolBalance, getTokenBalance, getInnerPoolBalance, getRawTokenBalance };
