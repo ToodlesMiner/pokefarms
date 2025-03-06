@@ -3,6 +3,7 @@ import stl from "./Stake.module.css";
 import Vault1 from "./vault1/Vault1";
 import Vault2 from "./vault2/Vault2";
 import Vault3 from "./vault3/Vault3";
+import Vault4 from "./vault4/Vault4";
 import { BsBank } from "react-icons/bs";
 import { getInnerPoolBalance } from "../../../utils/contractUtils";
 
@@ -72,6 +73,12 @@ const Stake = ({
         >
           {pool.tokenA.name}/{pool.tokenB.name} LP
         </button>
+        <button
+          className={activeTab === 4 ? stl.activeCta : ""}
+          onClick={() => setActiveTab(4)}
+        >
+          {pool.tokenA.name}/{pool.tokenC.name} LP
+        </button>
       </div>
       <div className={stl.vaultWrapper}>
         {activeTab === 1 && (
@@ -97,6 +104,17 @@ const Stake = ({
         )}
         {activeTab === 3 && (
           <Vault3
+            pairA={pairA}
+            pairB={pairB}
+            pool={pool}
+            contract={contract}
+            user={user}
+            connectWallet={connectWallet}
+            currentNetwork={currentNetwork}
+          />
+        )}
+        {activeTab === 4 && (
+          <Vault4
             pairA={pairA}
             pairB={pairB}
             pool={pool}
