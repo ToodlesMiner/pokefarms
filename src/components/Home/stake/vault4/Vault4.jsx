@@ -92,7 +92,7 @@ const Vault4 = ({
           const balance = await contract.userInfo(3, user);
           setStakedBalance(BigInt(parseInt(balance)) / BigInt(1e18));
         }
-        // TVL & APR
+        // TVL
         const totalPoolBalance = await getPoolBalance(
           pool.LP3,
           currentNetwork.rpcUrl
@@ -121,7 +121,21 @@ const Vault4 = ({
         console.log("PoolID: ", pool.contractName);
         console.log("SECinLP4contract: ", tokenAPoolBalance);
 
-        const ratio = tokenAPoolBalance / totalPoolBalance;
+        const pairARequest = await fetch(
+          `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP3}`
+        );
+        const pairBData = await pairARequest.json();
+        const nativePrice = +pairBData.pair.priceNative;
+        console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
+
+        const tokenAValuePerpairBs =
+          tokenAPoolBalance / nativePrice / totalPoolBalance;
+        console.log("TokenA Value Per LP Tokens: ", tokenAValuePerpairBs);
+        setValuePerLP(tokenAValuePerpairBs);
+
+        // const ratio = tokenAPoolBalance / totalPoolBalance;
+        const ratio = tokenAPoolBalance / nativePrice / totalPoolBalance;
+        // const ratioB = tokenAPoolBalance / totalPoolBalance;
         console.log("Ratio: ", ratio);
 
         const rewards = await contract.RewardPerSecond();
@@ -152,6 +166,8 @@ const Vault4 = ({
         const blastValuePerpairBs = tokenAPoolBalance / totalPoolBalance;
         console.log("Blast Value Per LP Tokens: ", blastValuePerpairBs);
         setValuePerLP(blastValuePerpairBs);
+
+        //const convertedAvalueperLP = 
 
         const blastStaked = blastValuePerpairBs * pool3Balance;
         console.log("Blast staked: ", blastStaked);
