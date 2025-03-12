@@ -98,11 +98,27 @@ const Vault4 = ({
           currentNetwork.rpcUrl
         );
         console.log("Total LP4 Supply: ", totalPoolBalance);
-        const tokenAPoolBalance = await getInnerPoolBalance(
-          pool.tokenA.address,
-          pool.LP3,
-          currentNetwork.rpcUrl
-        );
+        // const tokenAPoolBalance = await getInnerPoolBalance(
+        //   pool.tokenA.address,
+        //   pool.LP3,
+        //   currentNetwork.rpcUrl
+        // );
+        let tokenAPoolBalance;
+
+        if (pool.contractName === "Squirtle-Wartortle") {
+          tokenAPoolBalance = await getInnerPoolBalance(
+            pool.tokenC.address,  // Assuming Pool 2 requires a different token parameter
+            pool.LP3,  // Assuming LP2 instead of LP3 for Pool 2
+            currentNetwork.rpcUrl
+          );
+        } else {
+          tokenAPoolBalance = await getInnerPoolBalance(
+            pool.tokenA.address,
+            pool.LP3,
+            currentNetwork.rpcUrl
+          );
+        }
+        console.log("PoolID: ", pool.contractName);
         console.log("SECinLP4contract: ", tokenAPoolBalance);
 
         const ratio = tokenAPoolBalance / totalPoolBalance;

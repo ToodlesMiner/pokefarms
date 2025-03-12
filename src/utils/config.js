@@ -45,8 +45,8 @@ export const FARMS_CONFIG = [
       name: "Wartortle",
     },
     tokenC: {
-      address: "0xF830a25dbcf0A420C3c97e9ff1e353488a935645",
-      name: "Wartortle",
+      address: "0x31A4ffe71bFEADBDa769d4a3E03Bf4aE5c28EE31",
+      name: "Blastoise",
     },
     trainerContract: "0xA761cF14cAC5D97ee9F9564A38e1e707F8cc7b4C",
     LP0: "0xCFE221EBC120c1F4e78f82a1F2F4762DD7d269d0",
