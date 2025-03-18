@@ -98,11 +98,7 @@ const Vault4 = ({
           currentNetwork.rpcUrl
         );
         console.log("Total LP4 Supply: ", totalPoolBalance);
-        // const tokenAPoolBalance = await getInnerPoolBalance(
-        //   pool.tokenA.address,
-        //   pool.LP3,
-        //   currentNetwork.rpcUrl
-        // );
+        
         let tokenAPoolBalance;
 
         if (pool.contractName === "Squirtle-Wartortle") {
@@ -112,11 +108,19 @@ const Vault4 = ({
             currentNetwork.rpcUrl
           );
           const pairARequest = await fetch(
-            `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP3}`
+            `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP03}`
           );
           const pairBData = await pairARequest.json();
           const nativePrice = +pairBData.pair.priceNative;
-          console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
+          console.log("nativePrice: ", nativePrice);
+
+          const convertedTokenAinLP = nativePrice * tokenAPoolBalance;
+          console.log("convertedTokenAinLP: ", convertedTokenAinLP);
+          const tokenAValuePerLP =
+          tokenAPoolBalance / nativePrice / totalPoolBalance;
+          console.log("TokenA Value Per LP Tokens: ", tokenAValuePerLP);
+          setValuePerLP(tokenAValuePerLP);
+
         } else {
           tokenAPoolBalance = await getInnerPoolBalance(
             pool.tokenA.address,
@@ -129,21 +133,13 @@ const Vault4 = ({
           const pairBData = await pairARequest.json();
           const nativePrice = +pairBData.pair.priceNative;
           console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
+          const tokenAValuePerLP =
+          tokenAPoolBalance / nativePrice / totalPoolBalance;
+          console.log("TokenA Value Per LP Tokens: ", tokenAValuePerLP);
+          setValuePerLP(tokenAValuePerLP);
         }
         console.log("PoolID: ", pool.contractName);
-        console.log("SECinLP4contract: ", tokenAPoolBalance);
-
-        
-
-        // const tokenAValuePerpairBs =
-        //   tokenAPoolBalance / nativePrice / totalPoolBalance;
-        // console.log("TokenA Value Per LP Tokens: ", tokenAValuePerpairBs);
-        // setValuePerLP(tokenAValuePerpairBs);
-
-        // // const ratio = tokenAPoolBalance / totalPoolBalance;
-        // const ratio = tokenAPoolBalance / nativePrice / totalPoolBalance;
-        // // const ratioB = tokenAPoolBalance / totalPoolBalance;
-        // console.log("Ratio: ", ratio);
+        console.log("tokenAPoolBalance: ", tokenAPoolBalance);
 
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
@@ -171,19 +167,17 @@ const Vault4 = ({
         console.log("Annual Rewards: ", annualRewards);
 
         const blastValuePerpairBs = tokenAPoolBalance / totalPoolBalance;
-        console.log("Blast Value Per LP Tokens: ", blastValuePerpairBs);
+        console.log("blastValuePerpairBs: ", blastValuePerpairBs);
         setValuePerLP(blastValuePerpairBs);
 
-        //const convertedAvalueperLP = 
+        const tonenAstaked = blastValuePerpairBs * pool3Balance;
+        console.log("tonenAstaked: ", tonenAstaked);
 
-        const blastStaked = blastValuePerpairBs * pool3Balance;
-        console.log("Blast staked: ", blastStaked);
-
-        const APR = (annualRewards / blastStaked) * 10;
+        const APR = (annualRewards / tonenAstaked) * 10;
         setAPR(APR);
         console.log("APR: %", APR);
 
-        const TVL = blastStaked * 2 * +pairA.priceUsd;
+        const TVL = tonenAstaked * 2 * +pairA.priceUsd;
         setPoolTVL(TVL);
         console.log("TVL: ", TVL);
       } catch (err) {
