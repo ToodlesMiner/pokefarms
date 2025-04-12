@@ -133,18 +133,6 @@ const Vault4 = ({
         console.log("PoolID: ", pool.contractName);
         console.log("SECinLP4contract: ", tokenAPoolBalance);
 
-        
-
-        // const tokenAValuePerpairBs =
-        //   tokenAPoolBalance / nativePrice / totalPoolBalance;
-        // console.log("TokenA Value Per LP Tokens: ", tokenAValuePerpairBs);
-        // setValuePerLP(tokenAValuePerpairBs);
-
-        // // const ratio = tokenAPoolBalance / totalPoolBalance;
-        // const ratio = tokenAPoolBalance / nativePrice / totalPoolBalance;
-        // // const ratioB = tokenAPoolBalance / totalPoolBalance;
-        // console.log("Ratio: ", ratio);
-
         const rewards = await contract.RewardPerSecond();
         const formattedRewards = Number(rewards) / 1e18;
         console.log("SEC per Second: ", formattedRewards);
@@ -173,8 +161,6 @@ const Vault4 = ({
         const blastValuePerpairBs = tokenAPoolBalance / totalPoolBalance;
         console.log("Blast Value Per LP Tokens: ", blastValuePerpairBs);
         setValuePerLP(blastValuePerpairBs);
-
-        //const convertedAvalueperLP = 
 
         const blastStaked = blastValuePerpairBs * pool3Balance;
         console.log("Blast staked: ", blastStaked);

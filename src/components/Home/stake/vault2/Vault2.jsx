@@ -134,6 +134,7 @@ const Vault2 = ({
         );
         const pairBData = await pairARequest.json();
         const nativePrice = +pairBData.pair.priceNative;
+        console.log("nativePrice: ",nativePrice);
         console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
 
         const tokenAValuePerpairBs =
