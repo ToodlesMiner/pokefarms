@@ -65,7 +65,7 @@ const Home = () => {
     const poolName = pool.contractName;
 
     if (poolName === "Blastoise-Squirtle") {
-      return Number(emission.toString().slice(0, 3)); // Truncate to 8 digits for Squirtle-Wartortle
+      return Number(emission.toString().slice(0, 4)); // Truncate to 8 digits for Squirtle-Wartortle
     }
     if (poolName === "Squirtle-Wartortle") {
       return Number("0.00" + emission.toString().slice(0, 4)); // Truncate to 8 digits for Squirtle-Wartortle
