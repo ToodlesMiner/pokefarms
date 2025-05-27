@@ -347,7 +347,7 @@ const Vault2 = ({
           className={stl.dexCta}
           onClick={() =>
             window.open(
-              `https://dex.9mm.pro/v2/add/${pool.tokenB}/PLS`,
+              `https://dex.9mm.pro/v2/add/${pool.tokenB.address}/PLS`,
               "_blank"
             )
           }
