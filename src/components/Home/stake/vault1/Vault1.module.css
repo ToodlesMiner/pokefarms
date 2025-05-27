@@ -144,7 +144,6 @@
   top: 1rem;
   font-size: 14px;
   color: rgb(187, 187, 187);
-  text-transform: upp;
 }
 
 .valueSpan {
@@ -222,7 +221,8 @@
   font-size: 14px;
   position: relative;
 }
-.dexCta {
+
+/* .dexCta {
   position: absolute;
   left: 0;
   font-size: 16px;
@@ -248,6 +248,57 @@
 .mmlogo {
   width: 20px;
   height: 20px;
+} */
+
+.dexCta {
+  position: absolute;
+  left: 0;
+  font-size: 16px;
+  padding: 8px 16px; /* From previous suggestion for better clickability */
+  border-radius: 0.5rem; /* Softer corners */
+  border: 2px solid rgb(0, 77, 201); /* Thicker border */
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, rgb(0, 77, 201), rgb(0, 120, 255)); /* Blue gradient */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem; /* Adjusted spacing */
+  color: white;
+  font-weight: 600; /* Bolder text */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: all 0.2s ease-in-out; /* Smooth transitions */
+  animation: blink 1.5s infinite ease-in-out; /* Blinking animation */
+}
+
+.dexCta:hover {
+  transform: scale(1.05); /* Slight scale on hover */
+  background: linear-gradient(90deg, rgb(0, 120, 255), rgb(0, 77, 201)); /* Reverse gradient */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+  border-color: rgb(0, 120, 255); /* Brighter border */
+  animation: none; /* Pause blink on hover for clarity */
+}
+
+.dexCta:focus {
+  outline: 2px solid rgb(0, 120, 255); /* Accessible focus state */
+  outline-offset: 2px;
+  animation: none; /* Pause blink on focus */
+}
+
+.mmlogo {
+  width: 20px; /* Adjusted logo size */
+  height: 20px;
+  vertical-align: middle;
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6; /* Subtle fade for blink effect */
+  }
 }
 
 .titleBox h2 {
@@ -284,7 +335,6 @@
 .whiteSpan {
   color: white;
 }
-
 .grayPlus {
   color: gray;
   width: 70%;
