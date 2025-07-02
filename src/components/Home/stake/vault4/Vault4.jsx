@@ -112,11 +112,15 @@ const Vault4 = ({
             currentNetwork.rpcUrl
           );
           const pairARequest = await fetch(
-            `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pool.LP3}`
+            `https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x678de045552Fe88a9851fef48e52240C9e924690`
           );
+          
           const pairBData = await pairARequest.json();
           const nativePrice = +pairBData.pair.priceNative;
-          console.log("tokenAinLP1contract: ", tokenAPoolBalance / nativePrice);
+          tokenAPoolBalance = tokenAPoolBalance * nativePrice;
+          console.log("tokenAinLP1contract: ", tokenAPoolBalance * nativePrice);
+          console.log("nativePrice: ", nativePrice);
+          console.log("tokenAPoolBalance: ", tokenAPoolBalance);        
         } else {
           tokenAPoolBalance = await getInnerPoolBalance(
             pool.tokenA.address,

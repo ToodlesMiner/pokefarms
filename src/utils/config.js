@@ -53,6 +53,7 @@ export const FARMS_CONFIG = [
     LP1: "0x01609637D9Fb1f39cEd2C6059fb2867f9dCD90A1",
     LP2: "0xCA68536810302bd9518860405c502a3D9E686c22",
     LP3: "0xe5421226017B8B2407A31B61DdF88Fac9A194fFA",
+    LP4: "0x678de045552Fe88a9851fef48e52240C9e924690",
     dexTokenAImgUrl:
       "https://dd.dexscreener.com/ds-data/tokens/pulsechain/0x44de2D9EB4f3CB4131287D5C76C88c275139DA57.png?size=lg&key=19ffe5",
     dexTokenBImgUrl: "../wartortle.png",
