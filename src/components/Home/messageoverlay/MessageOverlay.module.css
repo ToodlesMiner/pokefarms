@@ -2,35 +2,65 @@
   position: fixed;
   left: 2rem;
   bottom: 2rem;
-  background-color: #232379;
+  background: linear-gradient(135deg, #232379, #4b0082, #8a2be2);
   z-index: 20;
   border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 0, 0.576);
+  border: 2px solid #ffd700;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
   padding: 1.5rem 2rem;
-  animation: mainslide 3.5s linear forwards;
+  animation: mainslide 3.5s ease-out forwards;
+  box-shadow: 
+    0 10px 30px rgba(35, 35, 121, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes mainslide {
   0% {
-    transform: translateY(7rem);
+    transform: translateY(7rem) scale(0.8);
+    opacity: 0;
   }
-  25% {
-    transform: translateY(0rem);
+  15% {
+    transform: translateY(0rem) scale(1);
+    opacity: 1;
   }
-  50% {
-    transform: translateY(0rem);
-  }
-  75% {
-    transform: translateY(0rem);
+  85% {
+    transform: translateY(0rem) scale(1);
+    opacity: 1;
   }
   100% {
-    transform: translateY(7rem);
+    transform: translateY(7rem) scale(0.8);
+    opacity: 0;
   }
+}
+
+.messageOverlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(255, 215, 0, 0.1) 0%, 
+    rgba(0, 255, 136, 0.1) 25%, 
+    rgba(0, 204, 255, 0.1) 50%, 
+    rgba(255, 107, 107, 0.1) 75%, 
+    rgba(255, 215, 0, 0.1) 100%);
+  border-radius: 0.75rem;
+  animation: successFlow 2s linear infinite;
+  z-index: -1;
+}
+
+@keyframes successFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .messageSpan {
@@ -38,14 +68,25 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  z-index: 1;
 }
 
 .check {
-  color: rgb(0, 255, 0);
+  color: #00ff88;
+  filter: drop-shadow(0 0 10px #00ff88);
+  animation: checkPulse 1s ease-in-out infinite;
+}
+
+@keyframes checkPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
 @media only screen and (max-width: 500px) {
   .messageOverlay {
     left: 1rem;
+    right: 1rem;
+    font-size: 20px;
+    padding: 1rem 1.5rem;
   }
 }

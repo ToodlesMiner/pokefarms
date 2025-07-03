@@ -9,21 +9,28 @@
   padding-top: 1rem;
   min-height: 659px;
   opacity: 0;
-  animation: fadeIn 0.2s forwards linear;
+  animation: fadeIn 0.5s forwards ease-out;
+  position: relative;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .swapWrap {
   width: 100%;
-  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
+  background: linear-gradient(135deg, 
+    rgba(14, 18, 0, 0.9) 0%, 
+    rgba(25, 50, 15, 0.9) 25%,
+    rgba(40, 80, 30, 0.9) 50%,
+    rgba(14, 18, 0, 0.9) 100%);
   min-height: 11rem;
   border-radius: 1rem;
   padding: 1rem;
@@ -32,23 +39,86 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  border: 1px solid rgba(255, 255, 0, 0.2);
-  box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
+  border: 2px solid;
+  border-image: linear-gradient(45deg, #00ff88, #00ccff, #ff6b6b, #ffd700) 1;
+  box-shadow: 
+    0 10px 30px rgba(0, 255, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 20;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  animation: containerPulse 4s ease-in-out infinite;
+}
+
+@keyframes containerPulse {
+  0%, 100% { 
+    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-image: linear-gradient(45deg, #00ff88, #00ccff, #ff6b6b, #ffd700) 1;
+  }
+  50% { 
+    box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-image: linear-gradient(45deg, #ffd700, #00ff88, #00ccff, #ff6b6b) 1;
+  }
+}
+
+.swapWrap::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: energyFlow 6s ease-in-out infinite;
+}
+
+@keyframes energyFlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }
 
 .swapArrow {
-  color: rgba(255, 255, 0, 0.705);
+  color: #ffd700;
   font-size: 35px;
   margin: 0.3rem 0rem;
+  filter: drop-shadow(0 0 10px #ffd700);
+  animation: arrowBounce 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.swapArrow:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 20px #ffd700);
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
 }
 
 .logoIcon {
   width: 40px;
-  background-color: rgb(0, 64, 255);
+  background: linear-gradient(135deg, #0040ff, #00ccff);
   padding: 6px;
   border-radius: 50%;
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  animation: iconSpin 8s linear infinite;
+  transition: all 0.3s ease;
+}
+
+.logoIcon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes iconSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .itemWrap {
@@ -58,17 +128,35 @@
   align-items: center;
   gap: 0.5rem;
   user-select: none;
-  color: var(--yellow);
+  color: #ffd700;
   border-radius: 1rem;
   padding: 8px;
   margin-left: -8px;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.itemWrap::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.itemWrap:hover::before {
+  left: 100%;
 }
 
 .itemWrap:hover {
-  box-shadow: 0px 0px 3px yellow;
-  background-color: rgba(255, 255, 0, 0.05);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 255, 136, 0.1));
+  transform: translateY(-2px);
 }
 
 .itemBox {
@@ -91,31 +179,71 @@
 
 .amountInput {
   font-size: 35px;
-  background-color: transparent;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(255, 215, 0, 0.1));
   outline: none;
-  border: none;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 0.5rem;
   color: white;
   text-align: right;
-  /* background-color: red; */
   height: 100%;
   width: 100%;
   padding: 0.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.amountInput:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 215, 0, 0.2));
+}
+
+.amountInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .whiteSpan {
   color: white;
   font-size: 35px !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .rate {
-  color: rgba(246, 255, 0, 0.687);
+  color: #00ff88;
   font-size: 15px;
-  border: 2px solid rgba(255, 255, 0, 0.2);
+  border: 2px solid rgba(0, 255, 136, 0.4);
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
   padding: 0.25rem;
   border-radius: 0.5rem;
   font-weight: bold;
   user-select: none;
   text-align: center;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  animation: rateGlow 3s ease-in-out infinite;
+}
+
+@keyframes rateGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.6); }
+}
+
+.greenHighlight {
+  color: #00ff88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 255, 0.2));
+  border-color: #00ff88;
+  animation: advantageGlow 2s ease-in-out infinite;
+}
+
+@keyframes advantageGlow {
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+    transform: scale(1.02);
+  }
 }
 
 .toprow {
@@ -130,19 +258,6 @@
   gap: 8px;
 }
 
-.info {
-  color: yellow;
-  font-size: 20px;
-  opacity: 0.5;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-
-.info:hover {
-  opacity: 1;
-  color: yellow;
-}
-
 .swapCta {
   width: 100%;
   min-height: 2.75rem;
@@ -151,14 +266,44 @@
   border: none;
   outline: none;
   cursor: pointer;
-  background-color: rgb(211, 211, 0);
-  transition: all 0.1s ease-in-out;
+  background: linear-gradient(135deg, #ffd700, #ff6b6b, #00ff88);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  transition: all 0.3s ease;
   text-transform: uppercase;
   min-height: 44px;
+  color: #000;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.swapCta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.swapCta:hover::before {
+  left: 100%;
 }
 
 .swapCta:hover {
-  background-color: yellow;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
 }
 
 .bottomBox {
@@ -173,16 +318,29 @@
 
 .tokenBox {
   display: flex;
-  color: rgb(0, 255, 0);
+  color: #00ff88;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  transition: all 0.3s ease;
+}
+
+.tokenBox:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 255, 0.2));
+  border-color: rgba(0, 255, 136, 0.5);
+  transform: translateY(-2px);
 }
 
 .priceSpan {
   font-size: 24px;
   margin-top: 5px;
   position: relative;
+  text-shadow: 0 0 10px currentColor;
 }
 
 .ctaBox {
@@ -192,8 +350,8 @@
 
 .ctaBox button {
   font-size: 20px;
-  background-color: transparent;
-  outline: 1px solid rgba(255, 255, 0, 0.635);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 255, 136, 0.2));
+  outline: 1px solid rgba(255, 215, 0, 0.6);
   border: none;
   color: white;
   border-radius: 0.25rem;
@@ -204,17 +362,46 @@
   align-items: center;
   gap: 4px;
   min-height: 28px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
 }
+
+.ctaBox button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.3s ease;
+}
+
+.ctaBox button:hover::before {
+  left: 100%;
+}
+
 .ctaBox button:hover {
-  background-color: rgb(255, 255, 0);
+  background: linear-gradient(135deg, #ffd700, #00ff88);
   color: black;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
 }
 
 .border {
   width: 100%;
   height: 2px;
-  background-color: rgba(255, 255, 0, 0.4);
+  background: linear-gradient(90deg, #ffd700, #00ff88, #00ccff, #ff6b6b);
   margin: 0.5rem 0rem;
+  border-radius: 1px;
+  animation: borderFlow 3s linear infinite;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .wrapper {
@@ -223,12 +410,13 @@
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  color: var(--yellow);
+  color: #ffd700;
 }
 
 .wrapper span {
   width: 3.5rem;
   font-size: 16px;
+  text-shadow: 0 0 5px currentColor;
 }
 
 .copyIcon {
@@ -237,11 +425,6 @@
 
 .buyIcon {
   font-size: 14px;
-}
-
-.frame {
-  width: 100%;
-  height: 30rem;
 }
 
 .priceBox {
@@ -255,7 +438,8 @@
 }
 
 .redPrice {
-  color: red !important;
+  color: #ff6b6b !important;
+  text-shadow: 0 0 10px #ff6b6b;
 }
 
 .loadOverlay {
@@ -271,25 +455,33 @@
   flex-direction: column;
   color: white;
   font-size: 40px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(75, 0, 130, 0.8));
+  backdrop-filter: blur(10px);
 }
 
 .loadOverlay h2 {
   z-index: 10;
+  text-shadow: 0 0 20px #ffd700;
+  animation: textGlow 2s ease-in-out infinite;
 }
 
-@keyframes fadeIn2 {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.6;
-  }
+@keyframes textGlow {
+  0%, 100% { text-shadow: 0 0 20px #ffd700; }
+  50% { text-shadow: 0 0 30px #ffd700, 0 0 40px #ff6b6b; }
 }
+
 .pika {
   width: 100%;
   opacity: 1;
   position: relative;
   z-index: 10;
+  filter: brightness(1.2) contrast(1.1);
+  animation: pikaGlow 2s ease-in-out infinite;
+}
+
+@keyframes pikaGlow {
+  0%, 100% { filter: brightness(1.2) contrast(1.1); }
+  50% { filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 20px #ffd700); }
 }
 
 .rotate {
@@ -302,6 +494,16 @@
   width: 100%;
   height: 100%;
   animation: fadeIn2 3s forwards linear;
+  filter: brightness(1.3) saturate(1.2);
+}
+
+@keyframes fadeIn2 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
 }
 
 .balanceSpan {
@@ -309,12 +511,17 @@
   right: 1rem;
   top: 1rem;
   font-size: 14px;
-  color: rgb(187, 187, 187);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  backdrop-filter: blur(5px);
 }
 
 .whiteSpan {
   font-size: 14px !important;
   color: white;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 .dollarValue {
@@ -323,21 +530,30 @@
   right: 1rem;
   font-size: 14px;
   right: 2rem;
-  color: rgb(0, 255, 0);
+  color: #00ff88;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  backdrop-filter: blur(5px);
+  text-shadow: 0 0 10px #00ff88;
 }
 
 .outputSpan {
   font-size: 35px !important;
-  color: gray;
+  color: rgba(255, 255, 255, 0.6);
   user-select: none;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .redInput {
-  color: red !important;
+  color: #ff6b6b !important;
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.4) !important;
 }
 
 .whiteBalance {
   color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .boxWrapper {
@@ -348,11 +564,6 @@
   flex: 1;
   justify-content: center;
   gap: 0.45rem;
-}
-
-.greenHighlight {
-  color: rgb(0, 255, 0); /* Or any other styling */
-  /* font-weight: bold; Optional: make it bold */
 }
 
 @media only screen and (max-width: 560px) {
