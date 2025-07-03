@@ -5,153 +5,169 @@
 
 .swapWrap {
   width: 100%;
-  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
-  min-height: 11rem;
-  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  min-height: 140px;
+  border-radius: 12px;
   color: white;
-  font-size: 24px;
+  font-size: 16px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
-  border: 1px solid rgba(255, 255, 0, 0.2);
-  box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
-  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.swapWrap:hover {
+  border-color: rgba(255, 20, 147, 0.3);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .statsWrap {
   width: 100%;
-  height: 2rem;
-  /* background-color: red; */
-  margin-bottom: 0.75rem;
-  margin-top: 0.75rem;
+  height: 60px;
+  margin-bottom: 1.5rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.tvl,
+.apr {
+  flex: 1;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
 }
 
 .tvl {
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, rgb(37, 37, 175), rgb(65, 65, 255));
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  display: flex;
-  padding: 4px;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 0.5rem;
-  color: rgb(0, 176, 0);
-  border: 1px solid rgb(65, 65, 255);
+  border-left: 3px solid #00ff88;
 }
+
 .apr {
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, rgb(65, 65, 255), rgb(37, 37, 175));
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  display: flex;
-  padding: 4px;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: 0.5rem;
-  color: rgb(0, 176, 0);
-  border: 1px solid rgb(65, 65, 255);
+  border-left: 3px solid #ff1493;
 }
 
-.statSpan {
-  color: white;
-  margin-top: 3px;
-  margin-left: 5px;
-}
-
+.statSpan,
 .statSpan2 {
-  color: white;
-  margin-top: 3px;
-  margin-right: 5px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .statValue {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgb(0, 255, 0);
-  font-size: 20px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .microLogo {
-  width: 25px;
-  height: 25px;
-  background-color: rgb(0, 64, 255);
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .microStake {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  margin-top: 1.75rem;
+  gap: 0.5rem;
 }
 
 .microRow {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 18px;
-  text-transform: uppercase;
+  gap: 0.5rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .leftWrap {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  margin: 1rem 0rem 1rem 1rem;
-  max-width: 8rem;
+  gap: 1rem;
+  min-width: 120px;
+}
+
+.leftWrap > span:first-child {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .vaultCta {
-  min-width: 4.5rem;
-  font-size: 20px;
-  background-color: transparent;
+  min-width: 80px;
+  height: 40px;
+  font-size: 14px;
+  background: linear-gradient(135deg, #ff1493, #ff6b9d);
   border: none;
   color: white;
-  background-color: rgba(96, 96, 249, 0.615);
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .vaultCta:hover {
-  background-color: rgb(96, 96, 249);
+  background: linear-gradient(135deg, #ff6b9d, #ff1493);
+  transform: translateY(-1px);
+}
+
+.vaultCta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .midblock {
   flex: 1;
   display: flex;
-  position: relative;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  margin: 0 1rem;
 }
 
 .balanceSpan {
   position: absolute;
-  right: 1rem;
-  top: 1rem;
-  font-size: 14px;
-  color: rgb(187, 187, 187);
-  text-transform: upp;
+  right: 0;
+  top: -1rem;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
 }
 
 .valueSpan {
   position: absolute;
-  bottom: -0.75rem;
-  left: 0rem;
-  color: rgb(0, 255, 0);
+  bottom: -1rem;
+  right: 0;
+  color: #00ff88;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
 }
 
 .midInputBlock {
@@ -159,57 +175,61 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: red; */
-  height: 100%;
-  width: 12rem;
-  margin-top: 1.5rem;
+  width: 100%;
+  gap: 0.75rem;
 }
 
 .input {
-  font-size: 20px;
-  padding: 4px;
-  height: 2.25rem;
-  border-radius: 0.5rem;
-  background-color: transparent;
+  font-size: 18px;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
   outline: none;
-  border: 1px solid rgba(62, 62, 255, 0.522);
-  background-color: rgba(62, 62, 255, 0.164);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
   color: white;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  font-weight: 600;
 }
 
 .input:focus {
-  box-shadow: 0px 0px 5px rgb(67, 67, 255);
+  border-color: rgba(255, 20, 147, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .buttonBox {
-  /* background-color: red; */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2px;
-  margin-top: 5px;
+  gap: 0.5rem;
 }
 
 .buttonBox button {
-  width: 25%;
-  font-size: 16px;
-  padding: 4px;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  background-color: rgb(96, 96, 249);
-  color: white;
-  border-radius: 4px;
+  flex: 1;
+  font-size: 12px;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .buttonBox button:hover {
-  background-color: rgb(123, 123, 255);
-  color: yellow;
+  background: rgba(255, 20, 147, 0.1);
+  border-color: rgba(255, 20, 147, 0.3);
+  color: #ff1493;
 }
 
 .titleBox {
@@ -218,119 +238,145 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 0.75rem;
-  font-size: 14px;
+  margin-bottom: 1.5rem;
   position: relative;
+  gap: 0.5rem;
 }
+
 .dexCta {
   position: absolute;
   left: 0;
-  font-size: 16px;
-  padding: 4px;
-  border-radius: 0.25rem;
-  border: none;
-  outline: none;
+  font-size: 12px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
-  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem;
-  color: white;
-  border: 1px solid rgb(0, 77, 201);
-  transition: all 0.1s ease-in-out;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .dexCta:hover {
-  background-color: rgb(32, 118, 255);
+  background: rgba(255, 20, 147, 0.1);
+  border-color: rgba(255, 20, 147, 0.3);
+  color: #ff1493;
 }
 
 .mmlogo {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .titleBox h2 {
-  font-size: 36px;
-  color: yellow;
+  font-size: 24px;
+  color: white;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.titleBox span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .copy {
   font-size: 12px;
   cursor: pointer;
+  transition: color 0.3s ease;
 }
+
 .copy:hover {
-  color: rgb(0, 255, 0);
+  color: #ff1493;
 }
 
 .claimCta {
   width: 100%;
-  height: 2.75rem;
-  margin-top: 1rem;
-  font-size: 24px;
-  border-radius: 0.75rem;
+  height: 56px;
+  margin-top: 1.5rem;
+  font-size: 16px;
+  border-radius: 12px;
   border: none;
   outline: none;
-  background-color: rgb(218, 218, 0);
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.3s ease;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
+
 .claimCta:hover {
-  background-color: var(--yellow);
+  background: linear-gradient(135deg, #00cc6a, #00ff88);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
+}
+
+.claimCta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .whiteSpan {
   color: white;
+  font-weight: 600;
 }
 
 .grayPlus {
-  color: gray;
-  width: 70%;
-  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 768px) {
+  .swapWrap {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .leftWrap {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .midblock {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .statsWrap {
+    flex-direction: column;
+    height: auto;
+    gap: 0.5rem;
+  }
+  
+  .tvl,
+  .apr {
+    width: 100%;
+  }
+  
   .dexCta {
     position: relative;
-    margin-bottom: 0.5rem;
-    width: 7rem;
-    justify-content: space-evenly;
+    margin-bottom: 1rem;
   }
-}
-
-@media only screen and (max-width: 500px) {
-  .swapWrap {
-    gap: 1rem;
-  }
-  .midInputBlock {
-    width: 9rem;
-  }
-
-  .midInputBlock input::placeholder {
-    font-size: 16px;
-  }
-  .vaultCta {
-    min-width: 3.5rem;
-    font-size: 16px;
-  }
-  .leftWrap {
-    max-width: 7rem;
-  }
-  .leftWrap span {
-    font-size: 16px;
-  }
-  .microRow {
-    font-size: 16px;
-  }
-  .balanceSpan {
-    right: 0;
-  }
-}
-
-@media only screen and (max-width: 400px) {
-  .midInputBlock {
-    width: 8rem;
+  
+  .balanceSpan,
+  .valueSpan {
+    position: relative;
+    margin-top: 0.5rem;
   }
 }
