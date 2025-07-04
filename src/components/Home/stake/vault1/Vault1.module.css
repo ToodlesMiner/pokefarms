@@ -5,169 +5,153 @@
 
 .swapWrap {
   width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  min-height: 140px;
-  border-radius: 12px;
+  background: linear-gradient(90deg, rgb(14, 18, 0), rgba(14, 18, 0, 0.424));
+  min-height: 11rem;
+  border-radius: 1rem;
   color: white;
-  font-size: 16px;
+  font-size: 24px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-}
-
-.swapWrap:hover {
-  border-color: rgba(255, 20, 147, 0.3);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 0, 0.2);
+  box-shadow: 0px 0px 8px rgba(255, 255, 0, 0.2);
+  overflow: hidden;
 }
 
 .statsWrap {
   width: 100%;
-  height: 60px;
-  margin-bottom: 1.5rem;
+  height: 2rem;
+  /* background-color: red; */
+  margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
   display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.tvl,
-.apr {
-  flex: 1;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  display: flex;
-  padding: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
+  gap: 0.5rem;
 }
 
 .tvl {
-  border-left: 3px solid #00ff88;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, rgb(37, 37, 175), rgb(65, 65, 255));
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: flex;
+  padding: 4px;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 0.5rem;
+  color: rgb(0, 176, 0);
+  border: 1px solid rgb(65, 65, 255);
 }
-
 .apr {
-  border-left: 3px solid #ff1493;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, rgb(65, 65, 255), rgb(37, 37, 175));
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  display: flex;
+  padding: 4px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 0.5rem;
+  color: rgb(0, 176, 0);
+  border: 1px solid rgb(65, 65, 255);
 }
 
-.statSpan,
+.statSpan {
+  color: white;
+  margin-top: 3px;
+  margin-left: 5px;
+}
+
 .statSpan2 {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: white;
+  margin-top: 3px;
+  margin-right: 5px;
 }
 
 .statValue {
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 255, 0);
+  font-size: 20px;
 }
 
 .microLogo {
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 25px;
+  background-color: rgb(0, 64, 255);
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px;
 }
 
 .microStake {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-top: 1.75rem;
 }
 
 .microRow {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 0.25rem;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 
 .leftWrap {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  min-width: 120px;
-}
-
-.leftWrap > span:first-child {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  flex: 1;
+  margin: 1rem 0rem 1rem 1rem;
+  max-width: 8rem;
 }
 
 .vaultCta {
-  min-width: 80px;
-  height: 40px;
-  font-size: 14px;
-  background: linear-gradient(135deg, #ff1493, #ff6b9d);
+  min-width: 4.5rem;
+  font-size: 20px;
+  background-color: transparent;
   border: none;
   color: white;
-  border-radius: 8px;
+  background-color: rgba(96, 96, 249, 0.615);
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: all 0.1s ease-in-out;
 }
 
 .vaultCta:hover {
-  background: linear-gradient(135deg, #ff6b9d, #ff1493);
-  transform: translateY(-1px);
-}
-
-.vaultCta:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+  background-color: rgb(96, 96, 249);
 }
 
 .midblock {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  position: relative;
   justify-content: center;
   align-items: center;
-  position: relative;
-  margin: 0 1rem;
 }
 
 .balanceSpan {
   position: absolute;
-  right: 0;
-  top: -1rem;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  backdrop-filter: blur(10px);
+  right: 1rem;
+  top: 1rem;
+  font-size: 14px;
+  color: rgb(187, 187, 187);
+  text-transform: upp;
 }
 
 .valueSpan {
   position: absolute;
-  bottom: -1rem;
-  right: 0;
-  color: #00ff88;
-  font-size: 12px;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  backdrop-filter: blur(10px);
+  bottom: -0.75rem;
+  left: 0rem;
+  color: rgb(0, 255, 0);
 }
 
 .midInputBlock {
@@ -175,61 +159,57 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  gap: 0.75rem;
+  /* background-color: red; */
+  height: 100%;
+  width: 12rem;
+  margin-top: 1.5rem;
 }
 
 .input {
-  font-size: 18px;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  font-size: 20px;
+  padding: 4px;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
   outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(62, 62, 255, 0.522);
+  background-color: rgba(62, 62, 255, 0.164);
   width: 100%;
   color: white;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  text-align: center;
-  font-weight: 600;
+  transition: all 0.1s ease-in-out;
 }
 
 .input:focus {
-  border-color: rgba(255, 20, 147, 0.5);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 0px 5px rgb(67, 67, 255);
 }
 
 .buttonBox {
+  /* background-color: red; */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 2px;
+  margin-top: 5px;
 }
 
 .buttonBox button {
-  flex: 1;
-  font-size: 12px;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  border-radius: 6px;
+  width: 25%;
+  font-size: 16px;
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  background-color: rgb(96, 96, 249);
+  color: white;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: all 0.1s ease-in-out;
 }
 
 .buttonBox button:hover {
-  background: rgba(255, 20, 147, 0.1);
-  border-color: rgba(255, 20, 147, 0.3);
-  color: #ff1493;
+  background-color: rgb(123, 123, 255);
+  color: yellow;
 }
 
 .titleBox {
@@ -238,145 +218,119 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
   position: relative;
-  gap: 0.5rem;
 }
-
 .dexCta {
   position: absolute;
   left: 0;
-  font-size: 12px;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
   cursor: pointer;
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  gap: 0.25rem;
+  color: white;
+  border: 1px solid rgb(0, 77, 201);
+  transition: all 0.1s ease-in-out;
 }
 
 .dexCta:hover {
-  background: rgba(255, 20, 147, 0.1);
-  border-color: rgba(255, 20, 147, 0.3);
-  color: #ff1493;
+  background-color: rgb(32, 118, 255);
 }
 
 .mmlogo {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }
 
 .titleBox h2 {
-  font-size: 24px;
-  color: white;
-  font-weight: 700;
+  font-size: 36px;
+  color: yellow;
   text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.titleBox span {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  font-family: monospace;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .copy {
   font-size: 12px;
   cursor: pointer;
-  transition: color 0.3s ease;
 }
-
 .copy:hover {
-  color: #ff1493;
+  color: rgb(0, 255, 0);
 }
 
 .claimCta {
   width: 100%;
-  height: 56px;
-  margin-top: 1.5rem;
-  font-size: 16px;
-  border-radius: 12px;
+  height: 2.75rem;
+  margin-top: 1rem;
+  font-size: 24px;
+  border-radius: 0.75rem;
   border: none;
   outline: none;
-  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  background-color: rgb(218, 218, 0);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease-in-out;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
-
 .claimCta:hover {
-  background: linear-gradient(135deg, #00cc6a, #00ff88);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
-}
-
-.claimCta:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+  background-color: var(--yellow);
 }
 
 .whiteSpan {
   color: white;
-  font-weight: 600;
 }
 
 .grayPlus {
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 12px;
+  color: gray;
+  width: 70%;
+  text-align: center;
 }
 
-@media only screen and (max-width: 768px) {
-  .swapWrap {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .leftWrap {
-    min-width: auto;
-    width: 100%;
-  }
-  
-  .midblock {
-    margin: 0;
-    width: 100%;
-  }
-  
-  .statsWrap {
-    flex-direction: column;
-    height: auto;
-    gap: 0.5rem;
-  }
-  
-  .tvl,
-  .apr {
-    width: 100%;
-  }
-  
+@media only screen and (max-width: 550px) {
   .dexCta {
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    width: 7rem;
+    justify-content: space-evenly;
   }
-  
-  .balanceSpan,
-  .valueSpan {
-    position: relative;
-    margin-top: 0.5rem;
+}
+
+@media only screen and (max-width: 500px) {
+  .swapWrap {
+    gap: 1rem;
+  }
+  .midInputBlock {
+    width: 9rem;
+  }
+
+  .midInputBlock input::placeholder {
+    font-size: 16px;
+  }
+  .vaultCta {
+    min-width: 3.5rem;
+    font-size: 16px;
+  }
+  .leftWrap {
+    max-width: 7rem;
+  }
+  .leftWrap span {
+    font-size: 16px;
+  }
+  .microRow {
+    font-size: 16px;
+  }
+  .balanceSpan {
+    right: 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .midInputBlock {
+    width: 8rem;
   }
 }

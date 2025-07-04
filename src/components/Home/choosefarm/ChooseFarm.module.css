@@ -3,8 +3,11 @@
   width: 100vw;
   height: 100vh;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.8) 0%, 
+    rgba(75, 0, 130, 0.6) 50%, 
+    rgba(0, 0, 0, 0.8) 100%);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,21 +20,29 @@
 }
 
 .poolList {
-  width: 500px;
-  max-height: 600px;
-  background: rgba(16, 16, 16, 0.95);
-  border-radius: 16px;
+  width: 25rem;
+  height: 40rem;
+  background: linear-gradient(145deg,
+    rgba(34, 34, 151, 0.95),
+    rgba(35, 35, 121, 0.95),
+    rgba(5, 5, 116, 0.95),
+    rgba(75, 0, 130, 0.95)
+  );
+  border-radius: 1rem;
   position: relative;
   opacity: 0;
   animation: slideIn 0.4s forwards ease-out;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  overflow: hidden;
+  border: 3px solid;
+  border-image: linear-gradient(45deg, #ffd700, #00ff88, #00ccff, #ff6b6b) 1;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(15px);
 }
 
 @keyframes slideIn {
   from {
-    transform: translateY(-30px) scale(0.95);
+    transform: translateY(-30px) scale(0.9);
     opacity: 0;
   }
   to {
@@ -40,11 +51,34 @@
   }
 }
 
+.poolList::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+  border-radius: 1rem;
+  pointer-events: none;
+  animation: auraFlow 6s ease-in-out infinite;
+}
+
+@keyframes auraFlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
 .poolList {
   color: white;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
 }
 
 .poolList h2 {
@@ -52,62 +86,91 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: white;
+  gap: 0.25rem;
+  text-shadow: 0 0 20px #ffd700;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px #ffd700; }
+  50% { text-shadow: 0 0 30px #ffd700, 0 0 40px #00ff88; }
 }
 
 .list {
   width: 100%;
-  max-height: 400px;
-  overflow-y: auto;
+  height: 100%;
+  flex: 1;
+  margin-top: 2rem;
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
 }
 
 .list li {
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
   display: flex;
   cursor: pointer;
   justify-content: flex-start;
   align-items: center;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  overflow: hidden;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1), 
+    rgba(255, 215, 0, 0.1));
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(5px);
   transition: all 0.3s ease;
   position: relative;
 }
 
+.list li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.list li:hover::before {
+  left: 100%;
+}
+
 .list li:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 20, 147, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.2), 
+    rgba(0, 255, 136, 0.2));
+  border-color: #ffd700;
   transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
 }
 
 .poolName {
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
+  font-size: 20px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .contractSpan {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 11px;
-  font-family: monospace;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
 }
 
 .pairLogo {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  animation: logoSpin 6s linear infinite;
+}
+
+@keyframes logoSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .col {
@@ -115,79 +178,61 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  flex: 1;
-  gap: 0.25rem;
+  width: 100%;
 }
 
 .visitDiv {
   display: flex;
+  flex-direction: column;
+  width: 4.5rem;
   align-items: center;
-  gap: 0.5rem;
-  color: #ff1493;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .arrow {
-  font-size: 16px;
-  transition: transform 0.3s ease;
+  animation: slideRight 0.3s forwards ease-out;
+  filter: drop-shadow(0 0 5px currentColor);
 }
 
-.list li:hover .arrow {
-  transform: translateX(4px);
+@keyframes slideRight {
+  from {
+    transform: translateX(0rem);
+    color: white;
+  }
+  to {
+    color: #ffd700;
+    transform: translateX(1.8rem);
+  }
 }
 
 .close {
   position: absolute;
-  right: 1.5rem;
-  top: 1.5rem;
-  color: rgba(255, 255, 255, 0.6);
+  right: 1rem;
+  top: 1rem;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
-  padding: 0.5rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.25rem;
+  backdrop-filter: blur(5px);
 }
 
 .close:hover {
   color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
 }
 
 .currentPool {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   color: #00ff88;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 255, 136, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  text-shadow: 0 0 15px #00ff88;
+  animation: currentGlow 2s ease-in-out infinite;
 }
 
-@media only screen and (max-width: 768px) {
-  .poolList {
-    width: 90%;
-    margin: 0 1rem;
-    padding: 1.5rem;
-  }
-  
-  .list li {
-    padding: 0.75rem;
-  }
-  
-  .poolName {
-    font-size: 14px;
-  }
-  
-  .contractSpan {
-    font-size: 10px;
-  }
+@keyframes currentGlow {
+  0%, 100% { text-shadow: 0 0 15px #00ff88; }
+  50% { text-shadow: 0 0 25px #00ff88, 0 0 35px #00ccff; }
 }
